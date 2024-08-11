@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block title %} Ordenes facturadas {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% if company.status %}
+        <h1 id="title" >Casos facturados</h1>
+        
+        {% if orders %}
+
+            <section id="orders">
+                <div class="orders__column orders__column--id">
+                    <h3 class="column__title-orders">ID</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-id"><a href="{% url 'update-order' order.order_id %}">{{order.order_id}}</a></div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--client">
+                    <h3 class="column__title-orders">Cliente</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-client">{{order.client}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--city">
+                    <h3 class="column__title-orders">Ciudad</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-city">{{order.city}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--invesment">
+                    <h3 class="column__title-orders">Inversión</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-invesment">{{order.invesment}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--sales_value">
+                    <h3 class="column__title-orders">Valor de la venta</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-sales_value">{{order.sales_value}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--service_description">
+                    <h3 class="column__title-orders">Descripción</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-service_description">{{order.service_description}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--remarks">
+                    <h3 class="column__title-orders">Observaciones</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-remarks">{{order.remarks}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--in_charge">
+                    <h3 class="column__title-orders">Encargado</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-in_charge">{{order.in_charge}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--assigned_by">
+                    <h3 class="column__title-orders">Asignado por</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-assigned_by">{{order.assigned_by}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--status">
+                    <h3 class="column__title-orders">Estado</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-status">{{order.status}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--invoiced_at">
+                    <h3 class="column__title-orders">Facturado el</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-invoiced_at">{{order.invoiced_at|date:"d/m/Y"}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--invoice_id">
+                    <h3 class="column__title-orders">Número de factura</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-invoice_id">{{order.invoice_id}}</div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+        
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+    
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+{% endblock %}

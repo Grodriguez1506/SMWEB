@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %} Iniciar sesión {% endblock %}
+
+{% block content %}
+
+    {% if messages %}
+
+        {% for message in messages %}
+        
+            <span id="alert-{{message.tags}}">{{message}}</span>
+        
+        {% endfor %}
+    
+    {% endif %}
+
+    <h1 id="title">Comienza a gestionar tus proyectos de manera profesional</h1>
+
+    <h2 id="subtitle">Inicia sesión</h2>
+
+    <form id="login_form" action="" method="post">
+
+        {% csrf_token %}
+
+        <label for="username">Usuario</label><br>
+        <input type="text" name="username" placeholder="Ingresa tu usuario"><br>
+        <br><br>
+        <label for="password">Contraseña</label><br>
+        <input type="password" name="password" placeholder="Ingresa tu contraseña"><br>
+        <br><br>
+
+        <input type="submit" value="Ingresar">
+
+    </form>
+
+{% endblock %}

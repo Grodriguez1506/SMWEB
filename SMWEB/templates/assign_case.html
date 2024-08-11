@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %} Asignar Caso {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% if company.status %}
+        <h1 id="title" >Asignación de caso</h1>
+        
+        <form id="creation_form" action="" method="post">
+
+            {% csrf_token %}
+
+            <label for="order_id">Número de caso</label><br>
+            <input type="text" name="order_id" placeholder="Ingresa el número de caso"><br>
+            <br><br>
+            <label for="client">Cliente</label><br>
+            <input type="text" name="client" placeholder="Ingresa el Cliente"><br>
+            <br><br>
+            <label for="city">Ciudad</label><br>
+            <input type="text" name="city" placeholder="Ingresa la ciudad del caso"><br>
+            <br><br>
+            <label for="in_charge">Selecciona el gestor</label><br>
+            <select id="in_charge" name="in_charge">
+                <option value="">Selecciona un gestor para asignar el caso</option>
+                {% if users %}
+                    {% for user in users %}
+                        <option value={{user.first_name}}>{{user.first_name|capfirst}}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+            <br><br>
+            <label for="service_description">Descripción del servicio</label><br>
+            <textarea name="service_description", class="textarea", maxlength="135", placeholder="Ingresa una breve descripción del servicio", rows="10", cols="20"></textarea>
+            <span class="counter">0/135</span>
+
+            <input type="submit" value="Asignar caso">
+
+        </form>
+
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/update_order.js' %}"></script>
+{% endblock %}

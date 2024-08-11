@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %} Estadísticas {% endblock %}
+
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+    
+    {% if company.status %}
+        <h1 id="title" >Estadísticas - {{user.company}}</h1>
+        
+        <canvas id="myChart" width="200" height="200"></canvas>
+
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: {{labels|safe}},
+            datasets: [{
+                label: 'Ventas',
+                data: {{data|safe}},
+                backgroundColor: "rgb(0, 195, 255, 0.4)",
+                borderWidth: 1,
+                borderColor: "rgb(0, 195, 255)"
+            }]
+            }
+        });
+    </script>
+    
+    {% endblock %}

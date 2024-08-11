@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %} Facturar {{order.order_id}} {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% if company.status %}
+        
+        <h1 id="title" >Facturar {{order.order_id}}</h1>
+
+        <div class="order__section">
+            <div class="order__information">
+                <p class="order__element order__element-id"><strong>Caso:</strong> {{order.order_id}}</p>
+                <p class="order__element order__element-client"><strong>Cliente:</strong> {{order.client}}</p>
+                <p class="order__element order__element-city"><strong>Ciudad:</strong> {{order.city}}</p>
+                <p class="order__element order__element-invesment"><strong>Inversión:</strong> {{order.invesment}}</p>
+                <p class="order__element order__element-sales_value"><strong>Valor de la venta:</strong> {{order.sales_value}}</p>
+                <p class="order__element order__element-service_description"><strong>Descripción:</strong> {{order.service_description}}</p>
+                <p class="order__element order__element-remarks"><strong>Observaciones:</strong> {{order.remarks}}</p>
+                <p class="order__element order__element-in_charge"><strong>Encargado:</strong> {{order.in_charge}}</p>
+                <p class="order__element order__element-assigned_by"><strong>Asignado por:</strong> {{order.assigned_by}}</p>
+                <p class="order__element order__element-status"><strong>Estado:</strong> {{order.status}}</p>
+                <p class="order__element order__element-profit"><strong>Ganancia:</strong> {{profit}}</p>
+                <p class="order__element order__element-profit_percentage"><strong>Rendimiento:</strong> {{percentage}}%</p>
+            </div>
+
+            <form id="creation_form" class="update_form" action="" method="post">
+
+                {% csrf_token %}
+    
+                <br><br>
+                <label for="invoice_id">Número de factura</label><br>
+                <input type="text" name="invoice_id" placeholder="Ingresa el número de factura del caso"><br>
+                <br><br>
+                
+                <input type="submit" value="Facturar caso">
+    
+            </form>
+        </div>
+        
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+    
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/update_order.js' %}"></script>
+{% endblock %}

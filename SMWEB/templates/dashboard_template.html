@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %} Panel estadístico {% endblock %}
+
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+    
+    {% if company.status %}
+        <h1 id="title" >Ingresa la información para generar tu reporte</h1>
+        
+        <form id="creation_form" action="" method="post">
+
+            {% csrf_token %}
+
+            <label for="report">Tipo de reporte</label><br>
+            <select id="report" name="report">
+                <option value="">Selecciona el tipo de reporte deseado</option>
+                <option value="ventas finalizadas">Ventas finalizadas</option>
+                <option value="ventas finalizadas por gestor">Ventas finalizadas por gestor</option>
+                <option value="casos activos por gestor">Casos activos por gestor</option>
+                <option value="casos finalizados por gestor">Casos finalizados por gestor</option>
+            </select>
+            <br><br>
+            <label for="since">Desde</label><br>
+            <input type="date" name="since" placeholder="Fecha inicio"><br>
+            <br><br>
+            <label for="up_to">Hasta</label><br>
+            <input type="date" name="up_to" placeholder="Fecha fin"><br>
+            <br><br>
+
+            <input type="submit" value="Generar reporte">
+
+        </form>
+
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+    
+    {% endblock %}

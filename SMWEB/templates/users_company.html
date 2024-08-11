@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %} Usuarios de {{user.company}} {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+    
+    {% if company.status %}
+        <h1 id="title" >Bienvenido/a {{user.first_name}} {{user.last_name}}</h1>
+        <h2 id="subtitle">Usuarios de {{user.company}}</h2>
+
+        <section id="users">
+            {% if users %}
+                <div class="users__column users__column--firstname">
+                    <h3 class="column__title">Nombres</h3>
+                    {% for user in users %}
+                        <div class="users__element users__element-firstname">{{user.first_name|capfirst}}</div>
+                    {% endfor %}
+                </div>
+                <div class="users__column users__column--lastname">
+                    <h3 class="column__title">Apellidos</h3>
+                    {% for user in users %}
+                        <div class="users__element users__element-lastname">{{user.last_name|capfirst}}</div>
+                    {% endfor %}
+                </div>
+                <div class="users__column users__column--rol">
+                    <h3 class="column__title">Cargo</h3>
+                    {% for user in users %}
+                        <div class="users__element users__element-rol">{{user.rol|capfirst}}</div>
+                    {% endfor %}
+                </div>
+
+            {% endif %}
+        </section>
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}    
+
+{% endblock %}

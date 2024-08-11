@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %} Pagos {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% if company.status %}
+        <h1 id="title" >Pagos realizados</h1>
+        
+        {% if payments %}
+
+            <section id="payments">
+                <div class="payments__column payments__column--id">
+                    <h3 class="column__title-payments">ID</h3>
+                    {% for payment in payments %}
+                        {% if user.rol == 'financiero' %}
+                            <div class="payments__element payments__element-id"><a href="#">{{payment.order_id}}</a></div>
+                        {% else %}
+                            <div class="payments__element payments__element-id">{{payment.order_id}}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </section>
+        
+        {% else %}
+
+            <h1 id="title" >No existen pagos realizados</h1>
+
+        {% endif %}
+        
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+    
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+{% endblock %}
