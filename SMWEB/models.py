@@ -113,7 +113,7 @@ class InvoicedOrder(models.Model):
         return self.order_id
 
 class OrderPayment(models.Model):
-    order_id = models.CharField(verbose_name="Número de caso", max_length=255, primary_key = True)
+    order_id = models.CharField(verbose_name="Número de caso", max_length=255)
     client = models.CharField(verbose_name="Cliente", max_length=255, null=False, default="")
     city = models.CharField(verbose_name="Ciudad", max_length=255, null=False)
     invesment = models.DecimalField(verbose_name="Inversión", max_digits=20, decimal_places=2, null= True)
@@ -137,7 +137,7 @@ class OrderPayment(models.Model):
     def __str__(self):
         return self.order_id
     
-class Worker(models.Model):
+class Supplier(models.Model):
     full_name = models.CharField(verbose_name="Nombres y apellidos", max_length=255)
     type_document = models.CharField(verbose_name="Tipo de documento", max_length=255)
     document_number = models.CharField(verbose_name="Número de documento", max_length=255)
@@ -145,10 +145,11 @@ class Worker(models.Model):
     account_number = models.CharField(verbose_name="Número de cuenta", max_length=255)
     type_account = models.CharField(verbose_name="Tipo de cuenta", max_length=255)
     company = models.CharField(verbose_name="Empresa", max_length=255, default="")
+    city = models.CharField(verbose_name="city", max_length=255, default="")
     
     class Meta:
-        verbose_name = 'Trabajador'
-        verbose_name_plural = 'Trabajadores'
+        verbose_name = 'Proveedor'
+        verbose_name_plural = 'Proveedores'
     
     def __str__(self):
         return self.full_name

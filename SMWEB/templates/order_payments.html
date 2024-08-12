@@ -20,13 +20,103 @@
 
             <section id="payments">
                 <div class="payments__column payments__column--id">
-                    <h3 class="column__title-payments">ID</h3>
+                    <h3 class="column__title">ID</h3>
                     {% for payment in payments %}
                         {% if user.rol == 'financiero' %}
                             <div class="payments__element payments__element-id"><a href="#">{{payment.order_id}}</a></div>
                         {% else %}
                             <div class="payments__element payments__element-id">{{payment.order_id}}</div>
                         {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--client">
+                    <h3 class="column__title">Cliente</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-client">{{payment.client}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--city">
+                    <h3 class="column__title">Ciudad</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-city">{{payment.city}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--invesment">
+                    <h3 class="column__title">Inversión</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-invesment">{{payment.invesment}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--sales_value">
+                    <h3 class="column__title">Valor de venta</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-sales_value">{{payment.sales_value}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--service_description">
+                    <h3 class="column__title">Descripción</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-service_description">{{payment.service_description}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--in_charge">
+                    <h3 class="column__title">Encargado</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-in_charge">{{payment.in_charge}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--company">
+                    <h3 class="column__title">Empresa</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-company">{{user.company|upper}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--account_owner">
+                    <h3 class="column__title">Proveedor</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-account_owner">{{payment.account_owner}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--bank_account">
+                    <h3 class="column__title">Banco</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-bank_account">{{payment.bank_account}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--account_number">
+                    <h3 class="column__title">Nro de cuenta</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-account_number">{{payment.account_number}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--type_account">
+                    <h3 class="column__title">Tipo de cuenta</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-type_account">{{payment.type_account}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--amount">
+                    <h3 class="column__title">Valor del pago</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-amount">{{payment.amount}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--comments">
+                    <h3 class="column__title">Comentarios</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-comments">{{payment.comments}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--made_by">
+                    <h3 class="column__title">Realizado por</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-made_by">{{payment.made_by}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--created_at">
+                    <h3 class="column__title">Realizado el</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-created_at">{{payment.created_at|date:"d/m/Y"}}</div>
                     {% endfor %}
                 </div>
             </section>

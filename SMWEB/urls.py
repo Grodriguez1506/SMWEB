@@ -38,4 +38,6 @@ urlpatterns = [
     path('invoiced-orders/', views.invoiced_orders, name='invoiced-orders'),
     path('make-payment/', views.make_payment, name='make-payment'),
     path('order-payments/', views.order_payments, name='order-payments'),
+    path('create-supplier/', views.create_supplier, name='create-supplier'),
+    path('suppliers-company/', views.suppliers_company, name='suppliers-company'),
 ]

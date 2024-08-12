@@ -76,37 +76,25 @@
                             <a href='{% url "order-payments" %}'>Pagos realizados</a>
                         </li>
                         <li>
-                            <a href='#'>Pagos a proveedores</a>
+                            <a href='{% url "create-supplier" %}'>Crear proveedor</a>
+                        </li>
+                        <li>
+                            <a href='{% url "suppliers-company" %}'>Ver proveedores</a>
                         </li>
                     {% elif user.rol == 'coordinador' %}
                         <li>
                             <a href='{% url "assign-case" %}'>Asignar caso</a>
                         </li>
                         <li>
-                            <a href='{% url "dashboard-template" %}'>Estadísticas</a>
-                        </li>
-                        <li>
                             <a href='{% url "closed-orders" %}'>Casos finalizados</a>
-                        </li>
-                        <li>
-                            <a href='{% url "deleted-orders" %}'>Casos eliminados</a>
                         </li>
                         <li>
                             <a href='{% url "order-payments" %}'>Pagos realizados</a>
                         </li>
-                    {% elif user.rol == 'compras' %}
-                        <li>
-                            <a href='#'>Gestionar compras</a>
-                        </li>
                     {% elif user.rol == 'gestor' %}
                         <li>
-                            <a href='#'>Pagos</a>
+                            <a href='{% url "make-payment" %}'>Pagos a proveedores</a>
                         </li>
-                        
-                        <li>
-                            <a href='#'>Compras</a>
-                        </li>
-
                         <li>
                             <a href='#'>Afiliaciones</a>
                         </li>

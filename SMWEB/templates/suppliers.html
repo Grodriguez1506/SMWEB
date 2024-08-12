@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %} Proveedores {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+    
+    {% if company.status %}
+        <h1 id="title" >Bienvenido/a {{user.first_name}} {{user.last_name}}</h1>
+        <h2 id="subtitle">Proveedores de {{user.company}}</h2>
+
+        <section id="suppliers">
+            {% if suppliers %}
+                <div class="suppliers__column suppliers__column--full_name">
+                    <h3 class="column__title">Nombres y apellidos / Razón social</h3>
+                    {% for supplier in suppliers %}
+                        <div class="suppliers__element suppliers__element-full_name">{{supplier.full_name|upper}}</div>
+                    {% endfor %}
+                </div>
+                <div class="suppliers__column suppliers__column--type_document">
+                    <h3 class="column__title">Documento</h3>
+                    {% for supplier in suppliers %}
+                        <div class="suppliers__element suppliers__element-type_document">{{supplier.type_document}}</div>
+                    {% endfor %}
+                </div>
+                <div class="suppliers__column suppliers__column--document_number">
+                    <h3 class="column__title">Nro documento</h3>
+                    {% for supplier in suppliers %}
+                        <div class="suppliers__element suppliers__element-document_number">{{supplier.document_number}}</div>
+                    {% endfor %}
+                </div>
+                <div class="suppliers__column suppliers__column--bank_account">
+                    <h3 class="column__title">Banco</h3>
+                    {% for supplier in suppliers %}
+                        <div class="suppliers__element suppliers__element-bank_account">{{supplier.bank_account}}</div>
+                    {% endfor %}
+                </div>
+                <div class="suppliers__column suppliers__column--account_number">
+                    <h3 class="column__title">Nro de cuenta</h3>
+                    {% for supplier in suppliers %}
+                        <div class="suppliers__element suppliers__element-account_number">{{supplier.account_number}}</div>
+                    {% endfor %}
+                </div>
+                <div class="suppliers__column suppliers__column--type_account">
+                    <h3 class="column__title">Tipo de cuenta</h3>
+                    {% for supplier in suppliers %}
+                        <div class="suppliers__element suppliers__element-type_account">{{supplier.type_account}}</div>
+                    {% endfor %}
+                </div>
+                <div class="suppliers__column suppliers__column--company">
+                    <h3 class="column__title">Empresa</h3>
+                    {% for supplier in suppliers %}
+                        <div class="suppliers__element suppliers__element-company">{{user.company}}</div>
+                    {% endfor %}
+                </div>
+                <div class="suppliers__column suppliers__column--city">
+                    <h3 class="column__title">Ciudad</h3>
+                    {% for supplier in suppliers %}
+                        <div class="suppliers__element suppliers__element-city">{{supplier.city}}</div>
+                    {% endfor %}
+                </div>
+
+            {% endif %}
+        </section>
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}    
+
+{% endblock %}

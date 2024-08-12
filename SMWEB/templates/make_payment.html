@@ -26,18 +26,21 @@
             <label for="full_name">Selecciona el destinatario</label><br>
             <select id="full_name" name="full_name">
                 <option value="">Selecciona el destinatario del pago</option>
-                {% if workers %}
-                    {% for worker in workers %}
-                        <option value={{worker.full_name}}>{{worker.full_name|capfirst}}</option>
+                {% if suppliers %}
+                    {% for supplier in suppliers %}
+                        <option value="{{supplier.full_name}}">{{supplier.full_name|capfirst}}</option>
                     {% endfor %}
                 {% endif %}
             </select>
+            <br><br>
+            <label for="amount">Valor del pago</label><br>
+            <input type="text" oninput="validateNumber(this)" name="amount" placeholder="Ingresa el valor del pago" inputmode="numeric"><br>
             <br><br>
             <label for="comments">Comentario</label><br>
             <textarea name="comments", class="textarea", maxlength="135", placeholder="Ingresa algún comentario relacionado al pago", rows="10", cols="20"></textarea>
             <span class="counter">0/135</span>
 
-            <input type="submit" value="Asignar caso">
+            <input type="submit" value="Registrar pago">
 
         </form>
 
@@ -47,4 +50,9 @@
 
     {% load static %}
     <script type="text/javascript" src="{% static 'js/update_order.js' %}"></script>
+    <script>
+        function validateNumber(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+    </script>
 {% endblock %}

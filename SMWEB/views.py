@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import CustomUser, Company, WorkOrder, FinishedOrder, DeletedOrder, InvoicedOrder, OrderPayment, Worker
+from .models import CustomUser, Company, WorkOrder, FinishedOrder, DeletedOrder, InvoicedOrder, OrderPayment, Supplier
+from django.utils import timezone
 from .utils import format_amount
 from datetime import datetime
 from django.db.models import Sum, Count
@@ -785,7 +786,7 @@ def order_payments(request):
 
     user_rol = request.user.rol
 
-    user_company = request.user.company
+    user_company = request.user.company_id
 
     if user_rol not in ['gerente', 'financiero', 'coordinador']:
 
@@ -805,7 +806,7 @@ def make_payment(request):
 
     user_company = request.user.company_id
 
-    workers = Worker.objects.filter(company = user_company).order_by('full_name')
+    suppliers = Supplier.objects.filter(company = user_company).order_by('full_name')
 
     if user_rol != 'gestor':
 
@@ -816,31 +817,109 @@ def make_payment(request):
         
         order_id = request.POST['order_id']
         full_name = request.POST['full_name']
+        amount = request.POST['amount']
         comments = request.POST['comments']
+        first_name = request.user.first_name
 
-        workers = Worker.objects.get(full_name = full_name)
-        order = WorkOrder.objects.get(order_id = order_id)
-
-        order_id = ,
-        client = ,
-        city = ,
-        invesment = ,
-        sales_value = ,
-        service_description = ,
-        in_charge = ,
-        company = ,
-        account_owner = ,
-        bank_account = ,
-        account_number = ,
-        type_account = ,
-        amount = ,
-        comments = ,
-        made_by = ,
-        created_at ,
-
-        #hacer el resto de la logica del pago (recaudar la información del formulario)
+        order = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(order_id = order_id).first()
         
+        if order is not None:
+
+            if full_name:
+
+                supplier = Supplier.objects.get(full_name = full_name)
+
+                client = order.client
+                city = order.city
+                invesment = order.invesment
+                sales_value = order.sales_value
+                service_description = order.service_description
+                in_charge = order.in_charge
+                company = order.company
+                account_owner = full_name
+                bank_account = supplier.bank_account
+                account_number = supplier.account_number
+                type_account = supplier.type_account
+
+                payment = OrderPayment(
+                    order_id = order_id,
+                    client = client,
+                    city = city,
+                    invesment = invesment,
+                    sales_value = sales_value,
+                    service_description = service_description,
+                    in_charge = in_charge,
+                    company = company,
+                    account_owner = account_owner,
+                    bank_account = bank_account,
+                    account_number = account_number,
+                    type_account = type_account,
+                    amount = amount,
+                    comments = comments.upper(),
+                    made_by = request.user.username
+                )
+
+                payment.save()
+                messages.success(request, f'El pago para la orden {order} se ha registrado exitosamente')
+            else:
+                messages.warning(request, 'No se ha registrado un destinatario para el pago')
+        else:
+            messages.warning(request, f'El caso ingresado no existe en la base de datos de {first_name.capitalize()}')
 
     return render(request, 'make_payment.html',{
-        'workers': workers
+        'suppliers': suppliers
     })
+
+@login_required(login_url=inicio)
+def create_supplier(request):
+    
+    user_rol = request.user.rol
+
+    if user_rol != 'financiero':
+        messages.warning(request, f'Tu rol de {user_rol} no te permite crear proveedores')
+
+    if request.method == 'POST':
+        full_name = request.POST['full_name']
+        type_document = request.POST['type_document']
+        document_number = request.POST['document_number']
+        bank_account = request.POST['bank_account']
+        account_number = request.POST['account_number']
+        type_account = request.POST['type_account']
+        city = request.POST['city']
+
+        supplier = Supplier(
+            full_name = full_name.upper(),
+            type_document = type_document,
+            document_number = document_number,
+            bank_account = bank_account.upper(),
+            account_number = account_number,
+            type_account = type_account,
+            company = request.user.company_id,
+            city = city.upper()
+        )
+
+        supplier.save()
+        messages.success(request, f'El proveedor {full_name} ha sido creado exitosamente')
+        return redirect('inicio')
+
+    return render(request, 'create_supplier.html')
+
+
+@login_required(login_url=inicio)
+def suppliers_company(request):
+
+    user_rol = request.user.rol
+    
+    if user_rol != 'financiero':
+
+        messages.warning(request, f'Tu rol de {user_rol} no te permite acceder a esta función')
+
+        return redirect('inicio')
+    else:
+        company = request.user.company_id
+
+        suppliers = Supplier.objects.filter(company = company)
+
+        return render(request, 'suppliers.html',{
+            'suppliers': suppliers
+        })

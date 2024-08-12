@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from .models import CustomUser, Company, WorkOrder, FinishedOrder, DeletedOrder, InvoicedOrder, OrderPayment, Worker
+from .models import CustomUser, Company, WorkOrder, FinishedOrder, DeletedOrder, InvoicedOrder, OrderPayment, Supplier
 
 # Register your models here.
 
@@ -47,6 +47,6 @@ admin.site.register(Company, CompanyAdmin)
 admin.site.register(WorkOrder, WorkOrderAdmin)
 admin.site.register(InvoicedOrder, InvoicedOrderAdmin)
 admin.site.register(OrderPayment, OrderPaymentAdmin)
-admin.site.register(Worker)
+admin.site.register(Supplier)
 
 
