@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %} Gestionar pagos {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% if company.status %}
+        
+        <h1 id="title" >Gestionar pago {{payment.order_id}}</h1>
+
+        <div class="payment__section">
+            <div class="payment__information">
+                <p class="payment__element payment__element-id"><strong>Caso:</strong> {{payment.order_id}}</p>
+                <p class="payment__element payment__element-client"><strong>Cliente:</strong> {{payment.client}}</p>
+                <p class="payment__element payment__element-city"><strong>Ciudad:</strong> {{payment.city}}</p>
+                <p class="payment__element payment__element-invesment"><strong>Inversión:</strong> {{payment.invesment}}</p>
+                <p class="payment__element payment__element-sales_value"><strong>Valor de la venta:</strong> {{payment.sales_value}}</p>
+                <p class="payment__element payment__element-service_description"><strong>Descripción:</strong> {{payment.service_description}}</p>
+                <p class="payment__element payment__element-in_charge"><strong>Encargado:</strong> {{payment.in_charge}}</p>
+                <p class="payment__element payment__element-in_charge"><strong>Destinatario:</strong> {{payment.account_owner}}</p>
+                <p class="payment__element payment__element-in_charge"><strong>Banco:</strong> {{payment.bank_account}}</p>
+                <p class="payment__element payment__element-in_charge"><strong>Nro de cuenta:</strong> {{payment.account_number}}</p>
+                <p class="payment__element payment__element-in_charge"><strong>Tipo de cuenta:</strong> {{payment.type_account}}</p>
+                <p class="payment__element payment__element-in_charge"><strong>Valor del pago:</strong> {{payment.amount}}</p>
+                <p class="payment__element payment__element-remarks"><strong>Comentarios:</strong> {{payment.comments}}</p>
+                <p class="payment__element payment__element-assigned_by"><strong>Realizado por:</strong> {{payment.made_by}}</p>
+                <p class="payment__element payment__element-status"><strong>Realizado el:</strong> {{payment.created_at|date:"d/m/Y"}}</p>
+            </div>
+                
+                <div class="btn_payment">
+                    <a href='{% url "reject-payment" payment.id %}' class="reject_payment">Rechazar pago</a>
+                    <a href='{% url "approve-payment" payment.id %}' class="approve_payment">Aprobar pago</a>
+                </div>
+        </div>
+        
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+    
+{% endblock %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import CustomUser, Company, WorkOrder, FinishedOrder, DeletedOrder, InvoicedOrder, OrderPayment, Supplier
+from .models import *
 from django.utils import timezone
 from .utils import format_amount
 from datetime import datetime
@@ -923,3 +923,74 @@ def suppliers_company(request):
         return render(request, 'suppliers.html',{
             'suppliers': suppliers
         })
+    
+@login_required(login_url=inicio)
+def handle_payment(request, id):
+    
+    payment = OrderPayment.objects.get(id = id)
+
+    return render(request, 'handle_payment.html',{
+        'payment': payment
+    })
+
+@login_required(login_url=inicio)
+def reject_payment(request, id):
+
+    payment = OrderPayment.objects.get(id= id)
+
+    payment_rejected = PaymentRejected(
+        order_id = payment.order_id,
+        client = payment.client,
+        city = payment.city,
+        invesment = payment.invesment,
+        sales_value = payment.sales_value,
+        service_description = payment.service_description,
+        in_charge = payment.in_charge,
+        company = payment.company,
+        account_owner = payment.account_owner,
+        bank_account = payment.bank_account,
+        account_number = payment.account_number,
+        type_account = payment.type_account,
+        amount = payment.amount,
+        comments = payment.comments,
+        made_by = payment.made_by,
+        created_at = payment.created_at,
+        rejected_by = request.user.username
+    )
+
+    payment_rejected.save()
+    payment.delete()
+
+    messages.warning(request, f'El pago {payment_rejected.order_id} ha sido rechazado satisfactoriamente')
+    return redirect('inicio')
+
+@login_required(login_url=inicio)
+def approve_payment(request, id):
+
+    payment = OrderPayment.objects.get(id= id)
+
+    payment_approved = PaymentApproved(
+        order_id = payment.order_id,
+        client = payment.client,
+        city = payment.city,
+        invesment = payment.invesment,
+        sales_value = payment.sales_value,
+        service_description = payment.service_description,
+        in_charge = payment.in_charge,
+        company = payment.company,
+        account_owner = payment.account_owner,
+        bank_account = payment.bank_account,
+        account_number = payment.account_number,
+        type_account = payment.type_account,
+        amount = payment.amount,
+        comments = payment.comments,
+        made_by = payment.made_by,
+        created_at = payment.created_at,
+        approved_by = request.user.username
+    )
+
+    payment_approved.save()
+    payment.delete()
+
+    messages.success(request, f'El pago {payment_approved.order_id} ha sido aprobado satisfactoriamente')
+    return redirect('inicio')

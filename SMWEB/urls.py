@@ -40,4 +40,7 @@ urlpatterns = [
     path('order-payments/', views.order_payments, name='order-payments'),
     path('create-supplier/', views.create_supplier, name='create-supplier'),
     path('suppliers-company/', views.suppliers_company, name='suppliers-company'),
+    path('handle-payment/<int:id>', views.handle_payment, name='handle-payment'),
+    path('reject-payment/<int:id>', views.reject_payment, name='reject-payment'),
+    path('approve-payment/<int:id>', views.approve_payment, name='approve-payment'),
 ]

@@ -23,7 +23,7 @@
                     <h3 class="column__title">ID</h3>
                     {% for payment in payments %}
                         {% if user.rol == 'financiero' %}
-                            <div class="payments__element payments__element-id"><a href="#">{{payment.order_id}}</a></div>
+                            <div class="payments__element payments__element-id"><a href='{% url "handle-payment" payment.id %}'>{{payment.order_id}}</a></div>
                         {% else %}
                             <div class="payments__element payments__element-id">{{payment.order_id}}</div>
                         {% endif %}
@@ -130,7 +130,5 @@
     {% else %}
         <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
     {% endif %}
-    
-    {% load static %}
-    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+
 {% endblock %}

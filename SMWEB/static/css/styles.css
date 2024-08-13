@@ -19,7 +19,6 @@
     font-style: normal;
 }
 
-
 :root{
     --title-font: 'Billabong';
     --normal-font: 'Avant gardent light';
@@ -538,6 +537,42 @@ body{
     text-align: center;
 }
 
+/* PAYMENT */
+
+.payment__section{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.payment__information{
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: start;
+}
+
+.btn_payment{
+    flex-basis: 48%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+
+.payment__element{
+    flex-basis: 50%;
+    font-family: var(--normal-font);
+    font-size: 20px;
+    margin-bottom: 20px;
+    overflow-wrap: break-word; 
+}
+
 /* FINISH AND DELETE BUTTONS */
 
 .btn_container{
@@ -550,7 +585,9 @@ body{
 }
 
 .finish_order,
-.delete_order{
+.delete_order,
+.reject_payment,
+.approve_payment{
     font-family: var(--normal-font);
     font-size: 22px;
     text-decoration: none;
@@ -562,11 +599,16 @@ body{
 }
 
 .finish_order:hover,
-.delete_order:hover{
+.delete_order:hover,
+.reject_payment:hover,
+.approve_payment:hover{
     box-shadow: 0px 0px 10px #999;
 }
 
-.finish_order:active{
+.finish_order:active,
+.delete_order:active,
+.reject_payment:active,
+.approve_payment:active{
     transform: scale(0.7);
 }
 
