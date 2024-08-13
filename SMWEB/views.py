@@ -800,6 +800,44 @@ def order_payments(request):
     })
 
 @login_required(login_url=inicio)
+def rejected_payments(request):
+
+    user_rol = request.user.rol
+
+    user_company = request.user.company_id
+
+    if user_rol not in ['gerente', 'financiero', 'coordinador']:
+
+        messages.warning(request, f'Tu rol de {user_rol} no te permite acceder a los pagos realizados')
+        return redirect('inicio')
+    
+    payments = PaymentRejected.objects.filter(company = user_company).order_by('-created_at')
+
+    return render(request, 'rejected_payments.html',{
+        'payments': payments
+    })
+
+@login_required(login_url=inicio)
+def user_rejected_payments(request):
+
+    user_rol = request.user.rol
+
+    user_company = request.user.company_id
+
+    first_name = request.user.first_name
+
+    if user_rol != 'gestor':
+
+        messages.warning(request, f'Tu rol de {user_rol} no te permite acceder a los pagos realizados')
+        return redirect('inicio')
+    
+    payments = PaymentRejected.objects.filter(company = user_company).filter(in_charge = first_name.upper()).order_by('-created_at')
+
+    return render(request, 'user_rejected_payments.html',{
+        'payments': payments
+    })
+
+@login_required(login_url=inicio)
 def make_payment(request):
 
     user_rol = request.user.rol

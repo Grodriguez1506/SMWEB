@@ -526,7 +526,8 @@ body{
 .payments__column--account_owner,
 .payments__column--account_number,
 .payments__column--amount,
-.payments__column--made_by{
+.payments__column--made_by,
+.payments__column--rejected_at{
     background-color: #f0f0f084;
 }
 

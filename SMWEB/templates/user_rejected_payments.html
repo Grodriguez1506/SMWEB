@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %} Pagos recibidos {% endblock %}
+{% block title %} Pagos rechazados {% endblock %}
 
 {% block content %}
     {% if messages %}
@@ -14,7 +14,7 @@
     {% endif %}
 
     {% if company.status %}
-        <h1 id="title" >Pagos recibidos</h1>
+        <h1 id="title" >Pagos rechazados</h1>
         
         {% if payments %}
 
@@ -117,6 +117,18 @@
                     <h3 class="column__title">Realizado el</h3>
                     {% for payment in payments %}
                         <div class="payments__element payments__element-created_at">{{payment.created_at|date:"d/m/Y"}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--rejected_at">
+                    <h3 class="column__title">Rechazado el</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-rejected_at">{{payment.rejected_at|date:"d/m/Y"}}</div>
+                    {% endfor %}
+                </div>
+                <div class="payments__column payments__column--rejected_by">
+                    <h3 class="column__title">Rechazado por</h3>
+                    {% for payment in payments %}
+                        <div class="payments__element payments__element-rejected_by">{{payment.rejected_by}}</div>
                     {% endfor %}
                 </div>
             </section>

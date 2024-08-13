@@ -43,4 +43,6 @@ urlpatterns = [
     path('handle-payment/<int:id>', views.handle_payment, name='handle-payment'),
     path('reject-payment/<int:id>', views.reject_payment, name='reject-payment'),
     path('approve-payment/<int:id>', views.approve_payment, name='approve-payment'),
+    path('rejected-payments/', views.rejected_payments, name='rejected-payments'),
+    path('user-rejected-payments/', views.user_rejected_payments, name='user-rejected-payments'),
 ]
