@@ -864,7 +864,7 @@ def approved_payments(request):
 
     user_company = request.user.company_id
 
-    if user_rol != 'gestor':
+    if user_rol not in ['financiero', 'gestor']:
 
         messages.warning(request, f'Tu rol de {user_rol} no te permite acceder a los pagos realizados')
         return redirect('inicio')

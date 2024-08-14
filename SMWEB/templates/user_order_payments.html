@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %} Pagos recibidos {% endblock %}
+{% block title %} Pagos enviados {% endblock %}
 
 {% block content %}
     {% if messages %}
@@ -14,7 +14,7 @@
     {% endif %}
 
     {% if company.status %}
-        <h1 id="title" >Pagos recibidos</h1>
+        <h1 id="title" >Pagos enviados</h1>
         
         {% if payments %}
 
