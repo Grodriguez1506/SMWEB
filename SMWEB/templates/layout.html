@@ -76,6 +76,12 @@
                             <a href='{% url "order-payments" %}'>Pagos recibidos</a>
                         </li>
                         <li>
+                            <a href='{% url "approved-payments" %}'>Pagos aprobados</a>
+                        </li>
+                        <li>
+                            <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
+                        </li>
+                        <li>
                             <a href='{% url "create-supplier" %}'>Crear proveedor</a>
                         </li>
                         <li>
@@ -98,6 +104,24 @@
                         <li>
                             <a href='#'>Afiliaciones</a>
                         </li>
+                        <li>
+                            <a href='{% url "user-order-payments" %}'>Pagos enviados</a>
+                        </li>
+                        <li>
+                            <a href='{% url "user-approved-payments" %}'>Pagos aprobados</a>
+                        </li>
+                        {% if rejected_payments > 0 %}
+                            <li id="notification">
+                                <div class="notify">
+                                    {{rejected_payments}}
+                                </div>
+                                <a href='{% url "user-rejected-payments" %}'>Pagos rechazados</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href='{% url "user-rejected-payments" %}'>Pagos rechazados</a>
+                            </li>
+                        {% endif %}
                         <li>
                             <a href='{% url "closed-orders" %}'>Casos finalizados</a>
                         </li>
