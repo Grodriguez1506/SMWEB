@@ -1,4 +1,4 @@
-from .models import Company, PaymentRejected
+from .models import Company, PaymentRejected, OrderPayment
 
 def get_status(request):
     
@@ -31,4 +31,19 @@ def get_rejected_payments(request):
     
     return {
         'rejected_payments': False
+        }
+
+def get_payments(request):
+    
+    if request.user.is_authenticated:
+        company_id = request.user.company_id
+
+        rejected_payments = OrderPayment.objects.filter(company = company_id).count()
+
+        return {
+            'payments': rejected_payments
+        }
+    
+    return {
+        'payments': False
         }

@@ -14,7 +14,7 @@
     {% endif %}
 
     {% if company.status %}
-        <h1 id="title" >Pagos rechazados</h1>
+        <h1 id="title" >Reenviar pago rechazado </h1>
         
         {% if payments %}
 
@@ -22,7 +22,7 @@
                 <div class="payments__column payments__column--id">
                     <h3 class="column__title">ID</h3>
                     {% for payment in payments %}
-                        <div class="payments__element payments__element-id"><a href='{% url "handle-payment" payment.id %}'>{{payment.order_id}}</a></div>
+                        <div class="payments__element payments__element-id"><a href='{% url "handle-rejected-payment" payment.id %}'>{{payment.order_id}}</a></div>
                     {% endfor %}
                 </div>
                 <div class="payments__column payments__column--client">
@@ -131,7 +131,7 @@
         
         {% else %}
 
-            <h1 id="title" >No existen pagos realizados</h1>
+            <h1 id="title" >No existen pagos rechazados</h1>
 
         {% endif %}
         

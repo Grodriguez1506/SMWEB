@@ -1030,6 +1030,74 @@ def handle_payment(request, id):
     })
 
 @login_required(login_url=inicio)
+def handle_rejected_payment(request, id):
+    
+    payment_rejected = PaymentRejected.objects.get(id = id)
+
+    user_company = request.user.company_id
+
+    suppliers = Supplier.objects.filter(company = user_company).order_by('full_name')
+
+    if request.method == 'POST':
+        
+        full_name = request.POST['full_name']
+        amount = request.POST['amount']
+        comments = request.POST['comments']
+        first_name = request.user.first_name
+
+        order = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(order_id = payment_rejected.order_id).first()
+        
+        if order is not None:
+
+            if full_name:
+
+                supplier = Supplier.objects.get(full_name = full_name)
+
+                client = order.client
+                city = order.city
+                invesment = order.invesment
+                sales_value = order.sales_value
+                service_description = order.service_description
+                in_charge = order.in_charge
+                company = order.company
+                account_owner = full_name
+                bank_account = supplier.bank_account
+                account_number = supplier.account_number
+                type_account = supplier.type_account
+
+                payment = OrderPayment(
+                    order_id = payment_rejected.order_id,
+                    client = client,
+                    city = city,
+                    invesment = invesment,
+                    sales_value = sales_value,
+                    service_description = service_description,
+                    in_charge = in_charge,
+                    company = company,
+                    account_owner = account_owner,
+                    bank_account = bank_account,
+                    account_number = account_number,
+                    type_account = type_account,
+                    amount = amount,
+                    comments = comments.upper(),
+                    made_by = request.user.username
+                )
+
+                payment.save()
+                payment_rejected.delete()
+                messages.success(request, f'El pago para la orden {order} se ha reenviado exitosamente')
+                return redirect('inicio')
+            
+            messages.warning(request, 'No se ha registrado un destinatario para el pago')
+        else:
+            messages.warning(request, f'El caso ingresado no existe en la base de datos de {first_name.capitalize()}')
+
+    return render(request, 'handle_rejected_payment.html',{
+        'payment': payment_rejected,
+        'suppliers': suppliers
+    })
+
+@login_required(login_url=inicio)
 def reject_payment(request, id):
 
     payment = OrderPayment.objects.get(id= id)

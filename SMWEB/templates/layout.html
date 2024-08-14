@@ -72,9 +72,18 @@
                             <a href='{% url "users-company" %}'>Ver usuarios</a>
                         </li>
                     {% elif user.rol == 'financiero' %}
-                        <li>
-                            <a href='{% url "order-payments" %}'>Pagos recibidos</a>
-                        </li>
+                        {% if payments > 0 %}
+                            <li id="notification">
+                                <div class="notify">
+                                    {{payments}}
+                                </div>
+                                <a href='{% url "order-payments" %}'>Pagos recibidos</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href='{% url "order-payments" %}'>Pagos recibidos</a>
+                            </li>
+                        {% endif %}
                         <li>
                             <a href='{% url "approved-payments" %}'>Pagos aprobados</a>
                         </li>
@@ -99,7 +108,7 @@
                         </li>
                     {% elif user.rol == 'gestor' %}
                         <li>
-                            <a href='{% url "make-payment" %}'>Pagos a proveedores</a>
+                            <a href='{% url "make-payment" %}'>Pagos proveedores</a>
                         </li>
                         <li>
                             <a href='#'>Afiliaciones</a>

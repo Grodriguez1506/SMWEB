@@ -74,7 +74,7 @@ body{
 }
 
 #menu{
-    width: 250px;
+    width: 320px;
     height: 100%;
     padding-top: 40px;
     position: fixed;
@@ -109,7 +109,7 @@ body{
 
 .hidden_menu{
     transition: all 500ms;
-    transform: translateX(74%);
+    transform: translateX(80%);
 }
 
 .expanded_menu{
@@ -157,7 +157,7 @@ body{
 .notify {
     position: absolute;
     left: -13%;
-    top: 35%;
+    top: 33%;
     width: 20px;
     text-align: center;
     font-family: var(--normal-font);
@@ -208,6 +208,18 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.creation_form-rejected_payment{
+    width: 40% !important;
+}
+
+.creation_form-rejected_payment input[type=text],
+.creation_form-rejected_payment label,
+.creation_form-rejected_payment input[type=password],
+.creation_form-rejected_payment input[type=email],
+.creation_form-rejected_payment input[type=date]{
+    flex-basis: 50% !important;
 }
 
 #login_form label,
@@ -569,11 +581,11 @@ body{
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .payment__information{
-    flex-basis: 50%;
+    flex-basis: 48%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

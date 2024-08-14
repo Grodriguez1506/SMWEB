@@ -40,6 +40,7 @@ urlpatterns = [
     path('order-payments/', views.order_payments, name='order-payments'),
     path('user-order-payments/', views.user_order_payments, name='user-order-payments'),
     path('handle-payment/<int:id>', views.handle_payment, name='handle-payment'),
+    path('handle-rejected-payment/<int:id>', views.handle_rejected_payment, name='handle-rejected-payment'),
     path('reject-payment/<int:id>', views.reject_payment, name='reject-payment'),
     path('approve-payment/<int:id>', views.approve_payment, name='approve-payment'),
     path('rejected-payments/', views.rejected_payments, name='rejected-payments'),
