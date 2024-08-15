@@ -21,6 +21,19 @@
             
             {% if orders %}
 
+                <h2 id="subtitle" class="subtitle_index">Casos asignados</h2>
+
+                <form action="" method="post" class="search_engine">
+
+                    {% csrf_token %}
+                    
+                    <label for="search">Buscar</label>
+                    <input type="text" name="search">
+
+                    <input type="submit" class="symbol_search" value="L">
+                    
+                </form>
+
                 <section id="orders">
                     <div class="orders__column orders__column--id">
                         <h3 class="column__title-orders">ID</h3>
@@ -42,14 +55,14 @@
                     </div>
                     <div class="orders__column orders__column--invesment">
                         <h3 class="column__title-orders">Inversión</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-invesment">{{order.invesment}}</div>
+                        {% for invesment in formatted_invesment %}
+                            <div class="orders__element orders__element-invesment">{{invesment}}</div>
                         {% endfor %}
                     </div>
                     <div class="orders__column orders__column--sales_value">
                         <h3 class="column__title-orders">Valor de la venta</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-sales_value">{{order.sales_value}}</div>
+                        {% for sales in formatted_sales %}
+                            <div class="orders__element orders__element-sales_value">{{sales}}</div>
                         {% endfor %}
                     </div>
                     <div class="orders__column orders__column--service_description">

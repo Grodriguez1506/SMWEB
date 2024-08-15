@@ -19,10 +19,21 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Symbol';
+    src: url('./fonts/websymbols-regular-webfont.eot');
+    src: url('./fonts/websymbols-regular-webfont.eot?#iefix') format('embedded-onetype'),
+        url('./fonts/websymbols-regular-webfont.woff') format('woff'),
+        url('./fonts/websymbols-regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root{
     --title-font: 'Billabong';
     --normal-font: 'Avant gardent light';
     --menu-font: 'Avant gardent bold';
+    --symbol-font: 'Symbol';
 }
 
 *{
@@ -199,6 +210,61 @@ body{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+/* SEARCH ENGINE */
+
+.search_engine {
+    width: 80%;
+    height: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.search_engine label{
+    font-family: var(--normal-font);
+    font-size: 25px;
+}
+
+.search_engine input[type="text"]{
+    flex-basis: 30%;
+    height: 20%;
+    border-radius: 999px;
+    outline: none;
+    border: 1px solid #ccc;
+    margin: 0px 20px;
+    line-height: 15px;
+    padding: 5px 15px;
+    padding-right: 0px;
+    font-family: var(--normal-font);
+    font-size: 17px;
+    transition: all 300ms;
+}
+
+.search_engine input[type="text"]:focus{
+    border: 1px solid #999
+}
+
+.search_engine input[type="submit"]{
+    background-color: transparent;
+    border: none;
+    padding: 0px;
+    cursor: pointer;
+    color: #666;
+    font-family: var(--symbol-font);
+    font-size: 17px;
+    font-weight: lighter;
+    position: absolute;
+    top: 40%;
+    right: 32%;
+    transition: all 300ms;
+}
+
+.search_engine input[type="submit"]:hover{
+    color: #333;
+}
+
 
 /* LOGIN FORM */
 

@@ -43,14 +43,14 @@
                 </div>
                 <div class="payments__column payments__column--invesment">
                     <h3 class="column__title">Inversión</h3>
-                    {% for payment in payments %}
-                        <div class="payments__element payments__element-invesment">{{payment.invesment}}</div>
+                    {% for invesment in formatted_invesment %}
+                        <div class="payments__element payments__element-invesment">{{invesment}}</div>
                     {% endfor %}
                 </div>
                 <div class="payments__column payments__column--sales_value">
                     <h3 class="column__title">Valor de venta</h3>
-                    {% for payment in payments %}
-                        <div class="payments__element payments__element-sales_value">{{payment.sales_value}}</div>
+                    {% for sales in formatted_sales %}
+                        <div class="payments__element payments__element-sales_value">{{sales}}</div>
                     {% endfor %}
                 </div>
                 <div class="payments__column payments__column--service_description">
@@ -97,8 +97,8 @@
                 </div>
                 <div class="payments__column payments__column--amount">
                     <h3 class="column__title">Valor del pago</h3>
-                    {% for payment in payments %}
-                        <div class="payments__element payments__element-amount">{{payment.amount}}</div>
+                    {% for payment in formatted_payments %}
+                        <div class="payments__element payments__element-amount">{{payment}}</div>
                     {% endfor %}
                 </div>
                 <div class="payments__column payments__column--comments">

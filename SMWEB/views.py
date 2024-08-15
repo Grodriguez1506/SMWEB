@@ -27,16 +27,52 @@ def inicio(request):
 
             orders = WorkOrder.objects.filter(company = user_company).order_by('-order_id')
 
+            formatted_invesment = []
+            formatted_sales = []
+
+            for order in orders:
+                if order.invesment is not None:
+                    invesment = format_amount(order.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if order.sales_value is not None:
+                    sales = format_amount(order.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+            
             return render(request, 'index.html',{
-            'orders': orders
+            'orders': orders,
+            'formatted_invesment': formatted_invesment,
+            'formatted_sales': formatted_sales
         })
 
         elif user_rol == 'coordinador':
 
             orders = WorkOrder.objects.filter(company = user_company).order_by('-order_id')
 
+            formatted_invesment = []
+            formatted_sales = []
+
+            for order in orders:
+                if order.invesment is not None:
+                    invesment = format_amount(order.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if order.sales_value is not None:
+                    sales = format_amount(order.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+            
             return render(request, 'index.html',{
-            'orders': orders
+            'orders': orders,
+            'formatted_invesment': formatted_invesment,
+            'formatted_sales': formatted_sales
         })
 
         elif user_rol == 'gestor':
@@ -45,8 +81,26 @@ def inicio(request):
             
             orders = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(company = user_company).order_by('-order_id')
 
+            formatted_invesment = []
+            formatted_sales = []
+
+            for order in orders:
+                if order.invesment is not None:
+                    invesment = format_amount(order.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if order.sales_value is not None:
+                    sales = format_amount(order.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+            
             return render(request, 'index.html',{
-            'orders': orders
+            'orders': orders,
+            'formatted_invesment': formatted_invesment,
+            'formatted_sales': formatted_sales
         })
 
         elif user_rol == 'recursos humanos':
@@ -833,8 +887,34 @@ def rejected_payments(request):
     
     payments = PaymentRejected.objects.filter(company = user_company).order_by('-created_at')
 
+    formatted_invesment = []
+    formatted_sales = []
+    formatted_payments = []
+
+    for payment in payments:
+        if payment.invesment is not None:
+            invesment = format_amount(payment.invesment)
+            formatted_invesment.append(invesment)
+        else:
+            formatted_invesment.append(0)
+
+        if payment.sales_value is not None:
+            sales = format_amount(payment.sales_value)
+            formatted_sales.append(sales)
+        else:
+            formatted_sales.append(0)
+
+        if payment.amount is not None:
+            payment_amount = format_amount(payment.amount)
+            formatted_payments.append(payment_amount)
+        else:
+            formatted_payments.append(0)
+
     return render(request, 'rejected_payments.html',{
-        'payments': payments
+        'payments': payments,
+        'formatted_invesment': formatted_invesment,
+        'formatted_sales': formatted_sales,
+        'formatted_payments': formatted_payments
     })
 
 @login_required(login_url=inicio)
@@ -853,8 +933,34 @@ def user_rejected_payments(request):
     
     payments = PaymentRejected.objects.filter(company = user_company).filter(in_charge = first_name.upper()).order_by('-created_at')
 
+    formatted_invesment = []
+    formatted_sales = []
+    formatted_payments = []
+
+    for payment in payments:
+        if payment.invesment is not None:
+            invesment = format_amount(payment.invesment)
+            formatted_invesment.append(invesment)
+        else:
+            formatted_invesment.append(0)
+
+        if payment.sales_value is not None:
+            sales = format_amount(payment.sales_value)
+            formatted_sales.append(sales)
+        else:
+            formatted_sales.append(0)
+
+        if payment.amount is not None:
+            payment_amount = format_amount(payment.amount)
+            formatted_payments.append(payment_amount)
+        else:
+            formatted_payments.append(0)
+
     return render(request, 'user_rejected_payments.html',{
-        'payments': payments
+        'payments': payments,
+        'formatted_invesment': formatted_invesment,
+        'formatted_sales': formatted_sales,
+        'formatted_payments': formatted_payments
     })
 
 @login_required(login_url=inicio)
@@ -871,8 +977,34 @@ def approved_payments(request):
     
     payments = PaymentApproved.objects.filter(company = user_company).order_by('-created_at')
 
+    formatted_invesment = []
+    formatted_sales = []
+    formatted_payments = []
+
+    for payment in payments:
+        if payment.invesment is not None:
+            invesment = format_amount(payment.invesment)
+            formatted_invesment.append(invesment)
+        else:
+            formatted_invesment.append(0)
+
+        if payment.sales_value is not None:
+            sales = format_amount(payment.sales_value)
+            formatted_sales.append(sales)
+        else:
+            formatted_sales.append(0)
+
+        if payment.amount is not None:
+            payment_amount = format_amount(payment.amount)
+            formatted_payments.append(payment_amount)
+        else:
+            formatted_payments.append(0)
+
     return render(request, 'approved_payments.html',{
-        'payments': payments
+        'payments': payments,
+        'formatted_invesment': formatted_invesment,
+        'formatted_sales': formatted_sales,
+        'formatted_payments': formatted_payments
     })
 
 @login_required(login_url=inicio)
@@ -891,8 +1023,34 @@ def user_approved_payments(request):
     
     payments = PaymentApproved.objects.filter(company = user_company).filter(in_charge = first_name.upper()).order_by('-created_at')
 
+    formatted_invesment = []
+    formatted_sales = []
+    formatted_payments = []
+
+    for payment in payments:
+        if payment.invesment is not None:
+            invesment = format_amount(payment.invesment)
+            formatted_invesment.append(invesment)
+        else:
+            formatted_invesment.append(0)
+
+        if payment.sales_value is not None:
+            sales = format_amount(payment.sales_value)
+            formatted_sales.append(sales)
+        else:
+            formatted_sales.append(0)
+
+        if payment.amount is not None:
+            payment_amount = format_amount(payment.amount)
+            formatted_payments.append(payment_amount)
+        else:
+            formatted_payments.append(0)
+
     return render(request, 'user_approved_payments.html',{
-        'payments': payments
+        'payments': payments,
+        'formatted_invesment': formatted_invesment,
+        'formatted_sales': formatted_sales,
+        'formatted_payments': formatted_payments
     })
 
 @login_required(login_url=inicio)
