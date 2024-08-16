@@ -58,8 +58,23 @@
                         <li>
                             <a href='{% url "deleted-orders" %}'>Casos eliminados</a>
                         </li>
+                        {% if payments > 0 %}
+                            <li id="notification">
+                                <div class="notify">
+                                    {{payments}}
+                                </div>
+                                <a href='{% url "order-payments" %}'>Pagos recibidos</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href='{% url "order-payments" %}'>Pagos recibidos</a>
+                            </li>
+                        {% endif %}
                         <li>
-                            <a href='{% url "order-payments" %}'>Pagos realizados</a>
+                            <a href='{% url "approved-payments" %}'>Pagos aprobados</a>
+                        </li>
+                        <li>
+                            <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
                         </li>
                     {% elif user.rol == 'recursos humanos' %}
                         <li>
