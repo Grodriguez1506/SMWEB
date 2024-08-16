@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
-from django.utils import timezone
 from .utils import format_amount
 from datetime import datetime
 from django.db.models import Sum, Count
@@ -24,6 +23,38 @@ def inicio(request):
             return render(request, 'index.html')
 
         if user_rol == 'gerente':
+
+            if request.method == 'POST':
+                    search = request.POST['search']
+                    
+                    orders = WorkOrder.objects.filter(order_id__icontains= search).order_by('-order_id')
+
+                    if orders:
+
+                        formatted_invesment = []
+                        formatted_sales = []
+
+                        for order in orders:
+                            if order.invesment is not None:
+                                invesment = format_amount(order.invesment)
+                                formatted_invesment.append(invesment)
+                            else:
+                                formatted_invesment.append(0)
+
+                            if order.sales_value is not None:
+                                sales = format_amount(order.sales_value)
+                                formatted_sales.append(sales)
+                            else:
+                                formatted_sales.append(0)
+
+                        return render(request, 'index.html',{
+                        'orders': orders,
+                        'formatted_invesment': formatted_invesment,
+                        'formatted_sales': formatted_sales
+                        })
+                    else:
+                        messages.warning(request, 'El caso que buscas no existe')
+                        return redirect('inicio')
 
             orders = WorkOrder.objects.filter(company = user_company).order_by('-order_id')
 
@@ -50,6 +81,37 @@ def inicio(request):
         })
 
         elif user_rol == 'coordinador':
+
+            if request.method == 'POST':
+                    search = request.POST['search']
+                    
+                    orders = WorkOrder.objects.filter(order_id__icontains= search).order_by('-order_id')
+
+                    if orders:
+                        formatted_invesment = []
+                        formatted_sales = []
+
+                        for order in orders:
+                            if order.invesment is not None:
+                                invesment = format_amount(order.invesment)
+                                formatted_invesment.append(invesment)
+                            else:
+                                formatted_invesment.append(0)
+
+                            if order.sales_value is not None:
+                                sales = format_amount(order.sales_value)
+                                formatted_sales.append(sales)
+                            else:
+                                formatted_sales.append(0)
+
+                        return render(request, 'index.html',{
+                        'orders': orders,
+                        'formatted_invesment': formatted_invesment,
+                        'formatted_sales': formatted_sales
+                        })
+                    else:
+                        messages.warning(request, 'El caso que buscas no existe')
+                        return redirect('inicio')
 
             orders = WorkOrder.objects.filter(company = user_company).order_by('-order_id')
 
@@ -78,6 +140,37 @@ def inicio(request):
         elif user_rol == 'gestor':
 
             first_name = request.user.first_name
+            
+            if request.method == 'POST':
+                search = request.POST['search']
+                
+                orders = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
+
+                if orders:
+                    formatted_invesment = []
+                    formatted_sales = []
+
+                    for order in orders:
+                        if order.invesment is not None:
+                            invesment = format_amount(order.invesment)
+                            formatted_invesment.append(invesment)
+                        else:
+                            formatted_invesment.append(0)
+
+                        if order.sales_value is not None:
+                            sales = format_amount(order.sales_value)
+                            formatted_sales.append(sales)
+                        else:
+                            formatted_sales.append(0)
+                    
+                    return render(request, 'index.html',{
+                    'orders': orders,
+                    'formatted_invesment': formatted_invesment,
+                    'formatted_sales': formatted_sales
+                    })
+                else:
+                    messages.warning(request, 'El caso que buscas no existe')
+                    return redirect('inicio')
             
             orders = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(company = user_company).order_by('-order_id')
 
