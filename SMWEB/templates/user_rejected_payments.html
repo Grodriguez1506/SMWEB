@@ -15,6 +15,17 @@
 
     {% if company.status %}
         <h1 id="title" >Pagos rechazados</h1>
+
+        <form action="" method="post" class="search_engine">
+
+            {% csrf_token %}
+            
+            <label for="search">Buscar</label>
+            <input type="text" name="search">
+
+            <input type="submit" class="symbol_search" value="L">
+            
+        </form>
         
         {% if payments %}
 

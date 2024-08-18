@@ -227,6 +227,20 @@ def invoiced_orders(request):
 
     orders = InvoicedOrder.objects.filter(company = user_company).order_by('-order_id')
 
+    if request.method == 'POST':
+
+        search = request.POST['search']
+
+        orders = InvoicedOrder.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
+
+        if orders:
+            return render(request, 'invoiced_orders.html',{
+                'orders': orders
+            })
+        else:
+            messages.warning(request, 'El caso que buscas no existe')
+            return redirect('invoiced-orders')
+
     return render(request, 'invoiced_orders.html',{
         'orders': orders
     })
@@ -243,6 +257,19 @@ def closed_orders(request):
 
         orders = FinishedOrder.objects.filter(company = user_company).order_by('-order_id')
 
+        if request.method == 'POST':
+            search = request.POST['search']
+            
+            orders = FinishedOrder.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
+
+            if orders:
+                return render(request, 'closed_orders.html', {
+                    'orders': orders
+                })
+            else:
+                messages.warning(request, 'El caso que buscas no existe')
+                return redirect('closed-orders')
+
         return render(request, 'closed_orders.html', {
             'orders': orders
         })
@@ -253,6 +280,19 @@ def closed_orders(request):
 
         orders = FinishedOrder.objects.filter(in_charge=first_name.upper()).filter(company = user_company).order_by('-order_id')
 
+        if request.method == 'POST':
+            search = request.POST['search']
+            
+            orders = FinishedOrder.objects.filter(in_charge=first_name.upper()).filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
+
+            if orders:
+                return render(request, 'closed_orders.html', {
+                    'orders': orders
+                })
+            else:
+                messages.warning(request, 'El caso que buscas no existe')
+                return redirect('closed-orders')
+            
         return render(request, 'closed_orders.html', {
             'orders': orders
         })
@@ -270,6 +310,19 @@ def deleted_orders(request):
 
         orders = DeletedOrder.objects.filter(company = user_company).order_by('-order_id')
 
+        if request.method == 'POST':
+            search = request.POST['search']
+
+            orders = DeletedOrder.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
+
+            if orders:
+                return render(request, 'deleted_orders.html', {
+                    'orders': orders
+                })
+            else:
+                messages.warning(request, 'El caso que buscas no existe')
+                return redirect('deleted-orders')
+
         return render(request, 'deleted_orders.html', {
             'orders': orders
         })
@@ -279,6 +332,19 @@ def deleted_orders(request):
         first_name = request.user.first_name
 
         orders = DeletedOrder.objects.filter(in_charge=first_name.upper()).order_by('-order_id')
+
+        if request.method == 'POST':
+            search = request.POST['search']
+
+            orders = DeletedOrder.objects.filter(in_charge=first_name.upper()).filter(order_id__icontains = search).order_by('-order_id')
+
+            if orders:
+                return render(request, 'deleted_orders.html', {
+                    'orders': orders
+                })
+            else:
+                messages.warning(request, 'El caso que buscas no existe')
+                return redirect('deleted-orders')
 
         return render(request, 'deleted_orders.html', {
             'orders': orders
@@ -465,6 +531,20 @@ def users_company(request):
         company = request.user.company_id
 
         users = CustomUser.objects.filter(company_id = company)
+
+        if request.method == 'POST':
+                search = request.POST['search']
+
+                users = CustomUser.objects.filter(company_id = company).filter(first_name__icontains = search)
+                
+                if users:
+
+                    return render(request, 'users_company.html',{
+                        'users': users
+                    })
+                else:
+                    messages.warning(request, 'El usuario que buscas no existe')
+                    return redirect('users-company')
 
         return render(request, 'users_company.html',{
             'users': users
@@ -942,8 +1022,73 @@ def order_payments(request):
     
     payments = OrderPayment.objects.filter(company = user_company).order_by('-created_at')
 
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        payments = OrderPayment.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-created_at')
+
+        if payments:
+
+            formatted_invesment = []
+            formatted_sales = []
+            formatted_payments = []
+
+            for payment in payments:
+                if payment.invesment is not None:
+                    invesment = format_amount(payment.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if payment.sales_value is not None:
+                    sales = format_amount(payment.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+
+                if payment.amount is not None:
+                    payment_amount = format_amount(payment.amount)
+                    formatted_payments.append(payment_amount)
+                else:
+                    formatted_payments.append(0)
+
+            return render(request, 'order_payments.html',{
+                'payments': payments,
+                'formatted_invesment': formatted_invesment,
+                'formatted_sales': formatted_sales,
+                'formatted_payments': formatted_payments
+            })
+        messages.warning(request, 'El caso que buscas no tiene pagos registrados')
+        return redirect('order-payments')
+    
+    formatted_invesment = []
+    formatted_sales = []
+    formatted_payments = []
+
+    for payment in payments:
+        if payment.invesment is not None:
+            invesment = format_amount(payment.invesment)
+            formatted_invesment.append(invesment)
+        else:
+            formatted_invesment.append(0)
+
+        if payment.sales_value is not None:
+            sales = format_amount(payment.sales_value)
+            formatted_sales.append(sales)
+        else:
+            formatted_sales.append(0)
+
+        if payment.amount is not None:
+            payment_amount = format_amount(payment.amount)
+            formatted_payments.append(payment_amount)
+        else:
+            formatted_payments.append(0)
+
     return render(request, 'order_payments.html',{
-        'payments': payments
+        'payments': payments,
+        'formatted_invesment': formatted_invesment,
+        'formatted_sales': formatted_sales,
+        'formatted_payments': formatted_payments
     })
 
 @login_required(login_url=inicio)
@@ -962,8 +1107,73 @@ def user_order_payments(request):
     
     payments = OrderPayment.objects.filter(company = user_company).filter(in_charge = first_name.upper()).order_by('-created_at')
 
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        payments = OrderPayment.objects.filter(company = user_company).filter(in_charge = first_name.upper()).filter(order_id__icontains = search).order_by('-created_at')
+
+        if payments:
+            formatted_invesment = []
+            formatted_sales = []
+            formatted_payments = []
+
+            for payment in payments:
+                if payment.invesment is not None:
+                    invesment = format_amount(payment.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if payment.sales_value is not None:
+                    sales = format_amount(payment.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+
+                if payment.amount is not None:
+                    payment_amount = format_amount(payment.amount)
+                    formatted_payments.append(payment_amount)
+                else:
+                    formatted_payments.append(0)
+
+            return render(request, 'user_order_payments.html',{
+                'payments': payments,
+                'formatted_invesment': formatted_invesment,
+                'formatted_sales': formatted_sales,
+                'formatted_payments': formatted_payments
+            })
+        else:
+            messages.warning(request, 'El caso que buscas no tiene pagos registrados')
+            return redirect('user-order-payments')
+
+    formatted_invesment = []
+    formatted_sales = []
+    formatted_payments = []
+
+    for payment in payments:
+        if payment.invesment is not None:
+            invesment = format_amount(payment.invesment)
+            formatted_invesment.append(invesment)
+        else:
+            formatted_invesment.append(0)
+
+        if payment.sales_value is not None:
+            sales = format_amount(payment.sales_value)
+            formatted_sales.append(sales)
+        else:
+            formatted_sales.append(0)
+
+        if payment.amount is not None:
+            payment_amount = format_amount(payment.amount)
+            formatted_payments.append(payment_amount)
+        else:
+            formatted_payments.append(0)
+
     return render(request, 'user_order_payments.html',{
-        'payments': payments
+        'payments': payments,
+        'formatted_invesment': formatted_invesment,
+        'formatted_sales': formatted_sales,
+        'formatted_payments': formatted_payments
     })
 
 @login_required(login_url=inicio)
@@ -979,6 +1189,46 @@ def rejected_payments(request):
         return redirect('inicio')
     
     payments = PaymentRejected.objects.filter(company = user_company).order_by('-created_at')
+
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        payments = PaymentRejected.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-created_at')
+
+        if payments:
+
+            formatted_invesment = []
+            formatted_sales = []
+            formatted_payments = []
+
+            for payment in payments:
+                if payment.invesment is not None:
+                    invesment = format_amount(payment.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if payment.sales_value is not None:
+                    sales = format_amount(payment.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+
+                if payment.amount is not None:
+                    payment_amount = format_amount(payment.amount)
+                    formatted_payments.append(payment_amount)
+                else:
+                    formatted_payments.append(0)
+
+            return render(request, 'rejected_payments.html',{
+                'payments': payments,
+                'formatted_invesment': formatted_invesment,
+                'formatted_sales': formatted_sales,
+                'formatted_payments': formatted_payments
+            })
+        else:
+            messages.warning(request, 'El caso que buscas no tiene pagos registrados')
+            return redirect('rejected-payments')
 
     formatted_invesment = []
     formatted_sales = []
@@ -1026,6 +1276,11 @@ def user_rejected_payments(request):
     
     payments = PaymentRejected.objects.filter(company = user_company).filter(in_charge = first_name.upper()).order_by('-created_at')
 
+    if request.method == 'POST':
+        search = request.POST['search']
+        
+        payments = PaymentRejected.objects.filter(company = user_company).filter(in_charge = first_name.upper()).filter().order_by('-created_at')
+
     formatted_invesment = []
     formatted_sales = []
     formatted_payments = []
@@ -1069,6 +1324,42 @@ def approved_payments(request):
         return redirect('inicio')
     
     payments = PaymentApproved.objects.filter(company = user_company).order_by('-created_at')
+
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        payments = PaymentApproved.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-created_at')
+
+        if payments:
+            formatted_invesment = []
+            formatted_sales = []
+            formatted_payments = []
+
+            for payment in payments:
+                if payment.invesment is not None:
+                    invesment = format_amount(payment.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if payment.sales_value is not None:
+                    sales = format_amount(payment.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+
+                if payment.amount is not None:
+                    payment_amount = format_amount(payment.amount)
+                    formatted_payments.append(payment_amount)
+                else:
+                    formatted_payments.append(0)
+
+            return render(request, 'approved_payments.html',{
+                'payments': payments,
+                'formatted_invesment': formatted_invesment,
+                'formatted_sales': formatted_sales,
+                'formatted_payments': formatted_payments
+            })
 
     formatted_invesment = []
     formatted_sales = []
@@ -1115,6 +1406,41 @@ def user_approved_payments(request):
         return redirect('inicio')
     
     payments = PaymentApproved.objects.filter(company = user_company).filter(in_charge = first_name.upper()).order_by('-created_at')
+
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        payments = PaymentApproved.objects.filter(company = user_company).filter(in_charge = first_name.upper()).filter(order_id__icontains = search).order_by('-created_at')
+
+        formatted_invesment = []
+        formatted_sales = []
+        formatted_payments = []
+
+        for payment in payments:
+            if payment.invesment is not None:
+                invesment = format_amount(payment.invesment)
+                formatted_invesment.append(invesment)
+            else:
+                formatted_invesment.append(0)
+
+            if payment.sales_value is not None:
+                sales = format_amount(payment.sales_value)
+                formatted_sales.append(sales)
+            else:
+                formatted_sales.append(0)
+
+            if payment.amount is not None:
+                payment_amount = format_amount(payment.amount)
+                formatted_payments.append(payment_amount)
+            else:
+                formatted_payments.append(0)
+
+        return render(request, 'user_approved_payments.html',{
+            'payments': payments,
+            'formatted_invesment': formatted_invesment,
+            'formatted_sales': formatted_sales,
+            'formatted_payments': formatted_payments
+        })
 
     formatted_invesment = []
     formatted_sales = []

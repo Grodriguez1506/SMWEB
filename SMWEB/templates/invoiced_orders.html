@@ -15,6 +15,17 @@
 
     {% if company.status %}
         <h1 id="title" >Casos facturados</h1>
+
+        <form action="" method="post" class="search_engine">
+
+            {% csrf_token %}
+            
+            <label for="search">Buscar</label>
+            <input type="text" name="search">
+
+            <input type="submit" class="symbol_search" value="L">
+            
+        </form>
         
         {% if orders %}
 
@@ -22,7 +33,7 @@
                 <div class="orders__column orders__column--id">
                     <h3 class="column__title-orders">ID</h3>
                     {% for order in orders %}
-                        <div class="orders__element orders__element-id"><a href="{% url 'update-order' order.order_id %}">{{order.order_id}}</a></div>
+                        <div class="orders__element orders__element-id">{{order.order_id}}</div>
                     {% endfor %}
                 </div>
                 <div class="orders__column orders__column--client">
