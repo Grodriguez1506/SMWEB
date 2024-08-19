@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %} Realizar afiliación {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% if company.status %}
+        <h1 id="title" >Realizar afiliación</h1>
+        
+        <form id="creation_form" action="" method="post">
+
+            {% csrf_token %}
+
+            <label for="order_id">Número de caso</label><br>
+            <input type="text" name="order_id" placeholder="Ingresa el número de caso"><br>
+            <br><br>
+            <label for="full_name">Selecciona el proveedor</label><br>
+            <select id="full_name" name="full_name">
+                <option value="">Selecciona el proveedor a afiliar</option>
+                {% if suppliers %}
+                    {% for supplier in suppliers %}
+                        <option value="{{supplier.full_name}}">{{supplier.full_name|capfirst}}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+            <br><br>
+            <label for="since">Desde</label><br>
+            <input type="date" name="since"><br>
+            <br><br>
+            <label for="up_to">Hasta</label><br>
+            <input type="date" name="up_to"><br>
+            <br><br>
+
+            <input type="submit" value="Registrar afiliación">
+
+        </form>
+
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/update_order.js' %}"></script>
+    <script>
+        function validateNumber(input) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+    </script>
+{% endblock %}

@@ -545,7 +545,8 @@ body{
 /* ORDERS */
 
 #orders,
-#payments{
+#payments,
+#affiliations{
     width: 98%;
     height: 500px;
     justify-content: space-around;
@@ -557,7 +558,8 @@ body{
 }
 
 .orders__column,
-.payments__column{
+.payments__column,
+.affiliations__column{
     min-width: 200px;
 }
 
@@ -573,7 +575,9 @@ body{
 }
 
 .payments__column--company,
-.payments__column--account_owner{
+.payments__column--account_owner,
+.affiliations__column--full_name,
+.affiliations__column--company{
     min-width: 580px;
     text-align: center;
 }
@@ -590,7 +594,8 @@ body{
 }
 
 .orders__element,
-.payments__element{
+.payments__element,
+.affiliations__element{
     font-family: var(--normal-font);
     font-size: 12px;
     font-weight: bold;
@@ -601,13 +606,15 @@ body{
 
 
 .orders__element-id > a,
-.payments__element-id > a{
+.payments__element-id > a,
+.affiliations__element-full_name > a{
     color: black;
     transition: all 450ms;
 }
 
 .orders__element-id > a:hover,
-.payments__element-id > a:hover{
+.payments__element-id > a:hover,
+.affiliations__element-full_name > a:hover{
     color: rgb(0, 132, 255);
     text-decoration: underline;
 }
@@ -628,14 +635,22 @@ body{
 .payments__column--account_number,
 .payments__column--amount,
 .payments__column--made_by,
-.payments__column--rejected_at{
+.payments__column--rejected_at,
+.affiliations__column--full_name,
+.affiliations__column--client,
+.affiliations__column--in_charge,
+.affiliations__column--up_to,
+.affiliations__column--created_at{
     background-color: #f0f0f084;
 }
 
 .orders__column--created_at,
 .orders__column--finished_at,
 .orders__column--deleted_at,
-.orders__column--status{
+.orders__column--status,
+.affiliations__column--since,
+.affiliations__column--up_to,
+.affiliations__column--created_at{
     text-align: center;
 }
 

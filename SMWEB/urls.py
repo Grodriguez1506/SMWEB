@@ -49,4 +49,6 @@ urlpatterns = [
     path('user-approved-payments/', views.user_approved_payments, name='user-approved-payments'),
     path('create-supplier/', views.create_supplier, name='create-supplier'),
     path('suppliers-company/', views.suppliers_company, name='suppliers-company'),
+    path('make-affiliation/', views.make_affiliattion, name='make-affiliation'),
+    path('order-affiliations/', views.order_affiliations, name='order-affiliations'),
 ]

@@ -78,7 +78,7 @@
                         </li>
                     {% elif user.rol == 'recursos humanos' %}
                         <li>
-                            <a href='#'>Gestionar afiliaciones</a>
+                            <a href='{% url "order-affiliations" %}'>Gestionar afiliaciones</a>
                         </li>
                         <li>
                             <a href='{% url "new-company-user" %}'>Crear usuario</a>
@@ -126,7 +126,7 @@
                             <a href='{% url "make-payment" %}'>Pagos proveedores</a>
                         </li>
                         <li>
-                            <a href='#'>Afiliaciones</a>
+                            <a href='{% url "make-affiliation" %}'>Afiliar proveedor</a>
                         </li>
                         <li>
                             <a href='{% url "user-order-payments" %}'>Pagos enviados</a>

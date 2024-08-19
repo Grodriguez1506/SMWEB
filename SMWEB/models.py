@@ -208,8 +208,21 @@ class PaymentApproved(models.Model):
     def __str__(self):
         return self.order_id
 
-# class Affiliation(models.Model):
-#     order_id = models.CharField(verbose_name="Número de caso", max_length=255)
-#     client = models.CharField(verbose_name="Cliente", max_length=255, null=False, default="")
-#     city = models.CharField(verbose_name="Ciudad", max_length=255, null=False)
-#     in_charge = models.CharField(verbose_name="Encargado", max_length=255, null=False, default="")
+class Affiliation(models.Model):
+    order_id = models.CharField(verbose_name="Número de caso", max_length=255)
+    client = models.CharField(verbose_name="Cliente", max_length=255, null=False, default="")
+    city = models.CharField(verbose_name="Ciudad", max_length=255, null=False)
+    in_charge = models.CharField(verbose_name="Encargado", max_length=255, null=False, default="")
+    full_name = models.CharField(verbose_name="Nombres y Apellidos", max_length=255, null= False)
+    since = models.DateField(verbose_name="Desde")
+    up_to = models.DateField(verbose_name="Hasta")
+    company = models.CharField(verbose_name="Empresa", max_length=255, null=False)
+    created_by = models.CharField(verbose_name="Realizado por", max_length=255, null=False)
+    created_at = models.DateField(verbose_name="Realizado el", auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Afiliación'
+        verbose_name_plural = 'Afiliaiciones'
+    
+    def __str__(self):
+        return self.order_id

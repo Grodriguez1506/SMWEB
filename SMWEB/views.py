@@ -7,6 +7,7 @@ from .utils import format_amount
 from datetime import datetime
 from django.db.models import Sum, Count
 from django.db.models.functions import TruncMonth
+from django.db.models import Q
 
 # Create your views here.
 
@@ -26,8 +27,15 @@ def inicio(request):
 
             if request.method == 'POST':
                     search = request.POST['search']
+
+                    if search == '':
+                        return redirect('inicio')
                     
-                    orders = WorkOrder.objects.filter(order_id__icontains= search).order_by('-order_id')
+                    orders = WorkOrder.objects.filter(Q(company = user_company) &
+                                                      Q(order_id__icontains= search) |
+                                                      Q(in_charge__icontains= search) |
+                                                      Q(city__icontains = search) |
+                                                      Q(client__icontains = search)).order_by('-order_id')
 
                     if orders:
 
@@ -52,9 +60,9 @@ def inicio(request):
                         'formatted_invesment': formatted_invesment,
                         'formatted_sales': formatted_sales
                         })
-                    else:
-                        messages.warning(request, 'El caso que buscas no existe')
-                        return redirect('inicio')
+                    
+                    messages.warning(request, 'No hay resultados para tu búsqueda')
+                    return redirect('inicio')
 
             orders = WorkOrder.objects.filter(company = user_company).order_by('-order_id')
 
@@ -84,8 +92,15 @@ def inicio(request):
 
             if request.method == 'POST':
                     search = request.POST['search']
+
+                    if search == '':
+                        return redirect('inicio')
                     
-                    orders = WorkOrder.objects.filter(order_id__icontains= search).order_by('-order_id')
+                    orders = WorkOrder.objects.filter(Q(company = user_company) &
+                                                      Q(order_id__icontains= search) |
+                                                      Q(in_charge__icontains= search) |
+                                                      Q(city__icontains = search) |
+                                                      Q(client__icontains = search)).order_by('-order_id')
 
                     if orders:
                         formatted_invesment = []
@@ -109,9 +124,9 @@ def inicio(request):
                         'formatted_invesment': formatted_invesment,
                         'formatted_sales': formatted_sales
                         })
-                    else:
-                        messages.warning(request, 'El caso que buscas no existe')
-                        return redirect('inicio')
+                    
+                    messages.warning(request, 'El caso que buscas no existe')
+                    return redirect('inicio')
 
             orders = WorkOrder.objects.filter(company = user_company).order_by('-order_id')
 
@@ -143,8 +158,15 @@ def inicio(request):
             
             if request.method == 'POST':
                 search = request.POST['search']
+
+                if search == '':
+                    return redirect('inicio')
                 
-                orders = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
+                orders = WorkOrder.objects.filter(Q(in_charge = first_name.upper()) &
+                                                    Q(company = user_company) &
+                                                    Q(order_id__icontains= search) |
+                                                    Q(city__icontains = search) |
+                                                    Q(client__icontains = search)).order_by('-order_id')
 
                 if orders:
                     formatted_invesment = []
@@ -169,7 +191,7 @@ def inicio(request):
                     'formatted_sales': formatted_sales
                     })
                 else:
-                    messages.warning(request, 'El caso que buscas no existe')
+                    messages.warning(request, 'No hay resultados para tu búsqueda')
                     return redirect('inicio')
             
             orders = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(company = user_company).order_by('-order_id')
@@ -230,6 +252,9 @@ def invoiced_orders(request):
     if request.method == 'POST':
 
         search = request.POST['search']
+
+        if search == '':
+            return redirect('inicio')
 
         orders = InvoicedOrder.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
 
@@ -1279,7 +1304,41 @@ def user_rejected_payments(request):
     if request.method == 'POST':
         search = request.POST['search']
         
-        payments = PaymentRejected.objects.filter(company = user_company).filter(in_charge = first_name.upper()).filter().order_by('-created_at')
+        payments = PaymentRejected.objects.filter(company = user_company).filter(in_charge = first_name.upper()).filter(order_id__icontains = search).order_by('-created_at')
+
+        if payments:
+            formatted_invesment = []
+            formatted_sales = []
+            formatted_payments = []
+
+            for payment in payments:
+                if payment.invesment is not None:
+                    invesment = format_amount(payment.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if payment.sales_value is not None:
+                    sales = format_amount(payment.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+
+                if payment.amount is not None:
+                    payment_amount = format_amount(payment.amount)
+                    formatted_payments.append(payment_amount)
+                else:
+                    formatted_payments.append(0)
+
+            return render(request, 'user_rejected_payments.html',{
+                'payments': payments,
+                'formatted_invesment': formatted_invesment,
+                'formatted_sales': formatted_sales,
+                'formatted_payments': formatted_payments
+            })
+        else:
+            messages.warning(request, 'El caso que buscas no tiene pagos registrados')
+            return redirect('user-rejected-payments')
 
     formatted_invesment = []
     formatted_sales = []
@@ -1411,36 +1470,39 @@ def user_approved_payments(request):
         search = request.POST['search']
 
         payments = PaymentApproved.objects.filter(company = user_company).filter(in_charge = first_name.upper()).filter(order_id__icontains = search).order_by('-created_at')
+        
+        if payments:
+            formatted_invesment = []
+            formatted_sales = []
+            formatted_payments = []
 
-        formatted_invesment = []
-        formatted_sales = []
-        formatted_payments = []
+            for payment in payments:
+                if payment.invesment is not None:
+                    invesment = format_amount(payment.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
 
-        for payment in payments:
-            if payment.invesment is not None:
-                invesment = format_amount(payment.invesment)
-                formatted_invesment.append(invesment)
-            else:
-                formatted_invesment.append(0)
+                if payment.sales_value is not None:
+                    sales = format_amount(payment.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
 
-            if payment.sales_value is not None:
-                sales = format_amount(payment.sales_value)
-                formatted_sales.append(sales)
-            else:
-                formatted_sales.append(0)
+                if payment.amount is not None:
+                    payment_amount = format_amount(payment.amount)
+                    formatted_payments.append(payment_amount)
+                else:
+                    formatted_payments.append(0)
 
-            if payment.amount is not None:
-                payment_amount = format_amount(payment.amount)
-                formatted_payments.append(payment_amount)
-            else:
-                formatted_payments.append(0)
-
-        return render(request, 'user_approved_payments.html',{
-            'payments': payments,
-            'formatted_invesment': formatted_invesment,
-            'formatted_sales': formatted_sales,
-            'formatted_payments': formatted_payments
-        })
+            return render(request, 'user_approved_payments.html',{
+                'payments': payments,
+                'formatted_invesment': formatted_invesment,
+                'formatted_sales': formatted_sales,
+                'formatted_payments': formatted_payments
+            })
+        else:
+            messages.warning(request,'El caso que buscas no tiene pagos registrados')
 
     formatted_invesment = []
     formatted_sales = []
@@ -1593,6 +1655,19 @@ def suppliers_company(request):
 
         suppliers = Supplier.objects.filter(company = company)
 
+        if request.method == 'POST':
+            search = request.POST['search']
+
+            suppliers = Supplier.objects.filter(company = company).filter(full_name__icontains = search)
+
+            if suppliers:
+                return render(request, 'suppliers.html',{
+                    'suppliers': suppliers
+                })
+            else:
+                messages.warning(request, 'El proveedor que buscas no existe')
+                return redirect('suppliers-company')
+
         return render(request, 'suppliers.html',{
             'suppliers': suppliers
         })
@@ -1735,3 +1810,85 @@ def approve_payment(request, id):
 
     messages.success(request, f'El pago {payment_approved.order_id} ha sido aprobado satisfactoriamente')
     return redirect('inicio')
+
+@login_required(login_url=inicio)
+def make_affiliattion(request):
+
+    user_company = request.user.company_id
+
+    first_name = request.user.first_name
+
+    suppliers = Supplier.objects.filter(company = user_company)
+
+    user_rol = request.user.rol
+
+    if user_rol != 'gestor':
+        messages.warning(request, f'Tu rol de {user_rol} no te permite realizar afiliaciones')
+        return redirect('inicio')
+
+    if request.method == 'POST':
+        order_id = request.POST['order_id']
+        full_name = request.POST['full_name']
+        since = request.POST['since']
+        up_to = request.POST['up_to']
+
+        order = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(order_id = order_id).first()
+
+        if order:
+            if full_name:
+                affiliation = Affiliation(
+                    order_id= order_id,
+                    client= order.client,
+                    city= order.city,
+                    in_charge= order.in_charge,
+                    full_name= full_name,
+                    since= since,
+                    up_to= up_to,
+                    company= request.user.company_id,
+                    created_by = request.user.username
+                )
+
+                affiliation.save()
+                messages.success(request, f'La afiliación del caso {order_id} ha sido realizada con éxito')
+                return redirect('make-affiliation')
+            
+            messages.warning(request, 'No se ha registrado un destinatario para la afiliación')
+        else:
+            messages.warning(request, f'El caso ingresado no existe en la base de datos de {first_name.capitalize()}')
+
+    return render(request, 'make_affiliation.html',{
+        'suppliers': suppliers
+    })
+
+@login_required(login_url=inicio)
+def order_affiliations(request):
+
+    user_company = request.user.company_id
+
+    user_rol = request.user.rol
+
+    if user_rol not in ['gerente', 'recursos humanos', 'coordinador']:
+
+        messages.warning(request, f'Tu rol de {user_rol} no te permite visualizar las afiliaciones realizadas')
+        return redirect('inicio')
+
+    affiliations = Affiliation.objects.filter(company = user_company)
+
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        affiliations = Affiliation.objects.filter(
+            Q(company = user_company) & (
+                Q(full_name__icontains = search) |
+                Q(order_id__icontains = search)))
+        
+        if affiliations:
+            return render(request, 'order_affiliations.html',{
+                'affiliations': affiliations
+            })
+        messages.warning(request, 'Tu búsqueda no tiene registro de afiliaciones')
+        return redirect('order-affiliations')
+
+    return render(request, 'order_affiliations.html',{
+        'affiliations': affiliations
+    })
