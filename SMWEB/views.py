@@ -254,7 +254,8 @@ def invoiced_orders(request):
         search = request.POST['search']
 
         if search == '':
-            return redirect('inicio')
+            return redirect('inicio') #COLOCAR ESTO EN EL RESTO DE BUSCADORES
+            
 
         orders = InvoicedOrder.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
 
