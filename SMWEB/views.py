@@ -228,11 +228,68 @@ def inicio(request):
             
             finished_orders = FinishedOrder.objects.filter(company = user_company).order_by('-order_id')
 
-            return render(request, 'index.html',{
-            'finished_orders': finished_orders
-        })
+            if request.method == 'POST':
+                search = request.POST['search']
 
+                if search == '':
+                    return redirect('inicio')
+                
+                finished_orders = FinishedOrder.objects.filter(Q(company = user_company) &
+                                                               Q(order_id__icontains = search) |
+                                                               Q(client__icontains = search) |
+                                                               Q(city__icontains = search) |
+                                                               Q(in_charge__icontains = search)).order_by('-order_id')
+                
+                if finished_orders:
+                
+                    formatted_invesment = []
+                    formatted_sales = []
+
+                    for order in finished_orders:
+                        if order.invesment is not None:
+                            invesment = format_amount(order.invesment)
+                            formatted_invesment.append(invesment)
+                        else:
+                            formatted_invesment.append(0)
+
+                        if order.sales_value is not None:
+                            sales = format_amount(order.sales_value)
+                            formatted_sales.append(sales)
+                        else:
+                            formatted_sales.append(0)
+                    
+                    return render(request, 'index.html',{
+                        'finished_orders': finished_orders,
+                        'formatted_invesment': formatted_invesment,
+                        'formatted_sales': formatted_sales
+                    })
+                
+                messages.warning(request, 'No hay resultados para tu búsqueda')
+                return redirect('inicio')
+            
+            formatted_invesment = []
+            formatted_sales = []
+
+            for order in finished_orders:
+                if order.invesment is not None:
+                    invesment = format_amount(order.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if order.sales_value is not None:
+                    sales = format_amount(order.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+
+            return render(request, 'index.html',{
+                'finished_orders': finished_orders,
+                'formatted_invesment': formatted_invesment,
+                'formatted_sales': formatted_sales
+            })
     return render(request, 'index.html')
+        
 
 @login_required(login_url=inicio)
 def invoiced_orders(request):
@@ -254,10 +311,15 @@ def invoiced_orders(request):
         search = request.POST['search']
 
         if search == '':
-            return redirect('inicio') #COLOCAR ESTO EN EL RESTO DE BUSCADORES
+            return redirect('invoiced-orders')
             
-
-        orders = InvoicedOrder.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
+        orders = InvoicedOrder.objects.filter(Q(company = user_company) &
+                                              Q(order_id__icontains = search) |
+                                              Q(client__icontains = search) |
+                                              Q(city__icontains = search) |
+                                              Q(in_charge__icontains = search) |
+                                              Q(invoiced_at__icontains = search) |
+                                              Q(invoice_id__icontains = search)).order_by('-order_id')
 
         if orders:
             return render(request, 'invoiced_orders.html',{
@@ -285,8 +347,15 @@ def closed_orders(request):
 
         if request.method == 'POST':
             search = request.POST['search']
+
+            if search == '':
+                return redirect('closed-orders')
             
-            orders = FinishedOrder.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
+            orders = FinishedOrder.objects.filter(Q(company = user_company) &
+                                                  Q(order_id__icontains = search) |
+                                                  Q(client__icontains = search) |
+                                                  Q(city__icontains = search) |
+                                                  Q(in_charge__icontains = search)).order_by('-order_id')
 
             if orders:
                 return render(request, 'closed_orders.html', {
@@ -339,7 +408,14 @@ def deleted_orders(request):
         if request.method == 'POST':
             search = request.POST['search']
 
-            orders = DeletedOrder.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-order_id')
+            if search == '':
+                return redirect('deleted-orders')
+
+            orders = DeletedOrder.objects.filter(Q(company = user_company) &
+                                                 Q(order_id__icontains = search) |
+                                                 Q(client__icontains = search) |
+                                                 Q(city__icontains = search) |
+                                                 Q(in_charge__icontains = search)).order_by('-order_id')
 
             if orders:
                 return render(request, 'deleted_orders.html', {
@@ -560,6 +636,9 @@ def users_company(request):
 
         if request.method == 'POST':
                 search = request.POST['search']
+
+                if search == '':
+                    return redirect('users-company')
 
                 users = CustomUser.objects.filter(company_id = company).filter(first_name__icontains = search)
                 
@@ -1051,7 +1130,11 @@ def order_payments(request):
     if request.method == 'POST':
         search = request.POST['search']
 
-        payments = OrderPayment.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-created_at')
+        payments = OrderPayment.objects.filter(Q(company = user_company) &
+                                               Q(order_id__icontains = search) |
+                                               Q(client__icontains = search) |
+                                               Q(city__icontains = search) |
+                                               Q(in_charge__icontains = search)).order_by('-created_at')
 
         if payments:
 
@@ -1136,7 +1219,11 @@ def user_order_payments(request):
     if request.method == 'POST':
         search = request.POST['search']
 
-        payments = OrderPayment.objects.filter(company = user_company).filter(in_charge = first_name.upper()).filter(order_id__icontains = search).order_by('-created_at')
+        payments = OrderPayment.objects.filter(Q(company = user_company) &
+                                               Q(in_charge = first_name.upper()) &
+                                               Q(order_id__icontains = search) |
+                                               Q(client__icontains = search) |
+                                               Q(city__icontains = search)).order_by('-created_at')
 
         if payments:
             formatted_invesment = []
@@ -1219,7 +1306,11 @@ def rejected_payments(request):
     if request.method == 'POST':
         search = request.POST['search']
 
-        payments = PaymentRejected.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-created_at')
+        payments = PaymentRejected.objects.filter(Q(company = user_company) &
+                                                  Q(order_id__icontains = search) |
+                                                  Q(client__icontains = search) |
+                                                  Q(city__icontains = search) |
+                                                  Q(in_charge__icontains = search)).order_by('-created_at')
 
         if payments:
 
@@ -1305,7 +1396,11 @@ def user_rejected_payments(request):
     if request.method == 'POST':
         search = request.POST['search']
         
-        payments = PaymentRejected.objects.filter(company = user_company).filter(in_charge = first_name.upper()).filter(order_id__icontains = search).order_by('-created_at')
+        payments = PaymentRejected.objects.filter(Q(company = user_company) &
+                                                  Q(in_charge = first_name.upper()) |
+                                                  Q(order_id__icontains = search) |
+                                                  Q(client__icontains = search) |
+                                                  Q(city__icontains = search)).order_by('-created_at')
 
         if payments:
             formatted_invesment = []
@@ -1388,7 +1483,11 @@ def approved_payments(request):
     if request.method == 'POST':
         search = request.POST['search']
 
-        payments = PaymentApproved.objects.filter(company = user_company).filter(order_id__icontains = search).order_by('-created_at')
+        payments = PaymentApproved.objects.filter(Q(company = user_company) &
+                                                  Q(order_id__icontains = search) |
+                                                  Q(city__icontains = search) |
+                                                  Q(client__icontains = search) |
+                                                  Q(in_charge__icontains = search)).order_by('-created_at')
 
         if payments:
             formatted_invesment = []
@@ -1470,7 +1569,11 @@ def user_approved_payments(request):
     if request.method == 'POST':
         search = request.POST['search']
 
-        payments = PaymentApproved.objects.filter(company = user_company).filter(in_charge = first_name.upper()).filter(order_id__icontains = search).order_by('-created_at')
+        payments = PaymentApproved.objects.filter(Q(company = user_company) &
+                                                  Q(in_charge = first_name.upper()) &
+                                                  Q(order_id__icontains = search) |
+                                                  Q(city__icontains = search) |
+                                                  Q(client__icontains = search)).order_by('-created_at')
         
         if payments:
             formatted_invesment = []
@@ -1832,25 +1935,31 @@ def make_affiliattion(request):
         full_name = request.POST['full_name']
         since = request.POST['since']
         up_to = request.POST['up_to']
+        affiliation_cost = request.POST['affiliation_cost']
 
         order = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(order_id = order_id).first()
 
         if order:
             if full_name:
-                affiliation = Affiliation(
-                    order_id= order_id,
-                    client= order.client,
-                    city= order.city,
-                    in_charge= order.in_charge,
-                    full_name= full_name,
-                    since= since,
-                    up_to= up_to,
-                    company= request.user.company_id,
-                    created_by = request.user.username
-                )
+                if since and up_to and affiliation_cost:
+                    affiliation = Affiliation(
+                        order_id= order_id,
+                        client= order.client,
+                        city= order.city,
+                        in_charge= order.in_charge,
+                        full_name= full_name,
+                        since= since,
+                        up_to= up_to,
+                        company= request.user.company_id,
+                        created_by = request.user.username,
+                        affiliation_cost = affiliation_cost
+                    )
 
-                affiliation.save()
-                messages.success(request, f'La afiliación del caso {order_id} ha sido realizada con éxito')
+                    affiliation.save()
+                    messages.success(request, f'La afiliación del caso {order_id} ha sido realizada con éxito')
+                    return redirect('make-affiliation')
+                
+                messages.warning(request, 'Todos los campos son obligatorios')
                 return redirect('make-affiliation')
             
             messages.warning(request, 'No se ha registrado un destinatario para la afiliación')
@@ -1878,18 +1987,314 @@ def order_affiliations(request):
     if request.method == 'POST':
         search = request.POST['search']
 
+        if search == '':
+            return redirect('order-affiliations')
+
         affiliations = Affiliation.objects.filter(
             Q(company = user_company) & (
                 Q(full_name__icontains = search) |
                 Q(order_id__icontains = search)))
         
         if affiliations:
+            formatted_cost = []
+
+            for affiliation in affiliations:
+                if affiliation.affiliation_cost is not None:
+                    affiliation_cost = format_amount(affiliation.affiliation_cost)
+                    formatted_cost.append(affiliation_cost)
+                else:
+                    formatted_cost.append(0)
+
             return render(request, 'order_affiliations.html',{
-                'affiliations': affiliations
+                'affiliations': affiliations,
+                'formatted_cost' : formatted_cost
             })
         messages.warning(request, 'Tu búsqueda no tiene registro de afiliaciones')
         return redirect('order-affiliations')
 
+    formatted_cost = []
+
+    for affiliation in affiliations:
+        if affiliation.affiliation_cost is not None:
+            affiliation_cost = format_amount(affiliation.affiliation_cost)
+            formatted_cost.append(affiliation_cost)
+        else:
+            formatted_cost.append(0)
+
     return render(request, 'order_affiliations.html',{
-        'affiliations': affiliations
+        'affiliations': affiliations,
+        'formatted_cost' : formatted_cost
+    })
+
+@login_required(login_url=inicio)
+def reject_affiliation(request, id):
+
+    affiliation = Affiliation.objects.get(id = id)
+
+    rejected_affiliation = RejectedAffiliation(
+        order_id = affiliation.order_id,
+        client = affiliation.client,
+        city = affiliation.city,
+        in_charge = affiliation.in_charge,
+        full_name = affiliation.full_name,
+        since = affiliation.since,
+        up_to = affiliation.up_to,
+        company = affiliation.company,
+        created_by = affiliation.created_by,
+        created_at = affiliation.created_at,
+        affiliation_cost = affiliation.affiliation_cost,
+        rejected_by = request.user.username
+    )
+
+    affiliation.delete()
+
+    rejected_affiliation.save()
+
+    messages.warning(request, f'La afiliacion del caso {rejected_affiliation.order_id} ha sido rechazada exitosamente')
+
+    return redirect('inicio')
+
+@login_required(login_url=inicio)
+def approve_affiliation(request, id):
+
+    affiliation = Affiliation.objects.get(id = id)
+
+    approved_affiliation = ApprovedAffiliation(
+        order_id = affiliation.order_id,
+        client = affiliation.client,
+        city = affiliation.city,
+        in_charge = affiliation.in_charge,
+        full_name = affiliation.full_name,
+        since = affiliation.since,
+        up_to = affiliation.up_to,
+        company = affiliation.company,
+        created_by = affiliation.created_by,
+        created_at = affiliation.created_at,
+        affiliation_cost = affiliation.affiliation_cost,
+        approved_by = request.user.username
+    )
+
+    affiliation.delete()
+
+    approved_affiliation.save()
+
+    messages.success(request, f'La afiliacion del caso {approved_affiliation.order_id} ha sido aprobada exitosamente')
+
+    return redirect('inicio')
+
+@login_required(login_url=inicio)
+def handle_affiliation(request, id):
+
+    affiliation = Affiliation.objects.get(id = id)
+
+    return render(request, 'handle_affiliation.html', {
+        'affiliation': affiliation
+    })
+
+@login_required(login_url=inicio)
+def rejected_affiliations(request):
+
+    user_company = request.user.company_id
+
+    user_rol = request.user.rol
+
+    if user_rol not in ['gerente', 'recursos humanos']:
+
+        messages.warning(request, f'Tu rol de {user_rol} no te permite visualizar las afiliaciones rechazadas')
+        return redirect('inicio')
+
+    rejected_affiliations = RejectedAffiliation.objects.filter(company = user_company).order_by('-rejected_at')
+
+    if request.method == 'POST':
+        search = request.POST['search']
+        
+        if search == '':
+            return redirect('rejected-affiliations')
+        rejected_affiliations = RejectedAffiliation.objects.filter(Q(company = user_company) &
+                                                                Q(full_name__icontains = search) |
+                                                                Q(order_id__icontains = search)).order_by('-rejected_at')
+        
+        if rejected_affiliations:
+            formatted_cost = []
+
+            for rejected_affiliation in rejected_affiliations:
+                if rejected_affiliation.affiliation_cost is not None:
+                    affiliation = format_amount(rejected_affiliation.affiliation_cost)
+                    formatted_cost.append(affiliation)
+                else:
+                    formatted_cost.append(0)
+                    
+                    
+
+            return render(request, 'rejected_affiliations.html',{
+                'affiliations': rejected_affiliations,
+                'formatted_cost': formatted_cost
+            })
+        messages.warning(request, 'Tu búsqueda no tiene registro de afiliaciones')
+        return redirect('rejected-affiliations')
+
+    formatted_cost = []
+
+    for rejected_affiliation in rejected_affiliations:
+        if rejected_affiliation.affiliation_cost is not None:
+            affiliation = format_amount(rejected_affiliation.affiliation_cost)
+            formatted_cost.append(affiliation)
+        else:
+            formatted_cost.append(0)            
+
+    return render(request, 'rejected_affiliations.html',{
+        'affiliations': rejected_affiliations,
+        'formatted_cost': formatted_cost
+    })
+    
+
+@login_required(login_url=login)
+def user_rejected_affiliations(request):
+
+    user_company = request.user.company_id
+
+    first_name = request.user.first_name
+
+    rejected_affiliations = RejectedAffiliation.objects.filter(in_charge = first_name.upper()).order_by('-rejected_at')
+
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        if search == '':
+            return redirect('user-rejected-affiliations')
+        
+        rejected_affiliations = RejectedAffiliation.objects.filter(Q(company = user_company) & 
+                                                                   Q(in_charge = first_name.upper()) &
+                                                                   Q(full_name__icontains = search) |
+                                                                   Q(order_id__icontains = search)).order_by('-rejected_at')
+        
+        if rejected_affiliations:
+            formatted_cost = []
+
+            for rejected_affiliation in rejected_affiliations:
+                if rejected_affiliation.affiliation_cost is not None:
+                    affiliation = format_amount(rejected_affiliation.affiliation_cost)
+                    formatted_cost.append(affiliation)
+                else:
+                    formatted_cost.append(0)
+                                    
+            return render(request, 'user_rejected_affiliations.html',{
+                'affiliations': rejected_affiliations,
+                'formatted_cost': formatted_cost
+            })
+        messages.warning(request, 'Tu búsqueda no tiene registro de afiliaciones')
+        return redirect('user-rejected-affiliations')
+
+    formatted_cost = []
+
+    for rejected_affiliation in rejected_affiliations:
+        if rejected_affiliation.affiliation_cost is not None:
+            affiliation = format_amount(rejected_affiliation.affiliation_cost)
+            formatted_cost.append(affiliation)
+        else:
+            formatted_cost.append(0)
+
+    return render(request, 'user_rejected_affiliations.html',{
+        'affiliations': rejected_affiliations,
+        'formatted_cost': formatted_cost
+    })
+
+@login_required(login_url=inicio)
+def approved_affiliations(request):
+
+    user_company = request.user.company_id
+
+    approved_affiliations = ApprovedAffiliation.objects.filter(company = user_company)
+
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        if search == '':
+            return redirect('approved-affiliations')
+        
+        approved_affiliations = ApprovedAffiliation.objects.filter(Q(company = user_company) &
+                                                                   Q(full_name__icontains = search) |
+                                                                   Q(order_id__icontains = search))
+        
+        if approved_affiliations:
+
+            formatted_cost = []
+
+            for approved_affiliation in approved_affiliations:
+                if approved_affiliation.affiliation_cost is not None:
+                    affiliation = format_amount(approved_affiliation.affiliation_cost)
+                    formatted_cost.append(affiliation)
+                else:
+                    formatted_cost.append(0)
+
+            return render(request, 'approved_affiliations.html',{
+                'affiliations': approved_affiliations,
+                'formatted_cost': formatted_cost
+            })
+        messages.warning(request, 'Tu búsqueda no tiene registro de afiliaciones')
+        return redirect('approved-affiliations')
+
+    formatted_cost = []
+
+    for approved_affiliation in approved_affiliations:
+        if approved_affiliation.affiliation_cost is not None:
+            affiliation = format_amount(approved_affiliation.affiliation_cost)
+            formatted_cost.append(affiliation)
+        else:
+            formatted_cost.append(0)
+
+    return render(request, 'approved_affiliations.html',{
+        'affiliations': approved_affiliations,
+        'formatted_cost': formatted_cost
+    })
+
+@login_required(login_url=inicio)
+def user_approved_affiliations(request):
+
+    user_company = request.user.company_id
+
+    first_name = request.user.first_name
+
+    approved_affiliations = ApprovedAffiliation.objects.filter(company = user_company).filter(in_charge = first_name.upper()).order_by('-approved_at')
+
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        if search == '':
+            return redirect('user-approved-affiliations')
+        
+        approved_affiliations = ApprovedAffiliation.objects.filter(Q(company = user_company) &
+                                                                   Q(in_charge = first_name.upper()) &
+                                                                   Q(full_name__icontains = search) |
+                                                                   Q(order_id__icontains = search))
+        
+        if approved_affiliations:
+            formatted_cost = []
+
+            for approved_affiliation in approved_affiliations:
+                if approved_affiliation.affiliation_cost is not None:
+                    affiliation = format_amount(approved_affiliation.affiliation_cost)
+                    formatted_cost.append(affiliation)
+                else:
+                    formatted_cost.append(0)
+
+            return render(request, 'approved_affiliations.html',{
+                'affiliations': approved_affiliations,
+                'formatted_cost': formatted_cost
+            })
+        messages.warning(request, 'Tu búsqueda no tiene registros de afiliación')
+        return redirect('approved-affiliations')
+
+    formatted_cost = []
+
+    for approved_affiliation in approved_affiliations:
+        if approved_affiliation.affiliation_cost is not None:
+            affiliation = format_amount(approved_affiliation.affiliation_cost)
+            formatted_cost.append(affiliation)
+        else:
+            formatted_cost.append(0)
+
+    return render(request, 'approved_affiliations.html',{
+        'affiliations': approved_affiliations,
+        'formatted_cost': formatted_cost
     })

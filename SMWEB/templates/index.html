@@ -21,7 +21,7 @@
             
             {% if orders %}
 
-                <h2 id="subtitle" class="subtitle_index">Casos asignados</h2>
+                <h2 id="subtitle" class="subtitle_index">Casos activos</h2>
 
                 <form action="" method="post" class="search_engine">
 
@@ -106,6 +106,17 @@
             {% elif finished_orders %}
                 
                 <h2 id="subtitle" class="subtitle_index">Casos finalizados</h2>
+
+                <form action="" method="post" class="search_engine">
+
+                    {% csrf_token %}
+                    
+                    <label for="search">Buscar</label>
+                    <input type="text" name="search">
+
+                    <input type="submit" class="symbol_search" value="L">
+                    
+                </form>
 
                 <section id="orders">
                     <div class="orders__column orders__column--id">

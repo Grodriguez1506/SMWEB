@@ -219,10 +219,55 @@ class Affiliation(models.Model):
     company = models.CharField(verbose_name="Empresa", max_length=255, null=False)
     created_by = models.CharField(verbose_name="Realizado por", max_length=255, null=False)
     created_at = models.DateField(verbose_name="Realizado el", auto_now_add=True)
+    affiliation_cost = models.DecimalField(verbose_name="Costo de afiliación", max_digits=20, decimal_places=2, null= False, default=96700.00)
 
     class Meta:
         verbose_name = 'Afiliación'
         verbose_name_plural = 'Afiliaiciones'
+    
+    def __str__(self):
+        return self.order_id
+    
+class RejectedAffiliation(models.Model):
+    order_id = models.CharField(verbose_name="Número de caso", max_length=255)
+    client = models.CharField(verbose_name="Cliente", max_length=255, null=False, default="")
+    city = models.CharField(verbose_name="Ciudad", max_length=255, null=False)
+    in_charge = models.CharField(verbose_name="Encargado", max_length=255, null=False, default="")
+    full_name = models.CharField(verbose_name="Nombres y Apellidos", max_length=255, null= False)
+    since = models.DateField(verbose_name="Desde")
+    up_to = models.DateField(verbose_name="Hasta")
+    company = models.CharField(verbose_name="Empresa", max_length=255, null=False)
+    created_by = models.CharField(verbose_name="Realizado por", max_length=255, null=False)
+    created_at = models.DateField(verbose_name="Realizado el")
+    affiliation_cost = models.DecimalField(verbose_name="Costo de afiliación", max_digits=20, decimal_places=2, null= False, default=96700.00)
+    rejected_at = models.DateField(verbose_name="Rechazado el", auto_now_add=True)
+    rejected_by = models.CharField(verbose_name="Rechazado por", max_length=255)
+
+    class Meta:
+        verbose_name = 'Afiliación rechazada'
+        verbose_name_plural = 'Afiliaiciones rechazadas'
+    
+    def __str__(self):
+        return self.order_id
+    
+class ApprovedAffiliation(models.Model):
+    order_id = models.CharField(verbose_name="Número de caso", max_length=255)
+    client = models.CharField(verbose_name="Cliente", max_length=255, null=False, default="")
+    city = models.CharField(verbose_name="Ciudad", max_length=255, null=False)
+    in_charge = models.CharField(verbose_name="Encargado", max_length=255, null=False, default="")
+    full_name = models.CharField(verbose_name="Nombres y Apellidos", max_length=255, null= False)
+    since = models.DateField(verbose_name="Desde")
+    up_to = models.DateField(verbose_name="Hasta")
+    company = models.CharField(verbose_name="Empresa", max_length=255, null=False)
+    created_by = models.CharField(verbose_name="Realizado por", max_length=255, null=False)
+    created_at = models.DateField(verbose_name="Realizado el")
+    affiliation_cost = models.DecimalField(verbose_name="Costo de afiliación", max_digits=20, decimal_places=2, null= False, default=96700.00)
+    approved_at = models.DateField(verbose_name="Aprobado el", auto_now_add=True)
+    approved_by = models.CharField(verbose_name="Aprobado por", max_length=255)
+
+    class Meta:
+        verbose_name = 'Afiliación aprobada'
+        verbose_name_plural = 'Afiliaiciones aprobadas'
     
     def __str__(self):
         return self.order_id

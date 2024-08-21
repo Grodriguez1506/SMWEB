@@ -157,9 +157,8 @@ body{
     transform: scale(1.1);
 }
 
-.notification-li{
-    background-color: lightblue;
-}
+
+/* NOTIFICACIONES */
 
 #notification{
     position: relative !important;
@@ -638,9 +637,12 @@ body{
 .payments__column--rejected_at,
 .affiliations__column--full_name,
 .affiliations__column--client,
-.affiliations__column--in_charge,
-.affiliations__column--up_to,
-.affiliations__column--created_at{
+.affiliations__column--affiliation_cost,
+.affiliations__column--since,
+.affiliations__column--company,
+.affiliations__column--created_by,
+.affiliations__column--rejected_by,
+.affiliations__column--approved_by{
     background-color: #f0f0f084;
 }
 

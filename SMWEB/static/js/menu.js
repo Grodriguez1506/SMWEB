@@ -5,7 +5,7 @@ const side_menu = document.querySelector('#menu');
 const element_1 = document.querySelector('.menu__element--1');
 const element_2 = document.querySelector('.menu__element--2');
 const element_3 = document.querySelector('.menu__element--3');
-const notify = document.querySelector('.notify');
+const notifies = document.querySelectorAll('.notify');
 
 
 function show_menu(){
@@ -16,7 +16,10 @@ function show_menu(){
     element_2.style.opacity = '0';
     element_3.style.transform = 'translateY(-11px) rotate(313deg)';
     side_menu.style.overflow = 'scroll';
-    notify.style.backgroundColor = 'rgb(0, 0, 255)';
+    
+    notifies.forEach(function(notify) {
+        notify.style.backgroundColor = 'rgb(0, 0, 255)';
+    });
 }
 
 function hide_menu(){
@@ -27,7 +30,11 @@ function hide_menu(){
     element_2.style.opacity = '1';
     element_3.style.transform = 'translateY(0px) rotate(0deg)';
     side_menu.style.overflow = 'hidden';
-    notify.style.backgroundColor = 'white';
+    
+    
+    notifies.forEach(function(notify) {
+        notify.style.backgroundColor = 'white';
+    });
 }
 
 

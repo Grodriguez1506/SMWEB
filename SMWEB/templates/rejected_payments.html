@@ -33,11 +33,7 @@
                 <div class="payments__column payments__column--id">
                     <h3 class="column__title">ID</h3>
                     {% for payment in payments %}
-                        {% if user.rol == 'financiero' %}
-                            <div class="payments__element payments__element-id"><a href='{% url "handle-payment" payment.id %}'>{{payment.order_id}}</a></div>
-                        {% else %}
-                            <div class="payments__element payments__element-id">{{payment.order_id}}</div>
-                        {% endif %}
+                        <div class="payments__element payments__element-id">{{payment.order_id}}</div>
                     {% endfor %}
                 </div>
                 <div class="payments__column payments__column--client">
@@ -146,7 +142,7 @@
         
         {% else %}
 
-            <h1 id="title" >No existen pagos realizados</h1>
+            <h1 id="title" >No existen pagos rechazados</h1>
 
         {% endif %}
         

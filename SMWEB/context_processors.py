@@ -1,4 +1,4 @@
-from .models import Company, PaymentRejected, OrderPayment
+from .models import Company, PaymentRejected, OrderPayment, Affiliation, RejectedAffiliation
 
 def get_status(request):
     
@@ -38,12 +38,44 @@ def get_payments(request):
     if request.user.is_authenticated:
         company_id = request.user.company_id
 
-        rejected_payments = OrderPayment.objects.filter(company = company_id).count()
+        payments = OrderPayment.objects.filter(company = company_id).count()
 
         return {
-            'payments': rejected_payments
+            'received_payments': payments
         }
     
     return {
-        'payments': False
+        'received_payments': False
+        }
+
+def get_affiliations(request):
+    
+    if request.user.is_authenticated:
+        company_id = request.user.company_id
+
+        affiliations = Affiliation.objects.filter(company = company_id).count()
+
+        return {
+            'received_affiliations': affiliations
+        }
+    
+    return {
+        'received_affiliations': False
+        }
+
+def get_rejected_affiliations(request):
+    
+    if request.user.is_authenticated:
+        company_id = request.user.company_id
+
+        first_name = request.user.first_name
+
+        rejected_affiliation = RejectedAffiliation.objects.filter(company = company_id).filter(in_charge = first_name.upper()).count()
+
+        return {
+            'rejected_affiliations': rejected_affiliation
+        }
+    
+    return {
+        'rejected_affiliations': False
         }

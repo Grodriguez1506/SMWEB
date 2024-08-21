@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %} Afiliaciones recibidas {% endblock %}
+{% block title %} Afiliaciones rechazadas {% endblock %}
 
 {% block content %}
     {% if messages %}
@@ -14,7 +14,7 @@
     {% endif %}
 
     {% if company.status %}
-        <h1 id="title" >Afiliaciones recibidas</h1>
+        <h1 id="title" >Afiliaciones rechazadas</h1>
         <form action="" method="post" class="search_engine">
 
             {% csrf_token %}
@@ -103,7 +103,7 @@
         
         {% else %}
 
-            <h1 id="title" >No existen pagos recibidos</h1>
+            <h1 id="title" >No existen afiliaciones rechazadas</h1>
 
         {% endif %}
         

@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %} Afiliaciones recibidas {% endblock %}
+{% block title %} Afiliaciones rechazadas {% endblock %}
 
 {% block content %}
     {% if messages %}
@@ -14,7 +14,7 @@
     {% endif %}
 
     {% if company.status %}
-        <h1 id="title" >Afiliaciones recibidas</h1>
+        <h1 id="title" >Afiliaciones rechazadas</h1>
         <form action="" method="post" class="search_engine">
 
             {% csrf_token %}
@@ -96,14 +96,26 @@
                 <div class="affiliations__column affiliations__column--created_by">
                     <h3 class="column__title">Realizado por</h3>
                     {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-created_by">{{affiliation.created_by}}</div>
+                        <div class="affiliations__element affiliationss__element-created_by">{{affiliation.created_by}}</div>
+                    {% endfor %}
+                </div>
+                <div class="affiliations__column affiliations__column--rejected_at">
+                    <h3 class="column__title">Rechazado el</h3>
+                    {% for affiliation in affiliations %}
+                        <div class="affiliations__element affiliations__element-rejected_at">{{affiliation.rejected_at|date:"d/m/Y"}}</div>
+                    {% endfor %}
+                </div>
+                <div class="affiliations__column affiliations__column--rejected_by">
+                    <h3 class="column__title">Rechazado por</h3>
+                    {% for affiliation in affiliations %}
+                        <div class="affiliations__element affiliations__element-rejected_by">{{affiliation.rejected_by}}</div>
                     {% endfor %}
                 </div>
             </section>
         
         {% else %}
 
-            <h1 id="title" >No existen pagos recibidos</h1>
+            <h1 id="title" >No existen afiliaciones rechazadas</h1>
 
         {% endif %}
         

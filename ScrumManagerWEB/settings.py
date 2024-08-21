@@ -69,7 +69,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'SMWEB.context_processors.get_rejected_payments',
                 'SMWEB.context_processors.get_payments',
-                'SMWEB.context_processors.get_status'
+                'SMWEB.context_processors.get_status',
+                'SMWEB.context_processors.get_affiliations',
+                'SMWEB.context_processors.get_rejected_affiliations',
             ],
         },
     },

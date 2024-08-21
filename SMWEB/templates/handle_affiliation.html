@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %} Gestionar afiliación {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% if company.status %}
+        
+        <h1 id="title" >Gestionar afiliación {{affiliation.order_id}}</h1>
+
+        <div class="payment__section">
+            <div class="payment__information">
+                <p class="payment__element payment__element-id"><strong>Caso:</strong> {{affiliation.order_id}}</p>
+                <p class="payment__element payment__element-client"><strong>Cliente:</strong> {{affiliation.client}}</p>
+                <p class="payment__element payment__element-city"><strong>Ciudad:</strong> {{affiliation.city}}</p>
+                <p class="payment__element payment__element-in_charge"><strong>Encargado:</strong> {{affiliation.in_charge}}</p>
+                <p class="payment__element payment__element-since"><strong>Desde:</strong> {{affiliation.since}}</p>
+                <p class="payment__element payment__element-up_to"><strong>Hasta:</strong> {{affiliation.up_to}}</p>
+                <p class="payment__element payment__element-affiliation_cost"><strong>Costo de afiliación:</strong> {{affiliation.affiliation_cost}}</p>
+                <p class="payment__element payment__element-full_name"><strong>Proveedor:</strong> {{affiliation.full_name}}</p>
+                <p class="payment__element payment__element-created_by"><strong>Realizado por:</strong> {{affiliation.created_by}}</p>
+                <p class="payment__element payment__element-created_at"><strong>Realizado el:</strong> {{affiliation.created_at|date:"d/m/Y"}}</p>
+            </div>
+                
+            <div class="btn_payment">
+                <a href='{% url "reject-affiliation" affiliation.id %}' class="reject_payment" onclick="return confirm('¿Estás seguro de que deseas rechazar esta afiliación?');">Rechazar afiliación</a>
+                <a href='{% url "approve-affiliation" affiliation.id %}' class="approve_payment" onclick="return confirm('¿Estás seguro de que deseas aprobar esta afiliación?');" >Aprobar afiliación</a>
+            </div>
+        </div>
+        
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+    
+{% endblock %}
