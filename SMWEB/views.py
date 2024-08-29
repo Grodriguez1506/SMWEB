@@ -1101,7 +1101,7 @@ def dashboard_template(request):
                     'data': data,
                     'main_label': main_label
                 })
-            except:
+            except FinishedOrder.DoesNotExist:
                 messages.warning(request, 'El proyecto seleccionado no ha sido finalizado')
                 return redirect('dashboard-template')
              
