@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %} Panel estadístico {% endblock %}
-
+{% load static %}
 
 {% block content %}
     {% if messages %}
@@ -26,18 +26,18 @@
                 <option value="">Selecciona el tipo de reporte deseado</option>
                 <option value="ventas finalizadas">Ventas finalizadas</option>
                 <option value="ventas finalizadas por gestor">Ventas finalizadas por gestor</option>
-                <option value="casos activos por gestor">Casos activos por gestor</option>
-                <option value="casos finalizados por gestor">Casos finalizados por gestor</option>
+                <option value="proyectos activos por gestor">Proyectos activos por gestor</option>
+                <option value="proyectos finalizados por gestor">Proyectos finalizados por gestor</option>
+                <option value="por proyecto detallado">Por proyecto detallado</option>
             </select>
-            <br><br>
-            <label for="since">Desde</label><br>
-            <input type="date" name="since" placeholder="Fecha inicio"><br>
-            <br><br>
-            <label for="up_to">Hasta</label><br>
-            <input type="date" name="up_to" placeholder="Fecha fin"><br>
-            <br><br>
+            <label for="id" class="label_project">Ingresa el proyecto</label><br>
+            <input type="text" name="id" placeholder="Ingresa el proyecto a validar" class="input_project"><br>
+            <label for="since" class="label_desde">Desde</label><br>
+            <input type="date" name="since" placeholder="Fecha inicio" class="input_desde"><br>
+            <label for="up_to" class="label_hasta">Hasta</label><br>
+            <input type="date" name="up_to" placeholder="Fecha fin" class="input_hasta"><br>
 
-            <input type="submit" value="Generar reporte">
+            <input type="submit" value="Generar reporte" class="btn_dashboard">
 
         </form>
 
@@ -45,4 +45,5 @@
         <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
     {% endif %}
     
+    <script type="text/javascript" src="{% static 'js/dashboard_template.js' %}"></script>
     {% endblock %}

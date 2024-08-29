@@ -978,6 +978,9 @@ def dashboard_template(request):
         if report == 'ventas finalizadas':
             since = request.POST['since']
             up_to = request.POST['up_to']
+
+            main_label = 'Ventas finalizadas por mes'
+
             if since and up_to:
                 # Convertir las cadenas de texto a objetos datetime.date
                 fecha_inicio = datetime.strptime(since, '%Y-%m-%d').date()
@@ -995,12 +998,15 @@ def dashboard_template(request):
 
                 return render(request, 'dashboard_ventas.html',{
                     'labels': labels,
-                    'data': data
+                    'data': data,
+                    'main_label': main_label
                 })
             
         elif report == 'ventas finalizadas por gestor':
             since = request.POST['since']
             up_to = request.POST['up_to']
+
+            main_label = 'Ventas finalizadas por gestor'
 
             if since and up_to:
                 # Convertir las cadenas de texto a objetos datetime.date
@@ -1019,11 +1025,14 @@ def dashboard_template(request):
 
                 return render(request, 'dashboard_ventas.html',{
                     'labels': labels,
-                    'data': data
+                    'data': data,
+                    'main_label': main_label
                 })
-        elif report == 'casos activos por gestor':
+        elif report == 'proyectos activos por gestor':
             since = request.POST['since']
             up_to = request.POST['up_to']
+
+            main_label = 'Proyectos activos por gestor'
 
             if since and up_to:
                 # Convertir las cadenas de texto a objetos datetime.date
@@ -1039,12 +1048,15 @@ def dashboard_template(request):
 
                 return render(request, 'dashboard_casos.html',{
                     'labels': gestores,
-                    'data': totales
+                    'data': totales,
+                    'main_label': main_label
                 })
         
-        elif report == 'casos finalizados por gestor':
+        elif report == 'proyectos finalizados por gestor':
             since = request.POST['since']
             up_to = request.POST['up_to']
+
+            main_label = 'Proyectos finalizados por gestor'
 
             if since and up_to:
                 # Convertir las cadenas de texto a objetos datetime.date
@@ -1060,8 +1072,38 @@ def dashboard_template(request):
 
                 return render(request, 'dashboard_casos.html',{
                     'labels': gestores,
-                    'data': totales
+                    'data': totales,
+                    'main_label': main_label
                 })
+            
+        elif report == 'por proyecto detallado':
+
+            id_proyecto = request.POST['id']
+
+            main_label = "Proyecto " + id_proyecto
+
+            try:
+                queryset = FinishedOrder.objects.filter(company = company).get(order_id = id_proyecto)
+
+                labels = []
+                data = []
+
+                invesment = queryset.invesment
+                sales_value = queryset.sales_value
+
+                labels.append('Inversión')
+                data.append(round(float(invesment), 2))
+                labels.append('Valor de la venta')
+                data.append(round(float(sales_value), 2))
+
+                return render(request, 'dashboard_casos.html',{
+                    'labels': labels,
+                    'data': data,
+                    'main_label': main_label
+                })
+            except:
+                messages.warning(request, 'El proyecto seleccionado no ha sido finalizado')
+                return redirect('dashboard-template')
              
     return render(request, 'dashboard_template.html')
 

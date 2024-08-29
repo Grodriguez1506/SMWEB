@@ -504,6 +504,13 @@ canvas{
     overflow-x: scroll;
 }
 
+/* DASHBOARD TEMPLATE */
+
+.input_project,
+.label_project{
+    display: none;
+}
+
 /* USERS AVAILABLES */
 
 #users,
