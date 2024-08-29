@@ -197,9 +197,10 @@ body{
 
 .slider_container {
     width: 800px;
-    height: 500px;
+    height: 400px;
     overflow: hidden;
     position: relative;
+    box-shadow: 3px 3px 15px #666;
 }
 
 .slider_wrapper {
