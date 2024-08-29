@@ -20,6 +20,11 @@
     </header>
     <nav id="menu" class="hidden_menu">
         <div class="menu_button">
+            {% if notifies %}
+                <div class="notifies">
+                    {{notifies}}
+                </div>
+            {% endif %}
             <div class="menu__element menu__element--1"></div>
             <div class="menu__element menu__element--2"></div>
             <div class="menu__element menu__element--3"></div>
@@ -179,6 +184,9 @@
                                 <a href='{% url "user-rejected-payments" %}'>Pagos rechazados</a>
                             </li>
                         {% endif %}
+                        <li>
+                            <a href='{% url "user-order-affiliations" %}'>Afiliaciones enviadas</a>
+                        </li>
                         {% if rejected_affiliations > 0 %}
                             <li id="notification">
                                 <div class="notify">

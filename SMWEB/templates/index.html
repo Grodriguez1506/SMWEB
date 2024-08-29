@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %} Scrum Manager Web {% endblock %}
+{% load static %}
 
 {% block content %}
     {% if messages %}
@@ -192,6 +193,11 @@
                         {% endfor %}
                     </div>
                 </section>
+            
+            {% else %}
+
+                <h1 id="title" >No existen casos</h1>
+
             {% endif %}
             
         {% else %}
@@ -203,8 +209,21 @@
 
         <h2 id="subtitle">Donde podrás gestionar tus tickets de manera eficaz</h2>
 
+        <div class="slider_container">
+            <div class="slider_wrapper">
+                <div class="slider_element">
+                    <img src="{% static 'images/home_img1.jpg' %}" alt="Imagen 1" class="slider_img">
+                </div>
+                <div class="slider_element">
+                    <img src="{% static 'images/home_img2.jpg' %}" alt="Imagen 2" class="slider_img">
+                </div>
+                <div class="slider_element">
+                    <img src="{% static 'images/home_img3.jpg' %}" alt="Imagen 3" class="slider_img">
+                </div>
+            </div>
+        </div>
+
     {% endif %}
     
-    {% load static %}
     <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
 {% endblock %}

@@ -79,3 +79,64 @@ def get_rejected_affiliations(request):
     return {
         'rejected_affiliations': False
         }
+
+def get_notifies(request):
+
+    if request.user.is_authenticated:
+        user_rol = request.user.rol
+
+        if user_rol == 'gerente':
+
+            company_id = request.user.company_id
+
+            payments = OrderPayment.objects.filter(company = company_id).count()
+
+            affiliations = Affiliation.objects.filter(company = company_id).count()
+
+            notifies = payments + affiliations
+
+            return {
+                'notifies': notifies
+            }
+
+        if user_rol == 'financiero':
+
+            company_id = request.user.company_id
+
+            payments = OrderPayment.objects.filter(company = company_id).count()
+
+            return {
+                'notifies': payments
+            }
+
+        if user_rol == 'recursos humanos':
+            
+            company_id = request.user.company_id
+
+            affiliations = Affiliation.objects.filter(company = company_id).count()
+
+            return {
+                'notifies': affiliations
+            }
+
+        if user_rol == 'gestor':
+            company_id = request.user.company_id
+
+            first_name = request.user.first_name
+
+            rejected_payments = PaymentRejected.objects.filter(company = company_id).filter(in_charge = first_name.upper()).count()
+            rejected_affiliation = RejectedAffiliation.objects.filter(company = company_id).filter(in_charge = first_name.upper()).count()
+
+            notifies = rejected_payments + rejected_affiliation
+
+            return {
+                'notifies': notifies
+            }
+        else:
+            return {
+                'notifies': False
+            }
+    else:
+        return {
+            'notifies': False
+        }

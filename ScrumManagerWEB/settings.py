@@ -72,6 +72,7 @@ TEMPLATES = [
                 'SMWEB.context_processors.get_status',
                 'SMWEB.context_processors.get_affiliations',
                 'SMWEB.context_processors.get_rejected_affiliations',
+                'SMWEB.context_processors.get_notifies',
             ],
         },
     },

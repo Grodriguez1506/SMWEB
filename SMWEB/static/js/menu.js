@@ -6,6 +6,7 @@ const element_1 = document.querySelector('.menu__element--1');
 const element_2 = document.querySelector('.menu__element--2');
 const element_3 = document.querySelector('.menu__element--3');
 const notifies = document.querySelectorAll('.notify');
+const all_notifies = document.querySelector('.notifies')
 
 
 function show_menu(){
@@ -20,6 +21,11 @@ function show_menu(){
     notifies.forEach(function(notify) {
         notify.style.backgroundColor = 'rgb(0, 0, 255)';
     });
+
+    if (all_notifies) {
+        all_notifies.style.transition = 'all 250ms';
+        all_notifies.style.backgroundColor = '#FBFBFB';
+    }
 }
 
 function hide_menu(){
@@ -35,6 +41,11 @@ function hide_menu(){
     notifies.forEach(function(notify) {
         notify.style.backgroundColor = 'white';
     });
+
+    if (all_notifies) {
+        all_notifies.style.transition = 'all 250ms';
+        all_notifies.style.backgroundColor = 'rgb(0, 0, 255)';
+    }
 }
 
 

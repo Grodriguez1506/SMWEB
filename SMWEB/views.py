@@ -764,154 +764,158 @@ def update_order(request, order_id):
         status = request.POST['status']
         remarks = request.POST['remarks']
 
-        if invesment and sales_value and status and remarks:
-
-            order.invesment = invesment
-            order.sales_value = sales_value
-            order.status = status
-            order.remarks = remarks.upper()
-
-            order.save()
-        elif invesment and sales_value and status:
-
-            order.invesment = invesment
-            order.status = status
-            order.sales_value = sales_value
-
-            order.save()
-        elif invesment and remarks and status:
-
-            order.invesment = invesment
-            order.status = status
-            order.remarks = remarks.upper()
-
-            order.save()
-        elif sales_value and remarks and status:
-
-            order.sales_value = sales_value
-            order.status = status
-            order.remarks = remarks.upper()
-
-            order.save()
-        
-        elif invesment and remarks and sales_value:
-
-            order.sales_value = sales_value
-            order.status = status
-            order.remarks = remarks.upper()
-
-            order.save()
-
-        elif invesment and sales_value:
-
-            order.invesment = invesment
-            order.sales_value = sales_value
-
-            order.save()
-
-        elif invesment and remarks:
-
-            order.invesment = invesment
-            order.remarks = remarks
-
-            order.save()
-
-        elif invesment and status:
-
-            order.invesment = invesment
-            order.status = status
-
-            order.save()
-
-        elif sales_value and remarks:
-
-            order.sales_value = sales_value
-            order.remarks = remarks
-
-            order.save()
-
-        elif sales_value and status:
-
-            order.sales_value = sales_value
-            order.status = status
-
-            order.save()
-
-        elif remarks and status:
-
-            order.remarks = remarks
-            order.status = status
-
-            order.save()
-
-        elif invesment:
-
-            order.invesment = invesment
+        if status:
             
-            order.save()
+            if invesment and sales_value and status and remarks:
 
-        elif sales_value:
+                order.invesment = invesment
+                order.sales_value = sales_value
+                order.status = status
+                order.remarks = remarks.upper()
 
-            order.sales_value = sales_value
+                order.save()
+            elif invesment and sales_value and status:
+
+                order.invesment = invesment
+                order.status = status
+                order.sales_value = sales_value
+
+                order.save()
+            elif invesment and remarks and status:
+
+                order.invesment = invesment
+                order.status = status
+                order.remarks = remarks.upper()
+
+                order.save()
+            elif sales_value and remarks and status:
+
+                order.sales_value = sales_value
+                order.status = status
+                order.remarks = remarks.upper()
+
+                order.save()
             
-            order.save()
-        
-        elif remarks:
+            elif invesment and remarks and sales_value:
 
-            order.remarks = remarks.upper()
+                order.sales_value = sales_value
+                order.invesment = invesment
+                order.remarks = remarks.upper()
+
+                order.save()
+
+            elif invesment and sales_value:
+
+                order.invesment = invesment
+                order.sales_value = sales_value
+
+                order.save()
+
+            elif invesment and remarks:
+
+                order.invesment = invesment
+                order.remarks = remarks
+
+                order.save()
+
+            elif invesment and status:
+
+                order.invesment = invesment
+                order.status = status
+
+                order.save()
+
+            elif sales_value and remarks:
+
+                order.sales_value = sales_value
+                order.remarks = remarks
+
+                order.save()
+
+            elif sales_value and status:
+
+                order.sales_value = sales_value
+                order.status = status
+
+                order.save()
+
+            elif remarks and status:
+
+                order.remarks = remarks
+                order.status = status
+
+                order.save()
+
+            elif invesment:
+
+                order.invesment = invesment
+                
+                order.save()
+
+            elif sales_value:
+
+                order.sales_value = sales_value
+                
+                order.save()
             
-            order.save()
-        
-        elif status:
+            elif remarks:
 
-            order.status = status
+                order.remarks = remarks.upper()
+                
+                order.save()
+            
+            elif status:
 
-            order.save()
+                order.status = status
 
-        order = WorkOrder.objects.get(order_id = order_id)
+                order.save()
 
-        if order.sales_value and order.invesment:
+            order = WorkOrder.objects.get(order_id = order_id)
 
-            profit = float(order.sales_value) - float(order.invesment)
+            if order.sales_value and order.invesment:
 
-            formatted_profit = format_amount(profit)
+                profit = float(order.sales_value) - float(order.invesment)
 
-            result = (int(profit) / int(order.sales_value)) * 100
+                formatted_profit = format_amount(profit)
 
-            profit_percentage = round(result, 2)
-        
-        elif order.sales_value:
+                result = (int(profit) / int(order.sales_value)) * 100
 
-            profit = float(order.sales_value) - 0
+                profit_percentage = round(result, 2)
+            
+            elif order.sales_value:
 
-            formatted_profit = format_amount(profit)
+                profit = float(order.sales_value) - 0
 
-            result = (int(profit) / int(order.sales_value)) * 100
+                formatted_profit = format_amount(profit)
 
-            profit_percentage = round(result, 2)
-        
-        elif order.invesment:
+                result = (int(profit) / int(order.sales_value)) * 100
 
-            profit = 0 - float(order.invesment)
+                profit_percentage = round(result, 2)
+            
+            elif order.invesment:
 
-            formatted_profit = format_amount(profit)
+                profit = 0 - float(order.invesment)
 
-            result = int(profit) * 100
+                formatted_profit = format_amount(profit)
 
-            profit_percentage = round(result, 2)
+                result = int(profit) * 100
 
+                profit_percentage = round(result, 2)
+
+            else:
+                formatted_profit = 0
+
+                profit_percentage = 0
+
+            messages.success(request, 'Actualización realizada con éxito.')
+
+            return render(request, 'update_order.html',{
+            'order': order,
+            'profit': formatted_profit,
+            'percentage': profit_percentage
+            })
         else:
-            formatted_profit = 0
-
-            profit_percentage = 0
-
-        messages.success(request, 'Actualización realizada con éxito.')
-
-        return render(request, 'update_order.html',{
-        'order': order,
-        'profit': formatted_profit,
-        'percentage': profit_percentage
-        })
+            messages.warning(request, 'Recuerda establecer el estado de tu caso')
 
     return render(request, 'update_order.html',{
         'order': order,
@@ -1726,20 +1730,25 @@ def create_supplier(request):
         type_account = request.POST['type_account']
         city = request.POST['city']
 
-        supplier = Supplier(
-            full_name = full_name.upper(),
-            type_document = type_document,
-            document_number = document_number,
-            bank_account = bank_account.upper(),
-            account_number = account_number,
-            type_account = type_account,
-            company = request.user.company_id,
-            city = city.upper()
-        )
+        if full_name and type_document and document_number and bank_account and account_number and type_account and city:
 
-        supplier.save()
-        messages.success(request, f'El proveedor {full_name} ha sido creado exitosamente')
-        return redirect('inicio')
+            supplier = Supplier(
+                full_name = full_name.upper(),
+                type_document = type_document,
+                document_number = document_number,
+                bank_account = bank_account.upper(),
+                account_number = account_number,
+                type_account = type_account,
+                company = request.user.company_id,
+                city = city.upper()
+            )
+
+            supplier.save()
+            messages.success(request, f'El proveedor {full_name} ha sido creado exitosamente')
+            return redirect('inicio')
+        else:
+            messages.warning(request, 'Todos los campos son obligatorios')
+            return redirect('create-supplier')
 
     return render(request, 'create_supplier.html')
 
@@ -1922,7 +1931,7 @@ def make_affiliattion(request):
 
     first_name = request.user.first_name
 
-    suppliers = Supplier.objects.filter(company = user_company)
+    suppliers = Supplier.objects.filter(company = user_company).order_by('full_name')
 
     user_rol = request.user.rol
 
@@ -2297,4 +2306,62 @@ def user_approved_affiliations(request):
     return render(request, 'approved_affiliations.html',{
         'affiliations': approved_affiliations,
         'formatted_cost': formatted_cost
+    })
+
+@login_required(login_url=inicio)
+def user_order_affiliations(request):
+
+    user_company = request.user.company_id
+
+    user_rol = request.user.rol
+
+    first_name = request.user.first_name
+
+    if user_rol != 'gestor':
+
+        messages.warning(request, f'Tu rol de {user_rol} no te permite visualizar las afiliaciones enviadas')
+        return redirect('inicio')
+
+    affiliations = Affiliation.objects.filter(company = user_company).filter(in_charge = first_name.upper())
+
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        if search == '':
+            return redirect('user-order-affiliations')
+
+        affiliations = Affiliation.objects.filter(Q(company = user_company) &
+                                                  Q(in_charge = first_name.upper()) &
+                                                  Q(full_name__icontains = search) |
+                                                  Q(order_id__icontains = search))
+        
+        if affiliations:
+            formatted_cost = []
+
+            for affiliation in affiliations:
+                if affiliation.affiliation_cost is not None:
+                    affiliation_cost = format_amount(affiliation.affiliation_cost)
+                    formatted_cost.append(affiliation_cost)
+                else:
+                    formatted_cost.append(0)
+
+            return render(request, 'user_order_affiliations.html',{
+                'affiliations': affiliations,
+                'formatted_cost' : formatted_cost
+            })
+        messages.warning(request, 'Tu búsqueda no tiene registro de afiliaciones')
+        return redirect('user-order-affiliations')
+
+    formatted_cost = []
+
+    for affiliation in affiliations:
+        if affiliation.affiliation_cost is not None:
+            affiliation_cost = format_amount(affiliation.affiliation_cost)
+            formatted_cost.append(affiliation_cost)
+        else:
+            formatted_cost.append(0)
+
+    return render(request, 'user_order_affiliations.html',{
+        'affiliations': affiliations,
+        'formatted_cost' : formatted_cost
     })

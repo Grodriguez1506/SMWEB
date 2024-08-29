@@ -51,6 +51,7 @@ urlpatterns = [
     path('suppliers-company/', views.suppliers_company, name='suppliers-company'),
     path('make-affiliation/', views.make_affiliattion, name='make-affiliation'),
     path('order-affiliations/', views.order_affiliations, name='order-affiliations'),
+    path('user-order-affiliations/', views.user_order_affiliations, name='user-order-affiliations'),
     path('reject-affiliation/<int:id>', views.reject_affiliation, name='reject-affiliation'),
     path('approve-affiliation/<int:id>', views.approve_affiliation, name='approve-affiliation'),
     path('handle-affiliation/<int:id>', views.handle_affiliation, name='handle-affiliation'),
