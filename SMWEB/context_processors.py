@@ -91,7 +91,8 @@ def get_notifies(request):
 
             payments = OrderPayment.objects.filter(company = company_id).count()
 
-            affiliations = Affiliation.objects.filter(company = company_id).count()
+            # affiliations = Affiliation.objects.filter(company = company_id).count()
+            affiliations = 0
 
             notifies = payments + affiliations
 
@@ -113,7 +114,8 @@ def get_notifies(request):
             
             company_id = request.user.company_id
 
-            affiliations = Affiliation.objects.filter(company = company_id).count()
+            # affiliations = Affiliation.objects.filter(company = company_id).count()
+            affiliations = 0
 
             return {
                 'notifies': affiliations
@@ -125,7 +127,8 @@ def get_notifies(request):
             first_name = request.user.first_name
 
             rejected_payments = PaymentRejected.objects.filter(company = company_id).filter(in_charge = first_name.upper()).count()
-            rejected_affiliation = RejectedAffiliation.objects.filter(company = company_id).filter(in_charge = first_name.upper()).count()
+            # rejected_affiliation = RejectedAffiliation.objects.filter(company = company_id).filter(in_charge = first_name.upper()).count()
+            rejected_affiliation = 0
 
             notifies = rejected_payments + rejected_affiliation
 

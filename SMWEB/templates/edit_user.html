@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %} Editar usuario {% endblock %}
+
+{% block content %}
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <span id="alert-{{message.tags}}">{{message}}</span>
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% if company.status %}
+        
+        <h1 id="title" >Editar usuario {{user.first_name}}</h1>
+
+        <div class="payment__section">
+            <div class="payment__information">
+                <p class="payment__element payment__element-id"><strong>Nombre:</strong> {{user.first_name}}</p>
+                <p class="payment__element payment__element-client"><strong>Apellido:</strong> {{user.last_name}}</p>
+                <p class="payment__element payment__element-city"><strong>Nombre de usuario:</strong> {{user.username}}</p>
+                <p class="payment__element payment__element-city"><strong>Cargo:</strong> {{user.rol|capfirst}}</p>
+            </div>
+
+            <form id="creation_form" class="update_form" action="" method="post">
+
+                {% csrf_token %}
+    
+                <br><br>
+                <label for="first_name">Nombre</label><br>
+                <input type="text" name="first_name" placeholder="Ingresa el nuevo nombre"><br>
+                <label for="last_name">Apellido</label><br>
+                <input type="text" name="last_name" placeholder="Ingresa el nuevo apellido"><br>
+                <label for="rol">Cargo</label><br>
+                <select id="rol" name="rol">
+                    <option value="">Ingresa el nuevo rol</option>
+                    <option value="compras">Compras</option>
+                    <option value="coordinador">Coordinador/a</option>
+                    <option value="financiero">Financiero/a</option>
+                    <option value="gerente">Gerente</option>
+                    <option value="facturacion">Facturación</option>
+                    <option value="gestor">Gestor</option>
+                    <option value="recursos humanos">Recursos humanos</option>
+                </select>
+                <label for="username">Usuario</label><br>
+                <input type="text" name="username" placeholder="Ingresa el nuevo nombre de usuario"><br>
+    
+                <input type="submit" value="Actualizar usuario">
+                
+                <div class="btn_container">
+                    <a href='{% url "delete-user" user.id %}' class="delete_user" onclick="return confirm('¿Estás seguro de que deseas eliminar el usuario seleccionado?');">Eliminar usuario</a>
+                </div>
+    
+            </form>
+        </div>
+        
+    {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %}
+    
+{% endblock %}

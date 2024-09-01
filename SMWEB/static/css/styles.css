@@ -535,6 +535,11 @@ canvas{
     text-align: center;
 }
 
+.users__column{
+    min-width: 250px;
+    text-align: center;
+}
+
 .users__column--company,
 .suppliers__column--full_name{
     background-color: #f0f0f084;
@@ -668,14 +673,16 @@ canvas{
 
 .orders__element-id > a,
 .payments__element-id > a,
-.affiliations__element-full_name > a{
+.affiliations__element-full_name > a,
+.users__element-firstname > a{
     color: black;
     transition: all 450ms;
 }
 
 .orders__element-id > a:hover,
 .payments__element-id > a:hover,
-.affiliations__element-full_name > a:hover{
+.affiliations__element-full_name > a:hover,
+.users__element-firstname > a:hover{
     color: rgb(0, 132, 255);
     text-decoration: underline;
 }
@@ -767,6 +774,7 @@ canvas{
 
 .finish_order,
 .delete_order,
+.delete_user,
 .reject_payment,
 .approve_payment{
     font-family: var(--normal-font);
@@ -779,10 +787,17 @@ canvas{
     transition: all 450ms;
 }
 
+.delete_user{
+    width: 100%;
+    height: 30px;
+    text-align: center;
+}
+
 .finish_order:hover,
 .delete_order:hover,
 .reject_payment:hover,
-.approve_payment:hover{
+.approve_payment:hover,
+.delete_user:hover{
     box-shadow: 0px 0px 10px #999;
 }
 

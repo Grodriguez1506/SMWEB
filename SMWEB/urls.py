@@ -59,4 +59,6 @@ urlpatterns = [
     path('user-rejected-affiliations/', views.user_rejected_affiliations, name='user-rejected-affiliations'),
     path('approved-affiliations/', views.approved_affiliations, name='approved-affiliations'),
     path('user-approved-affiliations/', views.user_approved_affiliations, name='user-approved-affiliations'),
+    path('select-user/<int:user_id>', views.select_user, name='select-user'),
+    path('delete-user/<int:user_id>', views.delete_user, name='delete-user'),
 ]

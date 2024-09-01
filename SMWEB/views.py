@@ -2407,3 +2407,45 @@ def user_order_affiliations(request):
         'affiliations': affiliations,
         'formatted_cost' : formatted_cost
     })
+
+@login_required(login_url=inicio)
+def select_user(request, user_id):
+
+    user = CustomUser.objects.get(id = user_id)
+
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        rol = request.POST['rol']
+        username = request.POST['username']
+
+        if first_name:
+            user.first_name = first_name
+            user.save()
+        
+        if last_name:
+            user.last_name = last_name
+            user.save()
+
+        if rol:
+            user.rol = rol
+            user.save()
+
+        if username:
+            user.username = username
+            user.save()
+
+        messages.success(request, 'El usuario ha sido modificado exitosamente')
+
+    return render(request, 'edit_user.html',{
+        'user': user
+    })
+
+@login_required(login_url=inicio)
+def delete_user(request, user_id):
+
+    user = CustomUser.objects.get(id=user_id)
+    user.delete()
+    
+    messages.warning(request, 'El usuario seleccionado ha sido eliminado satisfactoriamente')
+    return redirect('users-company')

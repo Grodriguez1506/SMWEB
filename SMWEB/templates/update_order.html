@@ -58,7 +58,7 @@
                 <input type="submit" value="Actualizar caso">
                 
                 <div class="btn_container">
-                    <a href='{% url "delete-order" order.order_id %}' class="delete_order" onclick="return confirm('¿Estás seguro de que deseas eliminar eliminar la orden?');">Eliminar caso</a>
+                    <a href='{% url "delete-order" order.order_id %}' class="delete_order" onclick="return confirm('¿Estás seguro de que deseas eliminar la orden?');">Eliminar caso</a>
                     <a href='{% url "finsh-order" order.order_id %}' class="finish_order-hidden" onclick="return confirm('¿Estás seguro de que deseas finalizar la orden?');">Finalizar caso</a>
                 </div>
     

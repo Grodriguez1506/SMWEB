@@ -81,7 +81,7 @@
                         <li>
                             <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
                         </li>
-                        {% if received_affiliations > 0 %}
+                        {% comment %} {% if received_affiliations > 0 %}
                             <li id="notification">
                                 <div class="notify">
                                     {{received_affiliations}}
@@ -95,9 +95,9 @@
                         {% endif %}
                         <li>
                             <a href='{% url "rejected-affiliations" %}'>Afiliaciones rechazadas</a>
-                        </li>
+                        </li> {% endcomment %}
                     {% elif user.rol == 'recursos humanos' %}
-                        {% if received_affiliations > 0 %}
+                        {% comment %} {% if received_affiliations > 0 %}
                             <li id="notification">
                                 <div class="notify">
                                     {{received_affiliations}}
@@ -114,7 +114,7 @@
                         </li>
                         <li>
                             <a href='{% url "approved-affiliations" %}'>Afiliaciones aprobadas</a>
-                        </li>
+                        </li> {% endcomment %}
                         <li>
                             <a href='{% url "new-company-user" %}'>Crear usuario</a>
                         </li>
@@ -163,9 +163,9 @@
                         <li>
                             <a href='{% url "make-payment" %}'>Pagos proveedores</a>
                         </li>
-                        <li>
+                        {% comment %} <li>
                             <a href='{% url "make-affiliation" %}'>Afiliar proveedor</a>
-                        </li>
+                        </li> {% endcomment %}
                         <li>
                             <a href='{% url "user-order-payments" %}'>Pagos enviados</a>
                         </li>
@@ -184,7 +184,7 @@
                                 <a href='{% url "user-rejected-payments" %}'>Pagos rechazados</a>
                             </li>
                         {% endif %}
-                        <li>
+                        {% comment %} <li>
                             <a href='{% url "user-order-affiliations" %}'>Afiliaciones enviadas</a>
                         </li>
                         {% if rejected_affiliations > 0 %}
@@ -201,7 +201,7 @@
                         {% endif %}
                         <li>
                             <a href='{% url "user-approved-affiliations" %}'>Afiliaciones aprobadas</a>
-                        </li>
+                        </li> {% endcomment %}
                     {% elif user.rol == 'facturacion' %}
                         <li>
                             <a href='{% url "invoiced-orders" %}'>Casos facturados</a>

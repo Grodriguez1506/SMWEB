@@ -33,7 +33,7 @@
                 <div class="users__column users__column--firstname">
                     <h3 class="column__title">Nombres</h3>
                     {% for user in users %}
-                        <div class="users__element users__element-firstname">{{user.first_name|capfirst}}</div>
+                        <div class="users__element users__element-firstname"><a href="{% url "select-user" user.id %}">{{user.first_name|capfirst}}</a></div>
                     {% endfor %}
                 </div>
                 <div class="users__column users__column--lastname">

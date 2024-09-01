@@ -17,7 +17,7 @@
     {% if user.is_authenticated %}
 
         {% if company.status %}
-            <h1 id="title" >Bienvenido/a {{user.first_name}} {{user.last_name}}</h1>
+            <h1 id="title" >Bienvenido/a {{user.first_name}}</h1>
             <h2 id="subtitle" class="subtitle_index">{{user.rol|capfirst}} de {{user.company}}</h2>
             
             {% if orders %}
@@ -193,6 +193,8 @@
                         {% endfor %}
                     </div>
                 </section>
+            
+            {% elif user.rol == 'recursos humanos' %}
             
             {% else %}
 
