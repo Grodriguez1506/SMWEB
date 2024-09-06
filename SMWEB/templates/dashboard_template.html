@@ -14,36 +14,39 @@
 
     {% endif %}
     
-    {% if company.status %}
-        <h1 id="title" >Ingresa la información para generar tu reporte</h1>
-        
-        <form id="creation_form" action="" method="post">
+    {% comment %} {% if company.status %} {% endcomment %}
+    <h1 id="title" >Ingresa la información para generar tu reporte</h1>
+    
+    <form id="creation_form" action="" method="post">
 
-            {% csrf_token %}
+        {% csrf_token %}
 
-            <label for="report">Tipo de reporte</label><br>
-            <select id="report" name="report">
-                <option value="">Selecciona el tipo de reporte deseado</option>
-                <option value="ventas finalizadas">Ventas finalizadas</option>
-                <option value="ventas finalizadas por gestor">Ventas finalizadas por gestor</option>
-                <option value="proyectos activos por gestor">Proyectos activos por gestor</option>
-                <option value="proyectos finalizados por gestor">Proyectos finalizados por gestor</option>
-                <option value="por proyecto detallado">Por proyecto detallado</option>
-            </select>
-            <label for="id" class="label_project">Ingresa el proyecto</label><br>
-            <input type="text" name="id" placeholder="Ingresa el proyecto a validar" class="input_project"><br>
-            <label for="since" class="label_desde">Desde</label><br>
-            <input type="date" name="since" placeholder="Fecha inicio" class="input_desde"><br>
-            <label for="up_to" class="label_hasta">Hasta</label><br>
-            <input type="date" name="up_to" placeholder="Fecha fin" class="input_hasta"><br>
+        <label for="report">Tipo de reporte</label><br>
+        <select id="report" name="report">
+            <option value="">Selecciona el tipo de reporte deseado</option>
+            <option value="ventas finalizadas">Ventas finalizadas</option>
+            <option value="ventas finalizadas por gestor">Ventas finalizadas por gestor</option>
+            <option value="ventas facturadas por gestor">Ventas facturadas por gestor</option>
+            <option value="proyectos activos por gestor">Proyectos activos por gestor</option>
+            <option value="proyectos finalizados por gestor">Proyectos finalizados por gestor</option>
+            <option value="proyectos facturados por gestor">Proyectos facturados por gestor</option>
+            <option value="por proyecto detallado finalizado">Por proyecto detallado finalizado</option>
+            <option value="por proyecto detallado facturado">Por proyecto detallado facturado</option>
+        </select>
+        <label for="id" class="label_project">Ingresa el proyecto</label><br>
+        <input type="text" name="id" placeholder="Ingresa el proyecto a validar" class="input_project"><br>
+        <label for="since" class="label_desde">Desde</label><br>
+        <input type="date" name="since" placeholder="Fecha inicio" class="input_desde"><br>
+        <label for="up_to" class="label_hasta">Hasta</label><br>
+        <input type="date" name="up_to" placeholder="Fecha fin" class="input_hasta"><br>
 
-            <input type="submit" value="Generar reporte" class="btn_dashboard">
+        <input type="submit" value="Generar reporte" class="btn_dashboard">
 
-        </form>
+    </form>
 
-    {% else %}
+    {% comment %} {% else %}
         <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
-    {% endif %}
+    {% endif %} {% endcomment %}
     
     <script type="text/javascript" src="{% static 'js/dashboard_template.js' %}"></script>
     {% endblock %}

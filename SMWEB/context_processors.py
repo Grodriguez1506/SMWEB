@@ -1,20 +1,21 @@
 from .models import Company, PaymentRejected, OrderPayment, Affiliation, RejectedAffiliation
 
-def get_status(request):
-    
-    if request.user.is_authenticated:
+# def get_status(request):
 
-        id = request.user.company_id
 
-        company = Company.objects.get(id = id)
+#     if request.user.is_authenticated:
 
-        return {
-            'company': company
-        }
-    else:
-        return {
-            'company' : False
-        }
+#         id = request.user.company_id
+
+#         company = Company.objects.get(id = id)
+
+#         return {
+#             'company': company
+#         }
+#     else:
+#         return {
+#             'company' : False
+#         }
     
 def get_rejected_payments(request):
     

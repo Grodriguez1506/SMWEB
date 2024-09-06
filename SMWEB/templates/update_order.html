@@ -13,61 +13,61 @@
 
     {% endif %}
 
-    {% if company.status %}
+    {% comment %} {% if company.status %} {% endcomment %}
         
-        <h1 id="title" >Caso {{order.order_id}}</h1>
+    <h1 id="title" >Caso {{order.order_id}}</h1>
 
-        <div class="order__section">
-            <div class="order__information">
-                <p class="order__element order__element-id"><strong>Caso:</strong> {{order.order_id}}</p>
-                <p class="order__element order__element-client"><strong>Cliente:</strong> {{order.client}}</p>
-                <p class="order__element order__element-city"><strong>Ciudad:</strong> {{order.city}}</p>
-                <p class="order__element order__element-invesment"><strong>Inversión:</strong> {{order.invesment}}</p>
-                <p class="order__element order__element-sales_value"><strong>Valor de la venta:</strong> {{order.sales_value}}</p>
-                <p class="order__element order__element-service_description"><strong>Descripción:</strong> {{order.service_description}}</p>
-                <p class="order__element order__element-remarks"><strong>Observaciones:</strong> {{order.remarks}}</p>
-                <p class="order__element order__element-in_charge"><strong>Encargado:</strong> {{order.in_charge}}</p>
-                <p class="order__element order__element-assigned_by"><strong>Asignado por:</strong> {{order.assigned_by}}</p>
-                <p class="order__element order__element-status"><strong>Estado:</strong> {{order.status}}</p>
-                <p class="order__element order__element-profit"><strong>Ganancia:</strong> {{profit}}</p>
-                <p class="order__element order__element-profit_percentage"><strong>Rendimiento:</strong> {{percentage}}%</p>
+    <div class="order__section">
+        <div class="order__information">
+            <p class="order__element order__element-id"><strong>Caso:</strong> {{order.order_id}}</p>
+            <p class="order__element order__element-client"><strong>Cliente:</strong> {{order.client}}</p>
+            <p class="order__element order__element-city"><strong>Ciudad:</strong> {{order.city}}</p>
+            <p class="order__element order__element-invesment"><strong>Inversión:</strong> {{order.invesment}}</p>
+            <p class="order__element order__element-sales_value"><strong>Valor de la venta:</strong> {{order.sales_value}}</p>
+            <p class="order__element order__element-service_description"><strong>Descripción:</strong> {{order.service_description}}</p>
+            <p class="order__element order__element-remarks"><strong>Observaciones:</strong> {{order.remarks}}</p>
+            <p class="order__element order__element-in_charge"><strong>Encargado:</strong> {{order.in_charge}}</p>
+            <p class="order__element order__element-assigned_by"><strong>Asignado por:</strong> {{order.assigned_by}}</p>
+            <p class="order__element order__element-status"><strong>Estado:</strong> {{order.status}}</p>
+            <p class="order__element order__element-profit"><strong>Ganancia:</strong> {{profit}}</p>
+            <p class="order__element order__element-profit_percentage"><strong>Rendimiento:</strong> {{percentage}}%</p>
+        </div>
+
+        <form id="creation_form" class="update_form" action="" method="post">
+
+            {% csrf_token %}
+
+            <br><br>
+            <label for="invesment">Inversión</label><br>
+            <input type="text" name="invesment" placeholder="Ingresa el monto de inversión del caso"><br>
+            <br><br>
+            <label for="sales_value">Valor de la venta</label><br>
+            <input type="text" name="sales_value" placeholder="Ingresa el valor de la venta"><br>
+            <br><br>
+            <label for="status">Estado</label><br>
+            <select id="status" name="status">
+                <option value="">Actualiza el estado del caso</option>
+                <option value="Activo">Activo</option>
+                <option value="En ejecucion">En ejecución</option>
+                <option value="Finalizado">Finalizado</option>
+            </select>
+            <label for="remarks">Observaciones del caso</label><br>
+            <textarea name="remarks", class="textarea", maxlength="135", placeholder="Describe observaciones relacionadas al caso", rows="10", cols="20"></textarea>
+            <span class="counter">0/135</span>
+
+            <input type="submit" value="Actualizar caso">
+            
+            <div class="btn_container">
+                <a href='{% url "delete-order" order.order_id %}' class="delete_order" onclick="return confirm('¿Estás seguro de que deseas eliminar la orden?');">Eliminar caso</a>
+                <a href='{% url "finsh-order" order.order_id %}' class="finish_order-hidden" onclick="return confirm('¿Estás seguro de que deseas finalizar la orden?');">Finalizar caso</a>
             </div>
 
-            <form id="creation_form" class="update_form" action="" method="post">
-
-                {% csrf_token %}
+        </form>
+    </div>
     
-                <br><br>
-                <label for="invesment">Inversión</label><br>
-                <input type="text" name="invesment" placeholder="Ingresa el monto de inversión del caso"><br>
-                <br><br>
-                <label for="sales_value">Valor de la venta</label><br>
-                <input type="text" name="sales_value" placeholder="Ingresa el valor de la venta"><br>
-                <br><br>
-                <label for="status">Estado</label><br>
-                <select id="status" name="status">
-                    <option value="">Actualiza el estado del caso</option>
-                    <option value="Activo">Activo</option>
-                    <option value="En ejecucion">En ejecución</option>
-                    <option value="Finalizado">Finalizado</option>
-                </select>
-                <label for="remarks">Observaciones del caso</label><br>
-                <textarea name="remarks", class="textarea", maxlength="135", placeholder="Describe observaciones relacionadas al caso", rows="10", cols="20"></textarea>
-                <span class="counter">0/135</span>
-    
-                <input type="submit" value="Actualizar caso">
-                
-                <div class="btn_container">
-                    <a href='{% url "delete-order" order.order_id %}' class="delete_order" onclick="return confirm('¿Estás seguro de que deseas eliminar la orden?');">Eliminar caso</a>
-                    <a href='{% url "finsh-order" order.order_id %}' class="finish_order-hidden" onclick="return confirm('¿Estás seguro de que deseas finalizar la orden?');">Finalizar caso</a>
-                </div>
-    
-            </form>
-        </div>
-        
-    {% else %}
+    {% comment %} {% else %}
         <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
-    {% endif %}
+    {% endif %} {% endcomment %}
     
     {% load static %}
     <script type="text/javascript" src="{% static 'js/update_order.js' %}"></script>

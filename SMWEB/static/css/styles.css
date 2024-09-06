@@ -711,7 +711,9 @@ canvas{
 .affiliations__column--company,
 .affiliations__column--created_by,
 .affiliations__column--rejected_by,
-.affiliations__column--approved_by{
+.affiliations__column--approved_by,
+.orders__column--invoiced_at,
+.orders__column--invoice_id{
     background-color: #f0f0f084;
 }
 

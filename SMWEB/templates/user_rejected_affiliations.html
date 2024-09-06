@@ -13,102 +13,102 @@
 
     {% endif %}
 
-    {% if company.status %}
-        <h1 id="title" >Afiliaciones rechazadas</h1>
-        <form action="" method="post" class="search_engine">
+    {% comment %} {% if company.status %} {% endcomment %}
+    <h1 id="title" >Afiliaciones rechazadas</h1>
+    <form action="" method="post" class="search_engine">
 
-            {% csrf_token %}
-            
-            <label for="search">Buscar</label>
-            <input type="text" name="search">
-
-            <input type="submit" class="symbol_search" value="L">
-            
-        </form>
+        {% csrf_token %}
         
-        {% if affiliations %}
+        <label for="search">Buscar</label>
+        <input type="text" name="search">
 
-            <section id="affiliations">
-                <div class="affiliations__column affiliations__column--full_name">
-                    <h3 class="column__title">Nombres y Apellidos</h3>
-                    {% for affiliation in affiliations %}
-                        {% if user.rol == 'recursos humanos' %}
-                            <div class="affiliations__element affiliations__element-full_name"><a href='{% url "handle-affiliation" affiliation.id %}'>{{affiliation.full_name}}</a></div>
-                        {% else %}
-                            <div class="affiliations__element affiliations__element-full_name">{{affiliation.full_name}}</div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--id">
-                    <h3 class="column__title">ID</h3>
-                    {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-id">{{affiliation.order_id}}</div>
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--client">
-                    <h3 class="column__title">Cliente</h3>
-                    {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-client">{{affiliation.client}}</div>
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--city">
-                    <h3 class="column__title">Ciudad</h3>
-                    {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-city">{{affiliation.city}}</div>
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--affiliation_cost">
-                    <h3 class="column__title">Costo de afiliación</h3>
-                    {% for affiliation_cost in formatted_cost %}
-                        <div class="payments__element payments__element-affiliation_cost">{{affiliation_cost}}</div>
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--in_charge">
-                    <h3 class="column__title">Encargado</h3>
-                    {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-in_charge">{{affiliation.in_charge}}</div>
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--since">
-                    <h3 class="column__title">Desde</h3>
-                    {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-since">{{affiliation.since|date:'d/m/Y'}}</div>
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--up_to">
-                    <h3 class="column__title">Hasta</h3>
-                    {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-up_to">{{affiliation.up_to|date:'d/m/Y'}}</div>
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--company">
-                    <h3 class="column__title">Empresa</h3>
-                    {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-company">{{user.company|upper}}</div>
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--created_at">
-                    <h3 class="column__title">Creado el</h3>
-                    {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-created_at">{{affiliation.created_at|date:'d/m/Y'}}</div>
-                    {% endfor %}
-                </div>
-                <div class="affiliations__column affiliations__column--created_by">
-                    <h3 class="column__title">Realizado por</h3>
-                    {% for affiliation in affiliations %}
-                        <div class="payments__element payments__element-created_by">{{affiliation.created_by}}</div>
-                    {% endfor %}
-                </div>
-            </section>
+        <input type="submit" class="symbol_search" value="L">
         
-        {% else %}
+    </form>
+    
+    {% if affiliations %}
 
-            <h1 id="title" >No existen afiliaciones rechazadas</h1>
-
-        {% endif %}
-        
+        <section id="affiliations">
+            <div class="affiliations__column affiliations__column--full_name">
+                <h3 class="column__title">Nombres y Apellidos</h3>
+                {% for affiliation in affiliations %}
+                    {% if user.rol == 'recursos humanos' %}
+                        <div class="affiliations__element affiliations__element-full_name"><a href='{% url "handle-affiliation" affiliation.id %}'>{{affiliation.full_name}}</a></div>
+                    {% else %}
+                        <div class="affiliations__element affiliations__element-full_name">{{affiliation.full_name}}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--id">
+                <h3 class="column__title">ID</h3>
+                {% for affiliation in affiliations %}
+                    <div class="payments__element payments__element-id">{{affiliation.order_id}}</div>
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--client">
+                <h3 class="column__title">Cliente</h3>
+                {% for affiliation in affiliations %}
+                    <div class="payments__element payments__element-client">{{affiliation.client}}</div>
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--city">
+                <h3 class="column__title">Ciudad</h3>
+                {% for affiliation in affiliations %}
+                    <div class="payments__element payments__element-city">{{affiliation.city}}</div>
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--affiliation_cost">
+                <h3 class="column__title">Costo de afiliación</h3>
+                {% for affiliation_cost in formatted_cost %}
+                    <div class="payments__element payments__element-affiliation_cost">{{affiliation_cost}}</div>
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--in_charge">
+                <h3 class="column__title">Encargado</h3>
+                {% for affiliation in affiliations %}
+                    <div class="payments__element payments__element-in_charge">{{affiliation.in_charge}}</div>
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--since">
+                <h3 class="column__title">Desde</h3>
+                {% for affiliation in affiliations %}
+                    <div class="payments__element payments__element-since">{{affiliation.since|date:'d/m/Y'}}</div>
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--up_to">
+                <h3 class="column__title">Hasta</h3>
+                {% for affiliation in affiliations %}
+                    <div class="payments__element payments__element-up_to">{{affiliation.up_to|date:'d/m/Y'}}</div>
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--company">
+                <h3 class="column__title">Empresa</h3>
+                {% for affiliation in affiliations %}
+                    <div class="payments__element payments__element-company">{{user.company|upper}}</div>
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--created_at">
+                <h3 class="column__title">Creado el</h3>
+                {% for affiliation in affiliations %}
+                    <div class="payments__element payments__element-created_at">{{affiliation.created_at|date:'d/m/Y'}}</div>
+                {% endfor %}
+            </div>
+            <div class="affiliations__column affiliations__column--created_by">
+                <h3 class="column__title">Realizado por</h3>
+                {% for affiliation in affiliations %}
+                    <div class="payments__element payments__element-created_by">{{affiliation.created_by}}</div>
+                {% endfor %}
+            </div>
+        </section>
+    
     {% else %}
-        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+
+        <h1 id="title" >No existen afiliaciones rechazadas</h1>
+
     {% endif %}
+    
+    {% comment %} {% else %}
+        <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+    {% endif %} {% endcomment %}
 
 {% endblock %}

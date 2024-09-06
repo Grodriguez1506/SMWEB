@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.contrib import messages
 from .models import *
 from .utils import format_amount
@@ -19,7 +20,7 @@ def inicio(request):
 
         user_company = request.user.company_id
 
-        if user_rol == 'administrador':
+        if request.user.is_staff:
 
             return render(request, 'index.html')
 
@@ -35,7 +36,8 @@ def inicio(request):
                                                       Q(order_id__icontains= search) |
                                                       Q(in_charge__icontains= search) |
                                                       Q(city__icontains = search) |
-                                                      Q(client__icontains = search)).order_by('-order_id')
+                                                      Q(client__icontains = search) |
+                                                      Q(status__icontains = search)).order_by('-order_id')
 
                     if orders:
 
@@ -100,7 +102,8 @@ def inicio(request):
                                                       Q(order_id__icontains= search) |
                                                       Q(in_charge__icontains= search) |
                                                       Q(city__icontains = search) |
-                                                      Q(client__icontains = search)).order_by('-order_id')
+                                                      Q(client__icontains = search) |
+                                                      Q(status__icontains = search)).order_by('-order_id')
 
                     if orders:
                         formatted_invesment = []
@@ -166,7 +169,8 @@ def inicio(request):
                                                     Q(company = user_company) &
                                                     Q(order_id__icontains= search) |
                                                     Q(city__icontains = search) |
-                                                    Q(client__icontains = search)).order_by('-order_id')
+                                                    Q(client__icontains = search) |
+                                                    Q(status__icontains = search)).order_by('-order_id')
 
                 if orders:
                     formatted_invesment = []
@@ -341,7 +345,7 @@ def closed_orders(request):
 
     user_company = request.user.company_id
 
-    if user_rol == 'gerente' or user_rol == 'coordinador':
+    if user_rol in ['gerente', 'coordinador']:
 
         orders = FinishedOrder.objects.filter(company = user_company).order_by('-order_id')
 
@@ -384,9 +388,9 @@ def closed_orders(request):
                 return render(request, 'closed_orders.html', {
                     'orders': orders
                 })
-            else:
-                messages.warning(request, 'El caso que buscas no existe')
-                return redirect('closed-orders')
+            
+            messages.warning(request, 'El caso que buscas no existe')
+            return redirect('closed-orders')
             
         return render(request, 'closed_orders.html', {
             'orders': orders
@@ -484,9 +488,9 @@ def login_user(request):
 @login_required(login_url=inicio)
 def new_user(request):
 
-    user_rol = request.user.rol
+    staff = request.user.is_staff
     
-    if user_rol != 'administrador':
+    if not staff:
 
         messages.warning(request, 'Esta función es solo del administrador del software')
 
@@ -537,6 +541,9 @@ def new_user(request):
             
             else:
                 messages.warning(request, 'Completa los campos vacíos del formulario')
+        except IntegrityError as e:
+            if 'UNIQUE constraint failed: SMWEB_customuser.username' in str(e):
+                messages.warning(request, 'El nombre de usuario que elegiste ya se encuentra en uso')
         except:
             messages.warning(request, 'Valida los campos con errores')
 
@@ -596,24 +603,27 @@ def new_company_user(request):
             else:
                 messages.warning(request, 'Completa los campos vacíos del formulario')
 
-        except:
-            messages.warning(request, 'Valida los campos con errores')
+        except IntegrityError as e:
+            if 'UNIQUE constraint failed: SMWEB_customuser.username' in str(e):
+                messages.warning(request, 'El nombre de usuario que elegiste ya se encuentra en uso')
+        except Exception as e:
+            messages.warning(request, f'{e}')
 
     return render(request, 'new_company_user.html')
 
 @login_required(login_url=inicio)
 def users_availables(request):
 
-    user_rol = request.user.rol
+    staff = request.user.is_staff
     
-    if user_rol != 'administrador':
+    if not staff:
 
         messages.warning(request, 'Esta función es solo del administrador del software')
 
         return redirect('inicio')
     else:
 
-        users = CustomUser.objects.all()
+        users = CustomUser.objects.all().exclude(is_staff = True)
 
         return render(request, 'users.html',{
             'users': users
@@ -633,7 +643,7 @@ def users_company(request):
         company = request.user.company_id
 
         users = CustomUser.objects.filter(company_id = company)
-
+        
         if request.method == 'POST':
                 search = request.POST['search']
 
@@ -763,159 +773,71 @@ def update_order(request, order_id):
         sales_value = request.POST['sales_value']
         status = request.POST['status']
         remarks = request.POST['remarks']
+        
+        if invesment:
+
+            order.invesment = invesment
+            order.save()
+
+        if sales_value:
+
+            order.sales_value = sales_value
+            order.save()
 
         if status:
-            
-            if invesment and sales_value and status and remarks:
 
-                order.invesment = invesment
-                order.sales_value = sales_value
-                order.status = status
-                order.remarks = remarks.upper()
+            order.status = status
+            order.save()
 
-                order.save()
-            elif invesment and sales_value and status:
+        if remarks:
 
-                order.invesment = invesment
-                order.status = status
-                order.sales_value = sales_value
+            order.remarks = remarks.upper()
+            order.save()
 
-                order.save()
-            elif invesment and remarks and status:
+        order = WorkOrder.objects.get(order_id = order_id)
 
-                order.invesment = invesment
-                order.status = status
-                order.remarks = remarks.upper()
+        if order.sales_value and order.invesment:
 
-                order.save()
-            elif sales_value and remarks and status:
+            profit = float(order.sales_value) - float(order.invesment)
 
-                order.sales_value = sales_value
-                order.status = status
-                order.remarks = remarks.upper()
+            formatted_profit = format_amount(profit)
 
-                order.save()
-            
-            elif invesment and remarks and sales_value:
+            result = (int(profit) / int(order.sales_value)) * 100
 
-                order.sales_value = sales_value
-                order.invesment = invesment
-                order.remarks = remarks.upper()
+            profit_percentage = round(result, 2)
+        
+        elif order.sales_value:
 
-                order.save()
+            profit = float(order.sales_value) - 0
 
-            elif invesment and sales_value:
+            formatted_profit = format_amount(profit)
 
-                order.invesment = invesment
-                order.sales_value = sales_value
+            result = (int(profit) / int(order.sales_value)) * 100
 
-                order.save()
+            profit_percentage = round(result, 2)
+        
+        elif order.invesment:
 
-            elif invesment and remarks:
+            profit = 0 - float(order.invesment)
 
-                order.invesment = invesment
-                order.remarks = remarks
+            formatted_profit = format_amount(profit)
 
-                order.save()
+            result = int(profit) * 100
 
-            elif invesment and status:
+            profit_percentage = round(result, 2)
 
-                order.invesment = invesment
-                order.status = status
-
-                order.save()
-
-            elif sales_value and remarks:
-
-                order.sales_value = sales_value
-                order.remarks = remarks
-
-                order.save()
-
-            elif sales_value and status:
-
-                order.sales_value = sales_value
-                order.status = status
-
-                order.save()
-
-            elif remarks and status:
-
-                order.remarks = remarks
-                order.status = status
-
-                order.save()
-
-            elif invesment:
-
-                order.invesment = invesment
-                
-                order.save()
-
-            elif sales_value:
-
-                order.sales_value = sales_value
-                
-                order.save()
-            
-            elif remarks:
-
-                order.remarks = remarks.upper()
-                
-                order.save()
-            
-            elif status:
-
-                order.status = status
-
-                order.save()
-
-            order = WorkOrder.objects.get(order_id = order_id)
-
-            if order.sales_value and order.invesment:
-
-                profit = float(order.sales_value) - float(order.invesment)
-
-                formatted_profit = format_amount(profit)
-
-                result = (int(profit) / int(order.sales_value)) * 100
-
-                profit_percentage = round(result, 2)
-            
-            elif order.sales_value:
-
-                profit = float(order.sales_value) - 0
-
-                formatted_profit = format_amount(profit)
-
-                result = (int(profit) / int(order.sales_value)) * 100
-
-                profit_percentage = round(result, 2)
-            
-            elif order.invesment:
-
-                profit = 0 - float(order.invesment)
-
-                formatted_profit = format_amount(profit)
-
-                result = int(profit) * 100
-
-                profit_percentage = round(result, 2)
-
-            else:
-                formatted_profit = 0
-
-                profit_percentage = 0
-
-            messages.success(request, 'Actualización realizada con éxito.')
-
-            return render(request, 'update_order.html',{
-            'order': order,
-            'profit': formatted_profit,
-            'percentage': profit_percentage
-            })
         else:
-            messages.warning(request, 'Recuerda establecer el estado de tu caso')
+            formatted_profit = 0
+
+            profit_percentage = 0
+
+        messages.success(request, 'Actualización realizada con éxito.')
+
+        return render(request, 'update_order.html',{
+        'order': order,
+        'profit': formatted_profit,
+        'percentage': profit_percentage
+        })
 
     return render(request, 'update_order.html',{
         'order': order,
@@ -1028,6 +950,34 @@ def dashboard_template(request):
                     'data': data,
                     'main_label': main_label
                 })
+            
+        elif report == 'ventas facturadas por gestor':
+            since = request.POST['since']
+            up_to = request.POST['up_to']
+
+            main_label = 'Ventas facturadas por gestor'
+
+            if since and up_to:
+                # Convertir las cadenas de texto a objetos datetime.date
+                fecha_inicio = datetime.strptime(since, '%Y-%m-%d').date()
+                fecha_fin = datetime.strptime(up_to, '%Y-%m-%d').date()
+
+                labels = []
+                data = []
+
+                queryset = InvoicedOrder.objects.filter(invoiced_at__range=(fecha_inicio, fecha_fin)).filter(company = company)
+
+                resultado = queryset.values('in_charge').annotate(total=Sum('sales_value')).order_by('in_charge')
+
+                labels = [venta['in_charge'] for venta in resultado]
+                data = [float(venta['total']) for venta in resultado]
+
+                return render(request, 'dashboard_ventas.html',{
+                    'labels': labels,
+                    'data': data,
+                    'main_label': main_label
+                })
+
         elif report == 'proyectos activos por gestor':
             since = request.POST['since']
             up_to = request.POST['up_to']
@@ -1075,8 +1025,32 @@ def dashboard_template(request):
                     'data': totales,
                     'main_label': main_label
                 })
+        
+        elif report == 'proyectos facturados por gestor':
+            since = request.POST['since']
+            up_to = request.POST['up_to']
+
+            main_label = 'Proyectos facturados por gestor'
+
+            if since and up_to:
+                # Convertir las cadenas de texto a objetos datetime.date
+                fecha_inicio = datetime.strptime(since, '%Y-%m-%d').date()
+                fecha_fin = datetime.strptime(up_to, '%Y-%m-%d').date()
+
+                queryset = InvoicedOrder.objects.filter(invoiced_at__range=(fecha_inicio, fecha_fin)).filter(company = company)
+
+                resultado = queryset.values('in_charge').annotate(total=Count('order_id'))
+
+                gestores = [gestor['in_charge'] for gestor in resultado]
+                totales = [servicio['total'] for servicio in resultado]
+
+                return render(request, 'dashboard_casos.html',{
+                    'labels': gestores,
+                    'data': totales,
+                    'main_label': main_label
+                })
             
-        elif report == 'por proyecto detallado':
+        elif report == 'por proyecto detallado finalizado':
 
             id_proyecto = request.POST['id']
 
@@ -1102,7 +1076,35 @@ def dashboard_template(request):
                     'main_label': main_label
                 })
             except FinishedOrder.DoesNotExist:
-                messages.warning(request, 'El proyecto seleccionado no ha sido finalizado')
+                messages.warning(request, 'El proyecto seleccionado no está finalizado')
+                return redirect('dashboard-template')
+        elif report == 'por proyecto detallado facturado':
+
+            id_proyecto = request.POST['id']
+
+            main_label = "Proyecto " + id_proyecto
+
+            try:
+                queryset = InvoicedOrder.objects.filter(company = company).get(order_id = id_proyecto)
+
+                labels = []
+                data = []
+
+                invesment = queryset.invesment
+                sales_value = queryset.sales_value
+
+                labels.append('Inversión')
+                data.append(round(float(invesment), 2))
+                labels.append('Valor de la venta')
+                data.append(round(float(sales_value), 2))
+
+                return render(request, 'dashboard_casos.html',{
+                    'labels': labels,
+                    'data': data,
+                    'main_label': main_label
+                })
+            except FinishedOrder.DoesNotExist:
+                messages.warning(request, 'El proyecto seleccionado no está finalizado')
                 return redirect('dashboard-template')
              
     return render(request, 'dashboard_template.html')
@@ -1301,9 +1303,9 @@ def user_order_payments(request):
                 'formatted_sales': formatted_sales,
                 'formatted_payments': formatted_payments
             })
-        else:
-            messages.warning(request, 'El caso que buscas no tiene pagos registrados')
-            return redirect('user-order-payments')
+        
+        messages.warning(request, 'El caso que buscas no tiene pagos registrados')
+        return redirect('user-order-payments')
 
     formatted_invesment = []
     formatted_sales = []
@@ -1511,6 +1513,8 @@ def user_rejected_payments(request):
         'formatted_sales': formatted_sales,
         'formatted_payments': formatted_payments
     })
+
+
 
 @login_required(login_url=inicio)
 def approved_payments(request):
@@ -1903,6 +1907,15 @@ def handle_rejected_payment(request, id):
         'payment': payment_rejected,
         'suppliers': suppliers
     })
+
+@login_required(login_url=inicio)
+def delete_rejected_payment(request, id):
+
+    payment_rejected = PaymentRejected.objects.get(id = id)
+
+    payment_rejected.delete()
+
+    return render(request, 'user_rejected_payments.html')
 
 @login_required(login_url=inicio)
 def reject_payment(request, id):
@@ -2411,35 +2424,42 @@ def user_order_affiliations(request):
 @login_required(login_url=inicio)
 def select_user(request, user_id):
 
-    user = CustomUser.objects.get(id = user_id)
+    user_rol = request.user.rol
 
-    if request.method == 'POST':
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        rol = request.POST['rol']
-        username = request.POST['username']
+    if user_rol in ['gerente', 'recursos humanos']:
 
-        if first_name:
-            user.first_name = first_name
-            user.save()
-        
-        if last_name:
-            user.last_name = last_name
-            user.save()
+        user_selected = CustomUser.objects.get(id = user_id)
 
-        if rol:
-            user.rol = rol
-            user.save()
+        if request.method == 'POST':
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            rol = request.POST['rol']
+            username = request.POST['username']
 
-        if username:
-            user.username = username
-            user.save()
+            if first_name:
+                user_selected.first_name = first_name
+                user_selected.save()
+            
+            if last_name:
+                user_selected.last_name = last_name
+                user_selected.save()
 
-        messages.success(request, 'El usuario ha sido modificado exitosamente')
+            if rol:
+                user_selected.rol = rol
+                user_selected.save()
 
-    return render(request, 'edit_user.html',{
-        'user': user
-    })
+            if username:
+                user_selected.username = username
+                user_selected.save()
+
+            messages.success(request, 'El usuario ha sido modificado exitosamente')
+
+        return render(request, 'edit_user.html',{
+            'user_selected': user_selected
+        })
+    
+    messages.warning(request, f'Tu rol de {user_rol} no te permite acceder a la edición de usuarios')
+    return redirect ('inicio')
 
 @login_required(login_url=inicio)
 def delete_user(request, user_id):

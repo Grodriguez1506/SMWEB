@@ -16,195 +16,206 @@
 
     {% if user.is_authenticated %}
 
-        {% if company.status %}
-            <h1 id="title" >Bienvenido/a {{user.first_name}}</h1>
+        {% comment %} {% if company.status %} {% endcomment %}
+        <h1 id="title" >Bienvenido/a {{user.first_name|capfirst}} {{user.last_name|capfirst}}</h1>
+        
+        {% if orders %}
+
             <h2 id="subtitle" class="subtitle_index">{{user.rol|capfirst}} de {{user.company}}</h2>
-            
-            {% if orders %}
+            <h2 id="subtitle" class="subtitle_index">Casos activos</h2>
 
-                <h2 id="subtitle" class="subtitle_index">Casos activos</h2>
+            <form action="" method="post" class="search_engine">
 
-                <form action="" method="post" class="search_engine">
-
-                    {% csrf_token %}
-                    
-                    <label for="search">Buscar</label>
-                    <input type="text" name="search">
-
-                    <input type="submit" class="symbol_search" value="L">
-                    
-                </form>
-
-                <section id="orders">
-                    <div class="orders__column orders__column--id">
-                        <h3 class="column__title-orders">ID</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-id"><a href="{% url 'update-order' order.order_id %}">{{order.order_id}}</a></div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--client">
-                        <h3 class="column__title-orders">Cliente</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-client">{{order.client}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--city">
-                        <h3 class="column__title-orders">Ciudad</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-city">{{order.city}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--invesment">
-                        <h3 class="column__title-orders">Inversión</h3>
-                        {% for invesment in formatted_invesment %}
-                            <div class="orders__element orders__element-invesment">{{invesment}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--sales_value">
-                        <h3 class="column__title-orders">Valor de la venta</h3>
-                        {% for sales in formatted_sales %}
-                            <div class="orders__element orders__element-sales_value">{{sales}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--service_description">
-                        <h3 class="column__title-orders">Descripción</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-service_description">{{order.service_description}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--remarks">
-                        <h3 class="column__title-orders">Observaciones</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-remarks">{{order.remarks}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--in_charge">
-                        <h3 class="column__title-orders">Encargado</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-in_charge">{{order.in_charge}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--assigned_by">
-                        <h3 class="column__title-orders">Asignado por</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-assigned_by">{{order.assigned_by}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--status">
-                        <h3 class="column__title-orders">Estado</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-status">{{order.status}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--created_at">
-                        <h3 class="column__title-orders">Asignado el</h3>
-                        {% for order in orders %}
-                            <div class="orders__element orders__element-created_at">{{order.created_at|date:"d/m/Y"}}</div>
-                        {% endfor %}
-                    </div>
-                </section>
-            
-            {% elif finished_orders %}
+                {% csrf_token %}
                 
-                <h2 id="subtitle" class="subtitle_index">Casos finalizados</h2>
+                <label for="search">Buscar</label>
+                <input type="text" name="search">
 
-                <form action="" method="post" class="search_engine">
+                <input type="submit" class="symbol_search" value="L">
+                
+            </form>
 
-                    {% csrf_token %}
-                    
-                    <label for="search">Buscar</label>
-                    <input type="text" name="search">
-
-                    <input type="submit" class="symbol_search" value="L">
-                    
-                </form>
-
-                <section id="orders">
-                    <div class="orders__column orders__column--id">
-                        <h3 class="column__title-orders">ID</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-id"><a href="{% url 'invoice-order' order.order_id %}">{{order.order_id}}</a></div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--client">
-                        <h3 class="column__title-orders">Cliente</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-client">{{order.client}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--city">
-                        <h3 class="column__title-orders">Ciudad</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-city">{{order.city}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--invesment">
-                        <h3 class="column__title-orders">Inversión</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-invesment">{{order.invesment}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--sales_value">
-                        <h3 class="column__title-orders">Valor de la venta</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-sales_value">{{order.sales_value}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--service_description">
-                        <h3 class="column__title-orders">Descripción</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-service_description">{{order.service_description}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--remarks">
-                        <h3 class="column__title-orders">Observaciones</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-remarks">{{order.remarks}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--in_charge">
-                        <h3 class="column__title-orders">Encargado</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-in_charge">{{order.in_charge}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--assigned_by">
-                        <h3 class="column__title-orders">Asignado por</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-assigned_by">{{order.assigned_by}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--status">
-                        <h3 class="column__title-orders">Estado</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-status">{{order.status}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--finished_at">
-                        <h3 class="column__title-orders">Finalizado el</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-finished_at">{{order.finished_at|date:"d/m/Y"}}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="orders__column orders__column--finished_by">
-                        <h3 class="column__title-orders">Finalizado por</h3>
-                        {% for order in finished_orders %}
-                            <div class="orders__element orders__element-finished_by">{{order.finished_by}}</div>
-                        {% endfor %}
-                    </div>
-                </section>
+            <section id="orders">
+                <div class="orders__column orders__column--id">
+                    <h3 class="column__title-orders">ID</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-id"><a href="{% url 'update-order' order.order_id %}">{{order.order_id}}</a></div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--client">
+                    <h3 class="column__title-orders">Cliente</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-client">{{order.client}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--city">
+                    <h3 class="column__title-orders">Ciudad</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-city">{{order.city}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--invesment">
+                    <h3 class="column__title-orders">Inversión</h3>
+                    {% for invesment in formatted_invesment %}
+                        <div class="orders__element orders__element-invesment">{{invesment}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--sales_value">
+                    <h3 class="column__title-orders">Valor de la venta</h3>
+                    {% for sales in formatted_sales %}
+                        <div class="orders__element orders__element-sales_value">{{sales}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--service_description">
+                    <h3 class="column__title-orders">Descripción</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-service_description">{{order.service_description}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--remarks">
+                    <h3 class="column__title-orders">Observaciones</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-remarks">{{order.remarks}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--in_charge">
+                    <h3 class="column__title-orders">Encargado</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-in_charge">{{order.in_charge}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--assigned_by">
+                    <h3 class="column__title-orders">Asignado por</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-assigned_by">{{order.assigned_by}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--status">
+                    <h3 class="column__title-orders">Estado</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-status">{{order.status}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--created_at">
+                    <h3 class="column__title-orders">Asignado el</h3>
+                    {% for order in orders %}
+                        <div class="orders__element orders__element-created_at">{{order.created_at|date:"d/m/Y"}}</div>
+                    {% endfor %}
+                </div>
+            </section>
+        
+        {% elif finished_orders %}
             
-            {% elif user.rol == 'recursos humanos' %}
-            
-            {% else %}
+            <h2 id="subtitle" class="subtitle_index">{{user.rol|capfirst}} de {{user.company}}</h2>
+            <h2 id="subtitle" class="subtitle_index">Casos finalizados</h2>
 
-                <h1 id="title" >No existen casos</h1>
+            <form action="" method="post" class="search_engine">
 
-            {% endif %}
-            
+                {% csrf_token %}
+                
+                <label for="search">Buscar</label>
+                <input type="text" name="search">
+
+                <input type="submit" class="symbol_search" value="L">
+                
+            </form>
+
+            <section id="orders">
+                <div class="orders__column orders__column--id">
+                    <h3 class="column__title-orders">ID</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-id"><a href="{% url 'invoice-order' order.order_id %}">{{order.order_id}}</a></div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--client">
+                    <h3 class="column__title-orders">Cliente</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-client">{{order.client}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--city">
+                    <h3 class="column__title-orders">Ciudad</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-city">{{order.city}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--invesment">
+                    <h3 class="column__title-orders">Inversión</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-invesment">{{order.invesment}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--sales_value">
+                    <h3 class="column__title-orders">Valor de la venta</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-sales_value">{{order.sales_value}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--service_description">
+                    <h3 class="column__title-orders">Descripción</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-service_description">{{order.service_description}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--remarks">
+                    <h3 class="column__title-orders">Observaciones</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-remarks">{{order.remarks}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--in_charge">
+                    <h3 class="column__title-orders">Encargado</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-in_charge">{{order.in_charge}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--assigned_by">
+                    <h3 class="column__title-orders">Asignado por</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-assigned_by">{{order.assigned_by}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--status">
+                    <h3 class="column__title-orders">Estado</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-status">{{order.status}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--finished_at">
+                    <h3 class="column__title-orders">Finalizado el</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-finished_at">{{order.finished_at|date:"d/m/Y"}}</div>
+                    {% endfor %}
+                </div>
+                <div class="orders__column orders__column--finished_by">
+                    <h3 class="column__title-orders">Finalizado por</h3>
+                    {% for order in finished_orders %}
+                        <div class="orders__element orders__element-finished_by">{{order.finished_by}}</div>
+                    {% endfor %}
+                </div>
+            </section>
+        
+        {% elif user.rol == 'recursos humanos' %}
+
+            <h2 id="subtitle" class="subtitle_index">{{user.rol|capfirst}} de {{user.company}}</h2>
+        
+        {% elif user.rol == 'financiero' %}
+
+        <h2 id="subtitle" class="subtitle_index">{{user.rol|capfirst}} de {{user.company}}</h2>
+
+        {% elif user.is_staff %}
+        
+            <h2 id="subtitle" class="subtitle_index">Administrador de Scrum Manager Web</h2>
+
         {% else %}
-            <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+
+            <h1 id="title" >No existen casos</h1>
+
         {% endif %}
+            
+        {% comment %} {% else %}
+            <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
+        {% endif %} {% endcomment %}
     {% else %}
 
         <h1 id="title" >Bienvenidos a Scrum Manager Web</h1>

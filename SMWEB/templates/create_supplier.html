@@ -13,52 +13,52 @@
 
     {% endif %}
 
-    {% if company.status %}
-        <h1 id="title" >Crear proveedor</h1>
-        
-        <form id="creation_form" action="" method="post">
+    {% comment %} {% if company.status %} {% endcomment %}
+    <h1 id="title" >Crear proveedor</h1>
+    
+    <form id="creation_form" action="" method="post">
 
-            {% csrf_token %}
+        {% csrf_token %}
 
-            <label for="full_name">Nombres y apellidos / Razón social</label><br>
-            <input type="text" name="full_name" placeholder="Ingresa el nombre o razón social del proveedor"><br>
-            <br><br>
-            <label for="type_document">Tipo de documento</label><br>
-            <select id="type_document" name="type_document">
-                <option value="">Selecciona el tipo de documento</option>
-                <option value="CC">CC</option>
-                <option value="NIT">Nit</option>
-                <option value="CE">CE</option>
-                <option value="PASAPORTE">Pasaporte</option>
-                <option value="PPT">PPT</option>
-            </select>
-            <br><br>
-            <label for="document_number">Número de documento</label><br>
-            <input type="text" name="document_number" placeholder="Ingresa el número de documento del proveedor"><br>
-            <br><br>
-            <label for="bank_account">Banco</label><br>
-            <input type="text" name="bank_account" placeholder="Ingresa el banco del proveedor"><br>
-            <br><br>
-            <label for="account_number">Número de cuenta</label><br>
-            <input type="text" name="account_number" placeholder="Ingresa el número de cuenta"><br>
-            <br><br>
-            <label for="type_account">Tipo de cuenta</label><br>
-            <select id="type_account" name="type_account">
-                <option value="">Selecciona el tipo de cuenta</option>
-                <option value="AHORROS">Ahorros</option>
-                <option value="CORRIENTE">Corriente</option>
-            </select>
-            <br><br>
-            <label for="city">Ciudad</label><br>
-            <input type="text" name="city" placeholder="Ingresa la ciudad del proveedor"><br>
-            <br><br>
+        <label for="full_name">Nombres y apellidos / Razón social</label><br>
+        <input type="text" name="full_name" placeholder="Ingresa el nombre o razón social del proveedor"><br>
+        <br><br>
+        <label for="type_document">Tipo de documento</label><br>
+        <select id="type_document" name="type_document">
+            <option value="">Selecciona el tipo de documento</option>
+            <option value="CC">CC</option>
+            <option value="NIT">Nit</option>
+            <option value="CE">CE</option>
+            <option value="PASAPORTE">Pasaporte</option>
+            <option value="PPT">PPT</option>
+        </select>
+        <br><br>
+        <label for="document_number">Número de documento</label><br>
+        <input type="text" name="document_number" placeholder="Ingresa el número de documento del proveedor"><br>
+        <br><br>
+        <label for="bank_account">Banco</label><br>
+        <input type="text" name="bank_account" placeholder="Ingresa el banco del proveedor"><br>
+        <br><br>
+        <label for="account_number">Número de cuenta</label><br>
+        <input type="text" name="account_number" placeholder="Ingresa el número de cuenta"><br>
+        <br><br>
+        <label for="type_account">Tipo de cuenta</label><br>
+        <select id="type_account" name="type_account">
+            <option value="">Selecciona el tipo de cuenta</option>
+            <option value="AHORROS">Ahorros</option>
+            <option value="CORRIENTE">Corriente</option>
+        </select>
+        <br><br>
+        <label for="city">Ciudad</label><br>
+        <input type="text" name="city" placeholder="Ingresa la ciudad del proveedor"><br>
+        <br><br>
 
-            <input type="submit" value="Crear proveedor">
+        <input type="submit" value="Crear proveedor">
 
-        </form>
+    </form>
 
-    {% else %}
+    {% comment %} {% else %}
         <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
-    {% endif %}
+    {% endif %} {% endcomment %}
 
 {% endblock %}

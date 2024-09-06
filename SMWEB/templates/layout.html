@@ -35,179 +35,179 @@
             </li>
             {% if user.is_authenticated %}
 
-                {% if company.status %}
+                {% comment %} {% if company.status %} {% endcomment %}
                 
-                    {% if user.rol == 'administrador' %}
-                        <li>
-                            <a href='{% url "new-user" %}'>Crear usuario</a>
+                {% if user.is_staff %}
+                    <li>
+                        <a href='{% url "new-user" %}'>Crear usuario</a>
+                    </li>
+                    <li>
+                        <a href='{% url "users" %}'>Gestionar usuarios</a>
+                    </li>
+                {% elif user.rol == 'gerente' %}
+                    <li>
+                        <a href='{% url "dashboard-template" %}'>Estadísticas</a>
+                    </li>
+                    <li>
+                        <a href='{% url "assign-case" %}'>Asignar caso</a>
+                    </li>
+                    <li>
+                        <a href='{% url "users-company" %}'>Ver usuarios</a>
+                    </li>
+                    <li>
+                        <a href='{% url "closed-orders" %}'>Casos finalizados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "invoiced-orders" %}'>Casos facturados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "deleted-orders" %}'>Casos eliminados</a>
+                    </li>
+                    {% if received_payments > 0 %}
+                        <li id="notification">
+                            <div class="notify">
+                                {{received_payments}}
+                            </div>
+                            <a href='{% url "order-payments" %}'>Pagos recibidos</a>
                         </li>
+                    {% else %}
                         <li>
-                            <a href='{% url "users" %}'>Gestionar usuarios</a>
+                            <a href='{% url "order-payments" %}'>Pagos recibidos</a>
                         </li>
-                    {% elif user.rol == 'gerente' %}
-                        <li>
-                            <a href='{% url "dashboard-template" %}'>Estadísticas</a>
+                    {% endif %}                        
+                    <li>
+                        <a href='{% url "approved-payments" %}'>Pagos aprobados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
+                    </li>
+                    {% comment %} {% if received_affiliations > 0 %}
+                        <li id="notification">
+                            <div class="notify">
+                                {{received_affiliations}}
+                            </div>
+                            <a href='{% url "order-affiliations" %}'>Afiliaciones recibidas</a>
                         </li>
+                    {% else %}
                         <li>
-                            <a href='{% url "assign-case" %}'>Asignar caso</a>
-                        </li>
-                        <li>
-                            <a href='{% url "users-company" %}'>Ver usuarios</a>
-                        </li>
-                        <li>
-                            <a href='{% url "closed-orders" %}'>Casos finalizados</a>
-                        </li>
-                        <li>
-                            <a href='{% url "invoiced-orders" %}'>Casos facturados</a>
-                        </li>
-                        <li>
-                            <a href='{% url "deleted-orders" %}'>Casos eliminados</a>
-                        </li>
-                        {% if received_payments > 0 %}
-                            <li id="notification">
-                                <div class="notify">
-                                    {{received_payments}}
-                                </div>
-                                <a href='{% url "order-payments" %}'>Pagos recibidos</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href='{% url "order-payments" %}'>Pagos recibidos</a>
-                            </li>
-                        {% endif %}                        
-                        <li>
-                            <a href='{% url "approved-payments" %}'>Pagos aprobados</a>
-                        </li>
-                        <li>
-                            <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
-                        </li>
-                        {% comment %} {% if received_affiliations > 0 %}
-                            <li id="notification">
-                                <div class="notify">
-                                    {{received_affiliations}}
-                                </div>
-                                <a href='{% url "order-affiliations" %}'>Afiliaciones recibidas</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href='{% url "order-affiliations" %}'>Afiliaciones recibidas</a>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a href='{% url "rejected-affiliations" %}'>Afiliaciones rechazadas</a>
-                        </li> {% endcomment %}
-                    {% elif user.rol == 'recursos humanos' %}
-                        {% comment %} {% if received_affiliations > 0 %}
-                            <li id="notification">
-                                <div class="notify">
-                                    {{received_affiliations}}
-                                </div>
-                                <a href='{% url "order-affiliations" %}'>Afiliaciones recibidas</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href='{% url "order-affiliations" %}'>Afiliaciones recibidas</a>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a href='{% url "rejected-affiliations" %}'>Afiliaciones rechazadas</a>
-                        </li>
-                        <li>
-                            <a href='{% url "approved-affiliations" %}'>Afiliaciones aprobadas</a>
-                        </li> {% endcomment %}
-                        <li>
-                            <a href='{% url "new-company-user" %}'>Crear usuario</a>
-                        </li>
-                        <li>
-                            <a href='{% url "users-company" %}'>Ver usuarios</a>
-                        </li>
-                    {% elif user.rol == 'financiero' %}
-                        {% if received_payments > 0 %}
-                            <li id="notification">
-                                <div class="notify">
-                                    {{received_payments}}
-                                </div>
-                                <a href='{% url "order-payments" %}'>Pagos recibidos</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href='{% url "order-payments" %}'>Pagos recibidos</a>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a href='{% url "approved-payments" %}'>Pagos aprobados</a>
-                        </li>
-                        <li>
-                            <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
-                        </li>
-                        <li>
-                            <a href='{% url "create-supplier" %}'>Crear proveedor</a>
-                        </li>
-                        <li>
-                            <a href='{% url "suppliers-company" %}'>Ver proveedores</a>
-                        </li>
-                    {% elif user.rol == 'coordinador' %}
-                        <li>
-                            <a href='{% url "assign-case" %}'>Asignar caso</a>
-                        </li>
-                        <li>
-                            <a href='{% url "closed-orders" %}'>Casos finalizados</a>
-                        </li>
-                        <li>
-                            <a href='{% url "order-payments" %}'>Pagos realizados</a>
-                        </li>
-                    {% elif user.rol == 'gestor' %}
-                        <li>
-                            <a href='{% url "closed-orders" %}'>Casos finalizados</a>
-                        </li>
-                        <li>
-                            <a href='{% url "make-payment" %}'>Pagos proveedores</a>
-                        </li>
-                        {% comment %} <li>
-                            <a href='{% url "make-affiliation" %}'>Afiliar proveedor</a>
-                        </li> {% endcomment %}
-                        <li>
-                            <a href='{% url "user-order-payments" %}'>Pagos enviados</a>
-                        </li>
-                        <li>
-                            <a href='{% url "user-approved-payments" %}'>Pagos aprobados</a>
-                        </li>
-                        {% if rejected_payments > 0 %}
-                            <li id="notification">
-                                <div class="notify">
-                                    {{rejected_payments}}
-                                </div>
-                                <a href='{% url "user-rejected-payments" %}'>Pagos rechazados</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href='{% url "user-rejected-payments" %}'>Pagos rechazados</a>
-                            </li>
-                        {% endif %}
-                        {% comment %} <li>
-                            <a href='{% url "user-order-affiliations" %}'>Afiliaciones enviadas</a>
-                        </li>
-                        {% if rejected_affiliations > 0 %}
-                            <li id="notification">
-                                <div class="notify">
-                                    {{rejected_affiliations}}
-                                </div>
-                                <a href='{% url "user-rejected-affiliations" %}'>Afiliaciones rechazadas</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href='{% url "user-rejected-affiliations" %}'>Afiliaciones rechazadas</a>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a href='{% url "user-approved-affiliations" %}'>Afiliaciones aprobadas</a>
-                        </li> {% endcomment %}
-                    {% elif user.rol == 'facturacion' %}
-                        <li>
-                            <a href='{% url "invoiced-orders" %}'>Casos facturados</a>
+                            <a href='{% url "order-affiliations" %}'>Afiliaciones recibidas</a>
                         </li>
                     {% endif %}
+                    <li>
+                        <a href='{% url "rejected-affiliations" %}'>Afiliaciones rechazadas</a>
+                    </li> {% endcomment %}
+                {% elif user.rol == 'recursos humanos' %}
+                    {% comment %} {% if received_affiliations > 0 %}
+                        <li id="notification">
+                            <div class="notify">
+                                {{received_affiliations}}
+                            </div>
+                            <a href='{% url "order-affiliations" %}'>Afiliaciones recibidas</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href='{% url "order-affiliations" %}'>Afiliaciones recibidas</a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href='{% url "rejected-affiliations" %}'>Afiliaciones rechazadas</a>
+                    </li>
+                    <li>
+                        <a href='{% url "approved-affiliations" %}'>Afiliaciones aprobadas</a>
+                    </li> {% endcomment %}
+                    <li>
+                        <a href='{% url "new-company-user" %}'>Crear usuario</a>
+                    </li>
+                    <li>
+                        <a href='{% url "users-company" %}'>Ver usuarios</a>
+                    </li>
+                {% elif user.rol == 'financiero' %}
+                    {% if received_payments > 0 %}
+                        <li id="notification">
+                            <div class="notify">
+                                {{received_payments}}
+                            </div>
+                            <a href='{% url "order-payments" %}'>Pagos recibidos</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href='{% url "order-payments" %}'>Pagos recibidos</a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href='{% url "approved-payments" %}'>Pagos aprobados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "create-supplier" %}'>Crear proveedor</a>
+                    </li>
+                    <li>
+                        <a href='{% url "suppliers-company" %}'>Ver proveedores</a>
+                    </li>
+                {% elif user.rol == 'coordinador' %}
+                    <li>
+                        <a href='{% url "assign-case" %}'>Asignar caso</a>
+                    </li>
+                    <li>
+                        <a href='{% url "closed-orders" %}'>Casos finalizados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "order-payments" %}'>Pagos realizados</a>
+                    </li>
+                {% elif user.rol == 'gestor' %}
+                    <li>
+                        <a href='{% url "closed-orders" %}'>Casos finalizados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "make-payment" %}'>Pagos proveedores</a>
+                    </li>
+                    {% comment %} <li>
+                        <a href='{% url "make-affiliation" %}'>Afiliar proveedor</a>
+                    </li> {% endcomment %}
+                    <li>
+                        <a href='{% url "user-order-payments" %}'>Pagos enviados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "user-approved-payments" %}'>Pagos aprobados</a>
+                    </li>
+                    {% if rejected_payments > 0 %}
+                        <li id="notification">
+                            <div class="notify">
+                                {{rejected_payments}}
+                            </div>
+                            <a href='{% url "user-rejected-payments" %}'>Pagos rechazados</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href='{% url "user-rejected-payments" %}'>Pagos rechazados</a>
+                        </li>
+                    {% endif %}
+                    {% comment %} <li>
+                        <a href='{% url "user-order-affiliations" %}'>Afiliaciones enviadas</a>
+                    </li>
+                    {% if rejected_affiliations > 0 %}
+                        <li id="notification">
+                            <div class="notify">
+                                {{rejected_affiliations}}
+                            </div>
+                            <a href='{% url "user-rejected-affiliations" %}'>Afiliaciones rechazadas</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href='{% url "user-rejected-affiliations" %}'>Afiliaciones rechazadas</a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href='{% url "user-approved-affiliations" %}'>Afiliaciones aprobadas</a>
+                    </li> {% endcomment %}
+                {% elif user.rol == 'facturacion' %}
+                    <li>
+                        <a href='{% url "invoiced-orders" %}'>Casos facturados</a>
+                    </li>
                 {% endif %}
+                {% comment %} {% endif %} {% endcomment %}
                 <li>
                     <a href='{% url "logout" %}'>Cerrar sesión</a>
                 </li>

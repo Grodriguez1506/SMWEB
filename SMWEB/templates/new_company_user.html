@@ -14,45 +14,45 @@
     
     {% endif %}
 
-    {% if company.status %}
-        <h1 id="title">Crea usuario para {{user.company}}</h1>
+    {% comment %} {% if company.status %} {% endcomment %}
+    <h1 id="title">Crea usuario para {{user.company}}</h1>
 
-        <form id="creation_form" action="" method="post">
+    <form id="creation_form" action="" method="post">
 
-            {% csrf_token %}
+        {% csrf_token %}
 
-            <label for="username">Usuario</label><br>
-            <input type="text" name="username" placeholder="Ingresa tu usuario"><br>
-            <br><br>
-            <label for="password">Contraseña</label><br>
-            <input type="password" name="password" placeholder="Ingresa tu contraseña"><br>
-            <br><br>
-            <label for="email">Correo electronico</label><br>
-            <input type="email" name="email" placeholder="Ingresa tu email"><br>
-            <br><br>
-            <label for="first_name">Nombre</label><br>
-            <input type="text" name="first_name" placeholder="Ingresa tu nombre"><br>
-            <br><br>
-            <label for="last_name">Apellidos</label><br>
-            <input type="text" name="last_name" placeholder="Ingresa tus apellidos"><br>
-            <br><br>
-            <label for="rol">Elige el rol</label><br>
-            <select id="rol" name="rol">
-                <option value="">Selecciona un rol para el usuario</option>
-                <option value="gerente">Gerente</option>
-                <option value="recursos humanos">Recursos humanos</option>
-                <option value="financiero">Financiero/a</option>
-                <option value="coordinador">Coordinador/a</option>
-                <option value="compras">Compras</option>
-                <option value="gestor">Gestor</option>
-                <option value="facturacion">Facturación</option>
-            </select>
+        <label for="username">Usuario</label><br>
+        <input type="text" name="username" placeholder="Ingresa tu usuario"><br>
+        <br><br>
+        <label for="password">Contraseña</label><br>
+        <input type="password" name="password" placeholder="Ingresa tu contraseña"><br>
+        <br><br>
+        <label for="email">Correo electronico</label><br>
+        <input type="email" name="email" placeholder="Ingresa tu email"><br>
+        <br><br>
+        <label for="first_name">Nombre</label><br>
+        <input type="text" name="first_name" placeholder="Ingresa tu nombre"><br>
+        <br><br>
+        <label for="last_name">Apellidos</label><br>
+        <input type="text" name="last_name" placeholder="Ingresa tus apellidos"><br>
+        <br><br>
+        <label for="rol">Elige el rol</label><br>
+        <select id="rol" name="rol">
+            <option value="">Selecciona un rol para el usuario</option>
+            <option value="compras">Compras</option>
+            <option value="coordinador">Coordinador/a</option>
+            <option value="facturacion">Facturación</option>
+            <option value="financiero">Financiero/a</option>
+            <option value="gerente">Gerente</option>
+            <option value="gestor">Gestor</option>
+            <option value="recursos humanos">Recursos humanos</option>
+        </select>
 
-            <input type="submit" value="Registrar">
+        <input type="submit" value="Registrar">
 
-        </form>
-    {% else %}
+    </form>
+    {% comment %} {% else %}
         <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
-    {% endif %}
+    {% endif %} {% endcomment %}
 
 {% endblock %}

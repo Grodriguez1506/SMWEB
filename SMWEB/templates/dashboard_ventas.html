@@ -14,14 +14,14 @@
 
     {% endif %}
     
-    {% if company.status %}
-        <h1 id="title" >Estadísticas - {{user.company}}</h1>
-        
-        <canvas id="myChart" width="250" height="250"></canvas>
+    {% comment %} {% if company.status %} {% endcomment %}
+    <h1 id="title" >Estadísticas - {{user.company}}</h1>
+    
+    <canvas id="myChart" width="250" height="250"></canvas>
 
-    {% else %}
+    {% comment %} {% else %}
         <h1 id="title" >Lo siento {{user.first_name}}, tu empresa se encuentra inactiva</h1>
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <script>
