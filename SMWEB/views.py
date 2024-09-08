@@ -1708,6 +1708,8 @@ def make_payment(request):
         full_name = request.POST['full_name']
         amount = request.POST['amount']
         comments = request.POST['comments']
+        if not comments:
+            comments = 'SIN COMENTARIOS'
         first_name = request.user.first_name
 
         order = WorkOrder.objects.filter(in_charge = first_name.upper()).filter(order_id = order_id).first()
@@ -1749,7 +1751,7 @@ def make_payment(request):
                 )
 
                 payment.save()
-                messages.success(request, f'El pago para la orden {order} se ha registrado exitosamente')
+                messages.success(request, f'El pago para la orden {order} se ha registrado exitosamente "{comments}"')
             else:
                 messages.warning(request, 'No se ha registrado un destinatario para el pago')
         else:
@@ -1916,7 +1918,7 @@ def delete_rejected_payment(request, id):
     payment_rejected.delete()
 
     messages.warning(request, 'El pago rechazado ha sido eliminado exitosamente')
-    
+
     return redirect('user-rejected-payments')
 
 @login_required(login_url=inicio)
@@ -1948,7 +1950,7 @@ def reject_payment(request, id):
     payment.delete()
 
     messages.warning(request, f'El pago {payment_rejected.order_id} ha sido rechazado satisfactoriamente')
-    return redirect('inicio')
+    return redirect('order-payments')
 
 @login_required(login_url=inicio)
 def approve_payment(request, id):
