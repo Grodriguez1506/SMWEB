@@ -1103,8 +1103,8 @@ def dashboard_template(request):
                     'data': data,
                     'main_label': main_label
                 })
-            except FinishedOrder.DoesNotExist:
-                messages.warning(request, 'El proyecto seleccionado no está finalizado')
+            except InvoicedOrder.DoesNotExist:
+                messages.warning(request, 'El proyecto seleccionado no está facturado')
                 return redirect('dashboard-template')
              
     return render(request, 'dashboard_template.html')
@@ -1915,7 +1915,9 @@ def delete_rejected_payment(request, id):
 
     payment_rejected.delete()
 
-    return render(request, 'user_rejected_payments.html')
+    messages.warning(request, 'El pago rechazado ha sido eliminado exitosamente')
+    
+    return redirect('user-rejected-payments')
 
 @login_required(login_url=inicio)
 def reject_payment(request, id):

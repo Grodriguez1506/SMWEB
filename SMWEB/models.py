@@ -126,7 +126,7 @@ class OrderPayment(models.Model):
     account_number = models.CharField(verbose_name="Número de cuenta", max_length=255, default="")
     type_account = models.CharField(verbose_name="Tipo de cuenta", max_length=255, default="")
     amount = models.IntegerField(verbose_name="Pago")
-    comments = models.TextField(verbose_name="Comentarios")
+    comments = models.TextField(verbose_name="Comentarios", default="SIN COMENTARIOS")
     made_by = models.CharField(verbose_name="Realizado por", max_length=255)
     created_at = models.DateField(verbose_name="Creado el", auto_now_add=True)
 

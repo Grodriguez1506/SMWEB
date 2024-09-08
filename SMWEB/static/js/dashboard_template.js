@@ -13,7 +13,7 @@ report.addEventListener('change', () => {
     
     var report_status = report.value;
 
-    if (report_status === 'por proyecto detallado') {
+    if (report_status === 'por proyecto detallado finalizado' || report_status === 'por proyecto detallado facturado') {
     
         labelProject.style.display= 'block';
         inputProject.style.display= 'block';

@@ -61,7 +61,8 @@ body{
 }
 
 #logo{
-    flex-basis: 74%;
+    flex-grow: 1;
+    flex-basis: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -251,6 +252,7 @@ body{
     background: linear-gradient(90deg, black, rgb(69, 69, 69), rgb(197, 197, 197));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-align: center;
 }
 
 /* SEARCH ENGINE */
@@ -837,3 +839,132 @@ canvas{
     font-family: var(--menu-font);
 }
 
+@media (max-width: 1211px) {
+    #login_form input[type=submit] {
+        width: 150px;
+    }
+}
+
+@media (max-width: 1000px){
+    .search_engine input[type="submit"] {
+        right: 30.5%;
+    }
+}
+
+@media (max-width: 815px) {
+    .slider_container{
+        display: none;
+    }
+    
+    #title {
+        font-size: 45px;
+    }
+
+    #subtitle {
+        font-size: 25px;
+    }
+
+    .search_engine input[type="submit"] {
+        right: 29%;
+    }
+
+    .payment__element {
+        flex-basis: 100%;
+    }
+
+    .payment__information {
+        flex-basis: 100%;
+        justify-content: center;
+    }
+
+    .btn_payment {
+        flex-basis: 100%;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 717px) {
+    #logo_title{
+        flex-basis: 100%;
+        font-size: 40px;
+    }
+
+    #logo img {
+        width: 45px;
+    }
+    
+    #login_form, #creation_form {
+        width: 80%;
+    }
+
+    .search_engine input[type="text"] {
+        flex-basis: 70%;
+    }
+
+    .search_engine input[type="submit"] {
+        right: 9%;
+    }
+
+    .order__information {
+        width: 100%;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+    }
+
+    .update_form{
+        flex-basis: 100% !important;
+    }
+
+    .creation_form-rejected_payment{
+        width: 80% !important;
+        margin-top: 20px;
+    }
+    
+}
+
+
+@media (max-width: 440px) {
+
+    #title {
+        font-size: 35px;
+    }
+
+    #footer > p{
+        font-size: 13px;
+    }
+
+    .reject_payment,
+    .approve_payment{
+        margin: 10px 0px;
+    }
+
+    #alert-success {
+        font-size: 12px;
+    }
+
+    #alert-warning {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 350px) {
+
+    #title {
+        font-size: 25px;
+    }
+
+    #subtitle{
+        font-size: 20px;
+    }
+
+    #login_form label, #creation_form label {
+        font-size: 15px;
+    }
+
+    #login_form input[type=text]{
+        font-size: 12px;
+    }
+
+}

@@ -4,6 +4,7 @@ const order_status = document.getElementsByClassName('orders__element-status');
 const sliderContainer = document.querySelector('.slider_container');
 const sliderWrapper = document.querySelector('.slider_wrapper');
 const sliderElements = document.querySelectorAll('.slider_element');
+const sliderElement = document.querySelector('.slider_element');
 const totalElements = sliderElements.length;
 let currentIndex = 0;
 
@@ -23,8 +24,10 @@ if (sliderWrapper){
     const firstElementClone = sliderElements[0].cloneNode(true);
     sliderWrapper.appendChild(firstElementClone);
 
+    medidaElemento = sliderElement.offsetWidth
+
     // Ajustar el ancho del slider_wrapper al tamaño total de los elementos
-    sliderWrapper.style.width = `${800 * (totalElements + 1)}px`;
+    sliderWrapper.style.width = `${medidaElemento * (totalElements + 1)}px`;
 
     function rotateSlider() {
         currentIndex++;
@@ -42,7 +45,7 @@ if (sliderWrapper){
             // Rehabilitar la transición
             sliderWrapper.style.transition = 'transform 1000ms ease';
         } else {
-            sliderWrapper.style.transform = `translateX(-${currentIndex * 800}px)`;
+            sliderWrapper.style.transform = `translateX(-${currentIndex * medidaElemento}px)`;
         }
     }
 
