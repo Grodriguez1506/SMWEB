@@ -61,7 +61,7 @@
 
             <input type="submit" value="Registrar pago">
             <div class="btn_container">
-                <a href='{% url "delete-rejected-payment" payment.id %}' class="delete_user" onclick="return confirm('¿Estás seguro de que deseas eliminar el pago rechazado?');">Eliminar pago</a>
+                <a href='{% url "delete-rejected-payment" payment.id %}' class="delete_user" onclick="return confirm('¿Estás seguro de que deseas descartar el pago rechazado?');">Descartar pago</a>
             </div>
 
         </form>

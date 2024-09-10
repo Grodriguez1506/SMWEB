@@ -81,6 +81,9 @@
                     <li>
                         <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
                     </li>
+                    <li>
+                        <a href='{% url "deleted-payments" %}'>Pagos rechazados descartados</a>
+                    </li>
                     {% comment %} {% if received_affiliations > 0 %}
                         <li id="notification">
                             <div class="notify">
@@ -141,6 +144,9 @@
                         <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
                     </li>
                     <li>
+                        <a href='{% url "deleted-payments" %}'>Pagos rechazados descartados</a>
+                    </li>
+                    <li>
                         <a href='{% url "create-supplier" %}'>Crear proveedor</a>
                     </li>
                     <li>
@@ -154,7 +160,16 @@
                         <a href='{% url "closed-orders" %}'>Casos finalizados</a>
                     </li>
                     <li>
-                        <a href='{% url "order-payments" %}'>Pagos realizados</a>
+                        <a href='{% url "order-payments" %}'>Pagos recibidos</a>
+                    </li>
+                    <li>
+                        <a href='{% url "approved-payments" %}'>Pagos aprobados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "rejected-payments" %}'>Pagos rechazados</a>
+                    </li>
+                    <li>
+                        <a href='{% url "deleted-payments" %}'>Pagos rechazados descartados</a>
                     </li>
                 {% elif user.rol == 'gestor' %}
                     <li>

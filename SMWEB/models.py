@@ -181,6 +181,35 @@ class PaymentRejected(models.Model):
     def __str__(self):
         return self.order_id
     
+class PaymentRejectedDeleted(models.Model):
+    order_id = models.CharField(verbose_name="Número de caso", max_length=255)
+    client = models.CharField(verbose_name="Cliente", max_length=255, null=False, default="")
+    city = models.CharField(verbose_name="Ciudad", max_length=255, null=False)
+    invesment = models.DecimalField(verbose_name="Inversión", max_digits=20, decimal_places=2, null= True)
+    sales_value = models.DecimalField(verbose_name="Valor de venta", max_digits=20, decimal_places=2, null= True)
+    service_description = models.TextField(verbose_name="Descripción del servicio")
+    in_charge = models.CharField(verbose_name="Encargado", max_length=255, null=False, default="")
+    company = models.CharField(verbose_name="Empresa", max_length=255, null=False, default="")
+    account_owner = models.CharField(verbose_name="Propietario de la cuenta", max_length=255, default="")
+    bank_account = models.CharField(verbose_name="Banco", max_length=255, default="")
+    account_number = models.CharField(verbose_name="Número de cuenta", max_length=255, default="")
+    type_account = models.CharField(verbose_name="Tipo de cuenta", max_length=255, default="")
+    amount = models.IntegerField(verbose_name="Pago")
+    comments = models.TextField(verbose_name="Comentarios")
+    made_by = models.CharField(verbose_name="Realizado por", max_length=255)
+    created_at = models.DateField(verbose_name="Creado el")
+    rejected_at = models.DateField(verbose_name="Rechazado el")
+    rejected_by = models.CharField(verbose_name="Rechazado por", max_length=255)
+    deleted_at = models.DateField(verbose_name="Eliminado el", auto_now_add=True)
+    deleted_by = models.CharField(verbose_name="Eliminado por", max_length=255)
+
+    class Meta:
+        verbose_name = 'Pago rechazado eliminado'
+        verbose_name_plural = 'Pagos rechazados eliminados'
+    
+    def __str__(self):
+        return self.order_id
+    
 class PaymentApproved(models.Model):
     order_id = models.CharField(verbose_name="Número de caso", max_length=255)
     client = models.CharField(verbose_name="Cliente", max_length=255, null=False, default="")

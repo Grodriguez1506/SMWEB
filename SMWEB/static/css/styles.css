@@ -715,7 +715,8 @@ canvas{
 .affiliations__column--rejected_by,
 .affiliations__column--approved_by,
 .orders__column--invoiced_at,
-.orders__column--invoice_id{
+.orders__column--invoice_id,
+.payments__column--deleted_at{
     background-color: #f0f0f084;
 }
 

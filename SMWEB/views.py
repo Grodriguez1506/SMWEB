@@ -480,8 +480,8 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 return redirect('inicio')
-            else:
-                messages.warning(request, 'Usuario o contraseña inválidos')
+            
+            messages.warning(request, f'Usuario o contraseña inválidos {username} {password}')
 
         return render(request, 'login.html')
 
@@ -1150,7 +1150,7 @@ def delete_order(request, id):
         remarks = order.remarks,
         in_charge = order.in_charge,
         assigned_by = order.assigned_by,
-        status = "Eliminado",
+        status = "Descartado",
         company = order.company,
         deleted_by = request.user.username
         )
@@ -1158,7 +1158,7 @@ def delete_order(request, id):
     deleted_order.save()
     order.delete()
 
-    messages.success(request, f'El caso {id} ha sido eliminado con éxito')
+    messages.success(request, f'El caso {id} ha sido descartado con éxito')
     return redirect('inicio')
 
 @login_required(login_url=inicio)
@@ -1392,7 +1392,7 @@ def rejected_payments(request):
                 'formatted_payments': formatted_payments
             })
         else:
-            messages.warning(request, 'El caso que buscas no tiene pagos registrados')
+            messages.warning(request, 'El caso que buscas no tiene pagos rechazados')
             return redirect('rejected-payments')
 
     formatted_invesment = []
@@ -1419,6 +1419,93 @@ def rejected_payments(request):
             formatted_payments.append(0)
 
     return render(request, 'rejected_payments.html',{
+        'payments': payments,
+        'formatted_invesment': formatted_invesment,
+        'formatted_sales': formatted_sales,
+        'formatted_payments': formatted_payments
+    })
+
+@login_required(login_url=inicio)
+def deleted_payments(request):
+
+    user_rol = request.user.rol
+
+    user_company = request.user.company_id
+
+    if user_rol not in ['gerente', 'financiero', 'coordinador']:
+
+        messages.warning(request, f'Tu rol de {user_rol} no te permite acceder a los pagos eliminados')
+        return redirect('inicio')
+    
+    payments = PaymentRejectedDeleted.objects.filter(company = user_company).order_by('-created_at')
+
+    if request.method == 'POST':
+        search = request.POST['search']
+
+        payments = PaymentRejected.objects.filter(Q(company = user_company) &
+                                                  Q(order_id__icontains = search) |
+                                                  Q(client__icontains = search) |
+                                                  Q(city__icontains = search) |
+                                                  Q(in_charge__icontains = search)).order_by('-created_at')
+
+        if payments:
+
+            formatted_invesment = []
+            formatted_sales = []
+            formatted_payments = []
+
+            for payment in payments:
+                if payment.invesment is not None:
+                    invesment = format_amount(payment.invesment)
+                    formatted_invesment.append(invesment)
+                else:
+                    formatted_invesment.append(0)
+
+                if payment.sales_value is not None:
+                    sales = format_amount(payment.sales_value)
+                    formatted_sales.append(sales)
+                else:
+                    formatted_sales.append(0)
+
+                if payment.amount is not None:
+                    payment_amount = format_amount(payment.amount)
+                    formatted_payments.append(payment_amount)
+                else:
+                    formatted_payments.append(0)
+
+            return render(request, 'deleted_payments.html',{
+                'payments': payments,
+                'formatted_invesment': formatted_invesment,
+                'formatted_sales': formatted_sales,
+                'formatted_payments': formatted_payments
+            })
+        messages.warning(request, 'El caso que buscas no tiene pagos eliminados')
+        return redirect('rejected-payments')
+
+    formatted_invesment = []
+    formatted_sales = []
+    formatted_payments = []
+
+    for payment in payments:
+        if payment.invesment is not None:
+            invesment = format_amount(payment.invesment)
+            formatted_invesment.append(invesment)
+        else:
+            formatted_invesment.append(0)
+
+        if payment.sales_value is not None:
+            sales = format_amount(payment.sales_value)
+            formatted_sales.append(sales)
+        else:
+            formatted_sales.append(0)
+
+        if payment.amount is not None:
+            payment_amount = format_amount(payment.amount)
+            formatted_payments.append(payment_amount)
+        else:
+            formatted_payments.append(0)
+
+    return render(request, 'deleted_payments.html',{
         'payments': payments,
         'formatted_invesment': formatted_invesment,
         'formatted_sales': formatted_sales,
@@ -1915,9 +2002,33 @@ def delete_rejected_payment(request, id):
 
     payment_rejected = PaymentRejected.objects.get(id = id)
 
+    payment_rejected_deleted = PaymentRejectedDeleted(
+        order_id = payment_rejected.order_id,
+        client = payment_rejected.client,
+        city = payment_rejected.city,
+        invesment = payment_rejected.invesment,
+        sales_value = payment_rejected.sales_value,
+        service_description = payment_rejected.service_description,
+        in_charge = payment_rejected.in_charge,
+        company = payment_rejected.company,
+        account_owner = payment_rejected.account_owner,
+        bank_account = payment_rejected.bank_account,
+        account_number = payment_rejected.account_number,
+        type_account = payment_rejected.type_account,
+        amount = payment_rejected.amount,
+        comments = payment_rejected.comments,
+        made_by = payment_rejected.made_by,
+        created_at = payment_rejected.created_at,
+        rejected_at = payment_rejected.rejected_at,
+        rejected_by = payment_rejected.rejected_by,
+        deleted_by = request.user.username
+    )
+
+    payment_rejected_deleted.save()
+
     payment_rejected.delete()
 
-    messages.warning(request, 'El pago rechazado ha sido eliminado exitosamente')
+    messages.warning(request, 'El pago rechazado ha sido descartado exitosamente')
 
     return redirect('user-rejected-payments')
 
@@ -2439,6 +2550,7 @@ def select_user(request, user_id):
             last_name = request.POST['last_name']
             rol = request.POST['rol']
             username = request.POST['username']
+            password = request.POST['password']
 
             if first_name:
                 user_selected.first_name = first_name
@@ -2454,6 +2566,10 @@ def select_user(request, user_id):
 
             if username:
                 user_selected.username = username
+                user_selected.save()
+                
+            if password:
+                user_selected.set_password(password)
                 user_selected.save()
 
             messages.success(request, 'El usuario ha sido modificado exitosamente')
