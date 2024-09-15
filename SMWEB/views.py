@@ -481,7 +481,7 @@ def login_user(request):
                 login(request, user)
                 return redirect('inicio')
             
-            messages.warning(request, f'Usuario o contraseña inválidos {username} {password}')
+            messages.warning(request, f'Usuario o contraseña inválidos')
 
         return render(request, 'login.html')
 

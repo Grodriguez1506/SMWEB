@@ -31,8 +31,10 @@
 
 :root{
     --title-font: 'Billabong';
-    --normal-font: 'Avant gardent light';
-    --menu-font: 'Avant gardent bold';
+    /* --normal-font: 'Avant gardent light';
+    --menu-font: 'Avant gardent bold'; */
+    --normal-font: 'M PLUS Rounded 1c';
+    --menu-font: 'M PLUS Rounded 1c';
     --symbol-font: 'Symbol';
 }
 
