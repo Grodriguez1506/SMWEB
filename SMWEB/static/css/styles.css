@@ -852,6 +852,10 @@ canvas{
     .search_engine input[type="submit"] {
         right: 30.5%;
     }
+
+    canvas{
+        width: 90% !important;
+    }
 }
 
 @media (max-width: 815px) {
