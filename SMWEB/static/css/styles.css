@@ -175,6 +175,7 @@ body{
     width: 20px;
     text-align: center;
     font-family: var(--normal-font);
+    font-size: 14px;
     font-weight: bold;
     color: white;
     background-color: white;
@@ -189,6 +190,7 @@ body{
     width: 20px;
     text-align: center;
     font-family: var(--normal-font);
+    font-size: 14px;
     font-weight: bold;
     border-radius: 999px;
     transition: all 300ms;

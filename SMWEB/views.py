@@ -1837,7 +1837,7 @@ def make_payment(request):
                 )
 
                 payment.save()
-                messages.success(request, f'El pago para la orden {order} se ha registrado exitosamente "{comments}"')
+                messages.success(request, f'El pago para la orden {order} se ha registrado exitosamente')
             else:
                 messages.warning(request, 'No se ha registrado un destinatario para el pago')
         else:

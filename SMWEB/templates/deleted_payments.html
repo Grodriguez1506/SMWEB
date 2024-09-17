@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %} Pagos eliminados {% endblock %}
+{% block title %} Pagos descartados {% endblock %}
 
 {% block content %}
     {% if messages %}
@@ -14,7 +14,7 @@
     {% endif %}
 
     {% comment %} {% if company.status %} {% endcomment %}
-    <h1 id="title" >Pagos rechazados eliminados</h1>
+    <h1 id="title" >Pagos rechazados descartados</h1>
     
     <form action="" method="post" class="search_engine">
 
@@ -139,7 +139,7 @@
                 {% endfor %}
             </div>
             <div class="payments__column payments__column--deleted_at">
-                <h3 class="column__title">Eliminado el</h3>
+                <h3 class="column__title">Descartado el</h3>
                 {% for payment in payments %}
                     <div class="payments__element payments__element-deleted_at">{{payment.deleted_at|date:"d/m/Y"}}</div>
                 {% endfor %}
