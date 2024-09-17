@@ -950,6 +950,18 @@ canvas{
     #alert-warning {
         font-size: 12px;
     }
+
+    .search_engine {
+        width: 100%;
+    }
+
+    .search_engine label {
+        display: none;
+    }
+
+    .search_engine input[type="text"] {
+        flex-basis: 100%;
+    }
 }
 
 @media (max-width: 350px) {

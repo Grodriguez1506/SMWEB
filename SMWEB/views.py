@@ -621,13 +621,12 @@ def users_availables(request):
         messages.warning(request, 'Esta función es solo del administrador del software')
 
         return redirect('inicio')
-    else:
 
-        users = CustomUser.objects.all().exclude(is_staff = True)
+    users = CustomUser.objects.all().exclude(is_staff = True)
 
-        return render(request, 'users.html',{
-            'users': users
-        })
+    return render(request, 'users.html',{
+        'users': users
+    })
 
 @login_required(login_url=inicio)
 def users_company(request):
@@ -639,31 +638,31 @@ def users_company(request):
         messages.warning(request, f'Tu rol de {user_rol} no te permite acceder a esta función')
 
         return redirect('inicio')
-    else:
-        company = request.user.company_id
-
-        users = CustomUser.objects.filter(company_id = company)
         
-        if request.method == 'POST':
-                search = request.POST['search']
+    company = request.user.company_id
 
-                if search == '':
-                    return redirect('users-company')
+    users = CustomUser.objects.filter(company_id = company)
+    
+    if request.method == 'POST':
+            search = request.POST['search']
 
-                users = CustomUser.objects.filter(company_id = company).filter(first_name__icontains = search)
-                
-                if users:
+            if search == '':
+                return redirect('users-company')
 
-                    return render(request, 'users_company.html',{
-                        'users': users
-                    })
-                else:
-                    messages.warning(request, 'El usuario que buscas no existe')
-                    return redirect('users-company')
+            users = CustomUser.objects.filter(company_id = company).filter(first_name__icontains = search)
+            
+            if users:
 
-        return render(request, 'users_company.html',{
-            'users': users
-        })
+                return render(request, 'users_company.html',{
+                    'users': users
+                })
+            else:
+                messages.warning(request, 'El usuario que buscas no existe')
+                return redirect('users-company')
+
+    return render(request, 'users_company.html',{
+        'users': users
+    })
 
 @login_required(login_url=inicio)
 def assign_case(request):
@@ -2541,45 +2540,48 @@ def select_user(request, user_id):
 
     user_rol = request.user.rol
 
-    if user_rol in ['gerente', 'recursos humanos']:
-
-        user_selected = CustomUser.objects.get(id = user_id)
-
-        if request.method == 'POST':
-            first_name = request.POST['first_name']
-            last_name = request.POST['last_name']
-            rol = request.POST['rol']
-            username = request.POST['username']
-            password = request.POST['password']
-
-            if first_name:
-                user_selected.first_name = first_name
-                user_selected.save()
-            
-            if last_name:
-                user_selected.last_name = last_name
-                user_selected.save()
-
-            if rol:
-                user_selected.rol = rol
-                user_selected.save()
-
-            if username:
-                user_selected.username = username
-                user_selected.save()
-                
-            if password:
-                user_selected.set_password(password)
-                user_selected.save()
-
-            messages.success(request, 'El usuario ha sido modificado exitosamente')
-
-        return render(request, 'edit_user.html',{
-            'user_selected': user_selected
-        })
+    staff = request.user.is_staff
     
-    messages.warning(request, f'Tu rol de {user_rol} no te permite acceder a la edición de usuarios')
-    return redirect ('inicio')
+    if not staff:
+        if user_rol not in ['gerente', 'recursos humanos']:
+
+            messages.warning(request, f'Tu rol de {user_rol} no te permite acceder a la edición de usuarios')
+            return redirect ('inicio')
+    
+    user_selected = CustomUser.objects.get(id = user_id)
+
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        rol = request.POST['rol']
+        username = request.POST['username']
+        password = request.POST['password']
+
+        if first_name:
+            user_selected.first_name = first_name
+            user_selected.save()
+        
+        if last_name:
+            user_selected.last_name = last_name
+            user_selected.save()
+
+        if rol:
+            user_selected.rol = rol
+            user_selected.save()
+
+        if username:
+            user_selected.username = username
+            user_selected.save()
+            
+        if password:
+            user_selected.set_password(password)
+            user_selected.save()
+
+        messages.success(request, 'El usuario ha sido modificado exitosamente')
+
+    return render(request, 'edit_user.html',{
+        'user_selected': user_selected
+    })
 
 @login_required(login_url=inicio)
 def delete_user(request, user_id):
